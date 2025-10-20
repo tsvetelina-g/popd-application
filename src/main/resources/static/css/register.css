@@ -1,0 +1,159 @@
+/* Register Page Specific Styles */
+
+/* Register Section */
+.register-section {
+  padding: 60px 0;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.register-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.register-subtitle {
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+/* Form Styles */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-input {
+  padding: 12px 15px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(133, 3, 9, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--muted);
+}
+
+/* Register Button */
+.register-button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.register-button:hover {
+  background: #6b0207;
+  transform: translateY(-1px);
+}
+
+.register-button:active {
+  transform: translateY(0);
+}
+
+/* Login Link */
+.login-link {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.login-link p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.login-link-text {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-link-text:hover {
+  color: #6b0207;
+}
+
+/* Navigation Active State */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-container {
+    margin: 20px;
+    padding: 30px 25px;
+  }
+  
+  .register-title {
+    font-size: 24px;
+  }
+  
+  .register-section {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    margin: 15px;
+    padding: 25px 20px;
+  }
+  
+  .register-title {
+    font-size: 22px;
+  }
+}

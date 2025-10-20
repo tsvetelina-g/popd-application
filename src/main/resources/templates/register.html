@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/3ltg6waaooj3pi9wpglhi/Popd-logo.png?rlkey=hagc0cda54mpqcdv7c13fp5ck&st=75m50xfy"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <nav class="nav">
+                    <a href="/login">Login</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/register" class="nav-active">Register</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/movies">Movies</a>
+                    <a href="/grement" class="nav-button">Grement</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="register-section">
+        <div class="register-container">
+            <h2 class="register-title">Create Your Account</h2>
+            <p class="register-subtitle">Join popd and start discovering amazing movies</p>
+            
+            <form class="register-form" action="/register" method="post">
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="register-button">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="login-link">
+                <p>Already have an account? <a href="/login" class="login-link-text">Sign in here</a></p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>
