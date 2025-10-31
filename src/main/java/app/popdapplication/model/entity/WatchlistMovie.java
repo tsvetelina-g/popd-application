@@ -12,24 +12,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Review {
+public class WatchlistMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(optional = false)
-    private User user;
+    private Watchlist watchlist;
 
     @ManyToOne(optional = false)
     private Movie movie;
 
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private LocalDateTime createdOn;
-
-    @Column(nullable = false)
-    private LocalDateTime editedOn;
+    @Column(name = "added_on", nullable = false)
+    private LocalDateTime addedOn;
 }

@@ -1,7 +1,7 @@
-/* Register Page Specific Styles */
+/* Edit Profile Page Styles - aligned with login and register page theme */
 
-/* Register Section */
-.register-section {
+/* Section */
+.edit-profile-section {
   padding: 60px 0;
   min-height: 70vh;
   display: flex;
@@ -9,7 +9,8 @@
   justify-content: center;
 }
 
-.register-container {
+/* Card */
+.edit-profile-container {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -17,34 +18,60 @@
   width: 100%;
   max-width: 450px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.register-title {
+.profile-picture {
+  flex-shrink: 0;
+  padding-bottom: 20px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
+/* Titles */
+.edit-profile-title {
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--text);
   text-align: center;
   margin-bottom: 8px;
 }
 
-.register-subtitle {
+.edit-profile-subtitle {
   color: var(--muted);
   text-align: center;
   margin-bottom: 30px;
   font-size: 14px;
 }
 
-/* Form Styles */
-.register-form {
+/* Form */
+
+.edit-profile-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+  align-items: stretch;
+  width: 100%;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  align-items: stretch;
 }
 
 .label-row {
@@ -52,23 +79,14 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
+  align-items: stretch;
 }
 
 .form-label {
   color: var(--text);
   font-size: 14px;
   font-weight: 500;
-}
 
-.warning-text {
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: right;
-  flex-shrink: 0;
-  min-width: 0;
-  word-wrap: break-word;
-  max-width: 200px;
 }
 
 .form-input {
@@ -91,13 +109,23 @@
   color: var(--muted);
 }
 
-/* Register Button */
-.register-button {
+/* Inline warnings */
+.warning-text {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+/* Submit Button */
+.edit-profile-button {
   background: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -106,62 +134,51 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 10px;
 }
 
-.register-button:hover {
+.edit-profile-button:hover {
   background: #6b0207;
   transform: translateY(-1px);
 }
 
-.register-button:active {
+.edit-profile-button:active {
   transform: translateY(0);
 }
 
-/* Login Link */
-.login-link {
+/* Beneath content */
+.profile-link {
   text-align: center;
-  margin-top: 25px;
-  padding-top: 20px;
+  margin-top: 22px;
+  padding-top: 18px;
   border-top: 1px solid var(--border);
 }
 
-.login-link p {
+.profile-link p {
   color: var(--muted);
   font-size: 14px;
   margin: 0;
 }
 
-.login-link-text {
+.profile-link-text {
   color: var(--accent);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.login-link-text:hover {
+.profile-link-text:hover {
   color: #6b0207;
 }
 
-/* Navigation Active State */
-.nav-active {
-  color: var(--accent) !important;
-  font-weight: 600;
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
-  .register-container {
+  .edit-profile-container {
     margin: 20px;
-    padding: 30px 25px;
+    padding: 30px 24px;
   }
   
-  .register-title {
+  .edit-profile-title {
     font-size: 24px;
-  }
-  
-  .register-section {
-    padding: 40px 0;
   }
   
   .warning-text {
@@ -171,12 +188,12 @@
 }
 
 @media (max-width: 480px) {
-  .register-container {
+  .edit-profile-container {
     margin: 15px;
-    padding: 25px 20px;
+    padding: 24px 18px;
   }
   
-  .register-title {
+  .edit-profile-title {
     font-size: 22px;
   }
   
@@ -191,3 +208,4 @@
     margin-top: 2px;
   }
 }
+

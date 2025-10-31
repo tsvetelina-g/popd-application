@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/movie-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+
+                <nav class="nav">
+                    <a href="/login">Login</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/register">Register</a>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/admin/movies/add">Add Movie</a>
+                            <a href="/admin/credits/add">Add Movie Credit</a>
+                            <a href="/admin/artists/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="movie-details-section">
+        <div class="movie-container">
+            <!-- Movie Header -->
+            <div class="movie-header">
+                <div class="movie-poster">
+                    <img src="https://via.placeholder.com/300x450/850309/ffffff?text=No+Poster"
+                         alt="Movie poster" class="poster-image">
+                </div>
+                <div class="movie-info">
+                    <h1 class="movie-title">Movie Title</h1>
+                    
+                    <div class="movie-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>2024</span>
+                        </div>
+                        <div class="meta-item">
+                            <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                 alt="Popcorn" class="popcorn-icon-small">
+                            <span>4.5</span>
+                        </div>
+                    </div>
+
+                    <div class="genres-list">
+                        <span class="genre-tag">Action</span>
+                        <span class="genre-tag">Drama</span>
+                        <span class="genre-tag">Thriller</span>
+                    </div>
+
+                    <div class="movie-actions">
+                        <button class="action-button add-to-watchlist-button" type="button">
+                            <i class="fas fa-plus-circle"></i>
+                            Add to Watchlist
+                        </button>
+                        <button class="action-button add-to-watched-button" type="button">
+                            <i class="fas fa-check-circle"></i>
+                            Mark as Watched
+                        </button>
+                        <a href="/admin/movies/edit" class="action-button edit-button">
+                            <i class="fas fa-edit"></i>
+                            Edit Movie
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie Stats -->
+            <div class="movie-stats">
+                <div class="stat-item">
+                    <span class="stat-number">150</span>
+                    <span class="stat-label">Total Ratings</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">45</span>
+                    <span class="stat-label">Reviews</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">320</span>
+                    <span class="stat-label">Users Watched</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="movie-description">
+                <h3 class="section-title">About</h3>
+                <p class="description-text">Movie description goes here. This is a placeholder for the movie's plot and storyline information.</p>
+            </div>
+
+            <!-- Rating Section -->
+            <div class="movie-rating-section">
+                <h3 class="section-title">Your Rating</h3>
+                <div class="rating-options">
+                    <button class="rating-button" type="button" value="1">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="1" class="popcorn-rating-icon">
+                    </button>
+                    <button class="rating-button" type="button" value="2">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="2" class="popcorn-rating-icon">
+                    </button>
+                    <button class="rating-button" type="button" value="3">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="3" class="popcorn-rating-icon">
+                    </button>
+                    <button class="rating-button" type="button" value="4">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="4" class="popcorn-rating-icon">
+                    </button>
+                    <button class="rating-button" type="button" value="5">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="5" class="popcorn-rating-icon">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Movie Credits -->
+            <div class="movie-credits-section">
+                <div class="credits-header">
+                    <h3 class="section-title">Cast & Crew</h3>
+                    <a href="/admin/movies/credits/add" class="action-button edit-credits-button">
+                        <i class="fas fa-plus"></i>
+                        Add Credit
+                    </a>
+                </div>
+                <div class="credits-container">
+                    <div class="credits-category">
+                        <h4 class="category-title">Actors</h4>
+                        <div class="credits-list">
+                            <div class="credit-item">
+                                <span class="credit-name">Actor Name 1</span>
+                            </div>
+                            <div class="credit-item">
+                                <span class="credit-name">Actor Name 2</span>
+                            </div>
+                            <div class="credit-item">
+                                <span class="credit-name">Actor Name 3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="credits-category">
+                        <h4 class="category-title">Directors</h4>
+                        <div class="credits-list">
+                            <div class="credit-item">
+                                <span class="credit-name">Director Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="credits-category">
+                        <h4 class="category-title">Writers</h4>
+                        <div class="credits-list">
+                            <div class="credit-item">
+                                <span class="credit-name">Writer Name 1</span>
+                            </div>
+                            <div class="credit-item">
+                                <span class="credit-name">Writer Name 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews/Comment Section -->
+            <div class="reviews-section">
+                <h3 class="section-title">User Reviews</h3>
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <span class="reviewer-name">John Doe</span>
+                                <span class="review-date">Jan 15, 2024</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>This was an amazing movie! The cinematography was stunning and the acting was top-notch.</p>
+                        </div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <span class="reviewer-name">Jane Smith</span>
+                                <span class="review-date">Jan 10, 2024</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>Absolutely loved it! One of the best films I've seen this year.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>
+

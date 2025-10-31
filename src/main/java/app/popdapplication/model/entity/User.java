@@ -2,10 +2,16 @@ package app.popdapplication.model.entity;
 
 import app.popdapplication.model.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class User {
 
@@ -25,7 +31,7 @@ public class User {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -35,7 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @Column
+    @Column(nullable = false)
     private boolean active;
 
     @Column(name = "created_on", nullable = false)

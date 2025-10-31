@@ -1,5 +1,6 @@
 package app.popdapplication.model.entity;
 
+import app.popdapplication.model.enums.WatchlistType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Review {
+public class Watchlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,15 +22,16 @@ public class Review {
     @ManyToOne(optional = false)
     private User user;
 
-    @ManyToOne(optional = false)
-    private Movie movie;
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
-    private String content;
+    @Enumerated(EnumType.STRING)
+    private WatchlistType watchlistType;
 
-    @Column(nullable = false)
+    @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 
-    @Column(nullable = false)
-    private LocalDateTime editedOn;
+    @Column(name = "updated_on", nullable = false)
+    private LocalDateTime updated;
 }

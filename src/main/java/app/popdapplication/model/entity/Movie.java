@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public class Movie {
     private LocalDate releaseDate;
 
     @ManyToMany
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     @Column
     private String posterUrl;

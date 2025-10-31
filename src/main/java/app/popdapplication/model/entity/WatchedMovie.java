@@ -3,7 +3,6 @@ package app.popdapplication.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -12,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Review {
+public class WatchedMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,13 +22,4 @@ public class Review {
 
     @ManyToOne(optional = false)
     private Movie movie;
-
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private LocalDateTime createdOn;
-
-    @Column(nullable = false)
-    private LocalDateTime editedOn;
 }

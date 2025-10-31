@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - popd</title>
+    <title>Edit Profile - popd</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/edit-profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
+    <meta name="color-scheme" content="dark light">
+    <meta name="supported-color-schemes" content="dark light">
 </head>
 <body>
 <header class="site-header">
@@ -30,7 +32,7 @@
                 <nav class="nav">
                     <a href="/login">Login</a>
                     <span class="nav-separator">|</span>
-                    <a href="/register" class="nav-active">Register</a>
+                    <a href="/register">Register</a>
                     <span class="nav-separator">|</span>
                     <div class="dropdown">
                         <a href="/profile" class="profile-btn">
@@ -66,87 +68,75 @@
 </header>
 
 <main class="container">
-    <section class="register-section">
-        <div class="register-container">
-            <h2 class="register-title">Create Your Account</h2>
-            <p class="register-subtitle">Join popd and start discovering amazing movies</p>
+    <section class="edit-profile-section">
+        <div class="edit-profile-container">
+            <div class="profile-picture">
+                <img th:src="${#strings.isEmpty(user.getProfilePicture()) ? 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl' : user.getProfilePicture()}"
+                     alt="Profile Picture" class="profile-image">
+            </div>
 
-            <form class="register-form" th:action="@{/register}" th:method="post" th:object="${registerRequest}">
+            <h2 th:text="${user.getUsername()}" class="edit-profile-title">John Doe</h2>
+            <p class="edit-profile-subtitle">Update your account information</p>
+
+            <form class="edit-profile-form" th:action="@{'/profile/' + ${user.getId()} + '/edit'}" th:method="put"  th:object="${editProfileRequest}">
                 <div class="form-group">
                     <div class="label-row">
                         <label for="username" class="form-label">Username</label>
                         <span class="warning-text" id="usernameWarning" th:if="${#fields.hasErrors('username')}">Invalid username</span>
                     </div>
-                    <input th:field="*{username}" type="text" id="username" name="username" class="form-input"
-                           placeholder="Enter your username" required>
+                    <input type="text" id="username" name="username" class="form-input"
+                           placeholder="Enter your username" th:field="*{username}" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <span class="warning-text" id="firstNameWarning" th:if="${#fields.hasErrors('firstName')}">Invalid first name</span>
+                    </div>
+                    <input type="text" id="firstName" name="firstName" class="form-input"
+                           placeholder="Enter your first name" th:field="*{firstName}">
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <span class="warning-text" id="lastNameWarning" th:if="${#fields.hasErrors('lastName')}">Invalid last name</span>
+                    </div>
+                    <input type="text" id="lastName" name="lastName" class="form-input"
+                           placeholder="Enter your last name" th:field="*{lastName}">
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
                         <label for="email" class="form-label">Email</label>
-                        <span class="warning-text" id="emailWarning"
-                              th:if="${#fields.hasErrors('email')}">Invalid email</span>
+                        <span class="warning-text" id="emailWarning" th:if="${#fields.hasErrors('email')}">Invalid email</span>
                     </div>
-                    <input th:field="*{email}" type="email" id="email" name="email" class="form-input"
-                           placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" class="form-input"
+                           placeholder="Enter your email" th:field="*{email}" required>
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="password" class="form-label">Password</label>
-                        <span class="warning-text" id="passwordWarning"
-                              th:text="${#fields.hasErrors('password')} ? 'Invalid password' : ''"
-                              style="display: none;">Invalid password</span>
+                        <label for="profilePicture" class="form-label">Profile Picture URL</label>
+                        <span class="warning-text" id="profilePictureWarning" th:if="${#fields.hasErrors('profilePictureUrl')}">Invalid URL</span>
                     </div>
-                    <input type="password" id="password" name="password" class="form-input"
-                           placeholder="Enter your password" required>
+                    <input type="url" id="profilePicture" name="profilePicture" class="form-input"
+                           placeholder="Enter profile picture URL" th:field="*{profilePictureUrl}">
                 </div>
 
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <span class="warning-text" id="confirmPasswordWarning"
-                              th:text="${#fields.hasErrors('password')} ? 'Invalid password' : ''"
-                              style="display: none;">Invalid password</span>
-                    </div>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
-                           placeholder="Confirm your password" required>
-                </div>
-
-                <button type="submit" class="register-button">
-                    <i class="fas fa-user-plus"></i>
-                    Create Account
+                <button type="submit" class="edit-profile-button">
+                    <i class="fas fa-save"></i>
+                    Save Changes
                 </button>
             </form>
 
-            <div class="login-link">
-                <p>Already have an account? <a href="/login" class="login-link-text">Sign in here</a></p>
+            <div class="profile-link">
+                <p>Cancel editing? <a href="/profile" class="profile-link-text">Back to Profile</a></p>
             </div>
         </div>
     </section>
 </main>
 
-<script>
-    document.querySelector('.register-form').addEventListener('submit', function (e) {
-        const password = document.getElementById('password').value;
-        const confirm = document.getElementById('confirmPassword').value;
-        const warningPass = document.getElementById('passwordWarning');
-        const warningConf = document.getElementById('confirmPasswordWarning');
-
-        if (password !== confirm) {
-            e.preventDefault();
-            const message = "Passwords do not match";
-            warningPass.textContent = message;
-            warningConf.textContent = message;
-            warningPass.style.display = "inline";
-            warningConf.style.display = "inline";
-        } else {
-            warningPass.style.display = "none";
-            warningConf.style.display = "none";
-        }
-    });
-
-</script>
 
 <footer class="site-footer">
     <div class="container">
@@ -155,3 +145,4 @@
 </footer>
 </body>
 </html>
+

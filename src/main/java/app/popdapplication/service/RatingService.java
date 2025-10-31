@@ -1,5 +1,6 @@
 package app.popdapplication.service;
 
+import app.popdapplication.model.entity.User;
 import app.popdapplication.repository.RatingRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,5 +11,9 @@ public class RatingService {
 
     public RatingService(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
+    }
+
+    public int countMoviesRated(User user) {
+        return ratingRepository.findAllByUser(user).size();
     }
 }

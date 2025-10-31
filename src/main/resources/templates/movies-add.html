@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - popd</title>
+    <title>Add Movie - popd</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/register.css">
+    <style>
+        /* Genres dropdown (click to expand, multiple checkboxes) */
+        .genres-box { border: 1px solid var(--border); border-radius: 8px; background: var(--card); }
+        .genres-box details { width: 100%; }
+        .genres-box summary { list-style: none; cursor: pointer; padding: 10px 12px; color: var(--text); }
+        .genres-box summary::-webkit-details-marker { display: none; }
+        .genres-box .genres-panel { padding: 8px 12px 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px 16px; }
+        .genres-box label { color: var(--text); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .genres-hint { color: var(--muted); font-size: 12px; margin-top: 6px; display: block; }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
 </head>
@@ -30,7 +40,7 @@
                 <nav class="nav">
                     <a href="/login">Login</a>
                     <span class="nav-separator">|</span>
-                    <a href="/register" class="nav-active">Register</a>
+                    <a href="/register">Register</a>
                     <span class="nav-separator">|</span>
                     <div class="dropdown">
                         <a href="/profile" class="profile-btn">
@@ -68,85 +78,64 @@
 <main class="container">
     <section class="register-section">
         <div class="register-container">
-            <h2 class="register-title">Create Your Account</h2>
-            <p class="register-subtitle">Join popd and start discovering amazing movies</p>
+            <h2 class="register-title">Add Movie</h2>
+            <p class="register-subtitle">Create a new movie entry</p>
 
-            <form class="register-form" th:action="@{/register}" th:method="post" th:object="${registerRequest}">
+            <form class="register-form" th:action="@{/admin/movies/add}" th:object="${addMovieRequest}" method="post">
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="username" class="form-label">Username</label>
-                        <span class="warning-text" id="usernameWarning" th:if="${#fields.hasErrors('username')}">Invalid username</span>
+                        <label for="title" class="form-label">Title</label>
+                        <span class="warning-text" id="titleWarning" th:if="${#fields.hasErrors('title')}">Title cannot be empty</span>
                     </div>
-                    <input th:field="*{username}" type="text" id="username" name="username" class="form-input"
-                           placeholder="Enter your username" required>
+                    <input type="text" id="title" th:field="*{title}" class="form-input" placeholder="Enter movie title" required>
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="email" class="form-label">Email</label>
-                        <span class="warning-text" id="emailWarning"
-                              th:if="${#fields.hasErrors('email')}">Invalid email</span>
+                        <label for="description" class="form-label">Description</label>
                     </div>
-                    <input th:field="*{email}" type="email" id="email" name="email" class="form-input"
-                           placeholder="Enter your email" required>
+                    <textarea id="description" th:field="*{description}" class="form-input" placeholder="Enter description" rows="5" style="resize: vertical;"></textarea>
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="password" class="form-label">Password</label>
-                        <span class="warning-text" id="passwordWarning"
-                              th:text="${#fields.hasErrors('password')} ? 'Invalid password' : ''"
-                              style="display: none;">Invalid password</span>
+                        <label for="releaseDate" class="form-label">Release Date</label>
                     </div>
-                    <input type="password" id="password" name="password" class="form-input"
-                           placeholder="Enter your password" required>
+                    <input type="date" id="releaseDate" th:field="*{releaseDate}" class="form-input">
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <span class="warning-text" id="confirmPasswordWarning"
-                              th:text="${#fields.hasErrors('password')} ? 'Invalid password' : ''"
-                              style="display: none;">Invalid password</span>
+                        <label class="form-label">Genres</label>
                     </div>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
-                           placeholder="Confirm your password" required>
+                    <div class="genres-box">
+                        <details>
+                            <summary>Select genres</summary>
+                            <div class="genres-panel">
+                                <label th:each="genre : ${genres}">
+                                    <input type="checkbox" th:field="*{genresIds}" name="genres" th:value="${genre.id}" th:text="${genre.name}">
+                                </label>
+                            </div>
+                        </details>
+                    </div>
+                    <small class="genres-hint">You can select multiple genres.</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="posterUrl" class="form-label">Poster URL</label>
+                    </div>
+                    <input type="url" id="posterUrl" th:field="*{posterUrl}" class="form-input" placeholder="https://...">
                 </div>
 
                 <button type="submit" class="register-button">
-                    <i class="fas fa-user-plus"></i>
-                    Create Account
+                    <i class="fas fa-plus"></i>
+                    Save Movie
                 </button>
             </form>
-
-            <div class="login-link">
-                <p>Already have an account? <a href="/login" class="login-link-text">Sign in here</a></p>
-            </div>
         </div>
     </section>
 </main>
-
-<script>
-    document.querySelector('.register-form').addEventListener('submit', function (e) {
-        const password = document.getElementById('password').value;
-        const confirm = document.getElementById('confirmPassword').value;
-        const warningPass = document.getElementById('passwordWarning');
-        const warningConf = document.getElementById('confirmPasswordWarning');
-
-        if (password !== confirm) {
-            e.preventDefault();
-            const message = "Passwords do not match";
-            warningPass.textContent = message;
-            warningConf.textContent = message;
-            warningPass.style.display = "inline";
-            warningConf.style.display = "inline";
-        } else {
-            warningPass.style.display = "none";
-            warningConf.style.display = "none";
-        }
-    });
-
-</script>
 
 <footer class="site-footer">
     <div class="container">
@@ -155,3 +144,5 @@
 </footer>
 </body>
 </html>
+
+

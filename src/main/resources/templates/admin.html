@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="color-scheme" content="dark light">
+    <meta name="supported-color-schemes" content="dark light">
+    
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+
+                <nav class="nav">
+                    <a href="/login">Login</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/register">Register</a>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/admin/movies/add">Add Movie</a>
+                            <a href="/admin/credits/add">Add Movie Credit</a>
+                            <a href="/admin/artists/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="admin-section">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1 class="admin-title">Admin Functions</h1>
+                <p class="admin-subtitle">Manage movies, artists and credits</p>
+            </div>
+
+            <div class="admin-actions">
+                <a class="action-button movie-button" href="/admin/movies/add">
+                    <i class="fas fa-film"></i>
+                    Add Movie
+                </a>
+                <a class="action-button artist-button" href="/admin/artists/add">
+                    <i class="fas fa-masks-theater"></i>
+                    Add Artist
+                </a>
+                <a class="action-button credit-button" href="/admin/credits/add">
+                    <i class="fas fa-clapperboard"></i>
+                    Add Movie Credit
+                </a>
+                <a class="action-button panel-button" href="admin/users">
+                    <i class="fas fa-screwdriver-wrench"></i>
+                    Manage Users
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+    
+</footer>
+</body>
+</html>
+
+

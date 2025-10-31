@@ -14,7 +14,7 @@
         <div class="header-bar">
             <div class="logo-section">
                 <a class="logo" href="/">
-                    <img src="https://dl.dropboxusercontent.com/scl/fi/3ltg6waaooj3pi9wpglhi/Popd-logo.png?rlkey=hagc0cda54mpqcdv7c13fp5ck&st=75m50xfy"
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
                          alt="POPd Logo" class="logo-image">
                 </a>
             </div>
@@ -31,8 +31,33 @@
                     <span class="nav-separator">|</span>
                     <a href="/register">Register</a>
                     <span class="nav-separator">|</span>
-                    <a href="/movies">Movies</a>
-                    <a href="/grement" class="nav-button">Grement</a>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/admin/movies/add">Add Movie</a>
+                            <a href="/admin/credits/add">Add Movie Credit</a>
+                            <a href="/admin/artists/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
                 </nav>
             </div>
         </div>

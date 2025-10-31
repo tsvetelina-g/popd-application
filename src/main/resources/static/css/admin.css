@@ -1,0 +1,77 @@
+/* Admin Page Styles */
+
+.admin-section {
+  padding: 40px 0;
+}
+
+.admin-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.admin-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.admin-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--card);
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background: var(--bg);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.movie-button i,
+.artist-button i,
+.credit-button i,
+.panel-button i {
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    margin: 0 15px;
+    padding: 24px 16px;
+  }
+}
+
+
