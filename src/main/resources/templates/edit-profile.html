@@ -53,9 +53,8 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/admin/movies/add">Add Movie</a>
-                            <a href="/admin/credits/add">Add Movie Credit</a>
-                            <a href="/admin/artists/add">Add Artist</a>
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
                         </div>
@@ -78,7 +77,8 @@
             <h2 th:text="${user.getUsername()}" class="edit-profile-title">John Doe</h2>
             <p class="edit-profile-subtitle">Update your account information</p>
 
-            <form class="edit-profile-form" th:action="@{'/profile/' + ${user.getId()} + '/edit'}" th:method="put"  th:object="${editProfileRequest}">
+            <form class="edit-profile-form" th:action="@{'/profile/' + ${user.getId()} + '/edit'}" th:method="put"
+                  th:object="${editProfileRequest}">
                 <div class="form-group">
                     <div class="label-row">
                         <label for="username" class="form-label">Username</label>
@@ -109,7 +109,8 @@
                 <div class="form-group">
                     <div class="label-row">
                         <label for="email" class="form-label">Email</label>
-                        <span class="warning-text" id="emailWarning" th:if="${#fields.hasErrors('email')}">Invalid email</span>
+                        <span class="warning-text" id="emailWarning"
+                              th:if="${#fields.hasErrors('email')}">Invalid email</span>
                     </div>
                     <input type="email" id="email" name="email" class="form-input"
                            placeholder="Enter your email" th:field="*{email}" required>
@@ -118,7 +119,8 @@
                 <div class="form-group">
                     <div class="label-row">
                         <label for="profilePicture" class="form-label">Profile Picture URL</label>
-                        <span class="warning-text" id="profilePictureWarning" th:if="${#fields.hasErrors('profilePictureUrl')}">Invalid URL</span>
+                        <span class="warning-text" id="profilePictureWarning"
+                              th:if="${#fields.hasErrors('profilePictureUrl')}">Invalid URL</span>
                     </div>
                     <input type="url" id="profilePicture" name="profilePicture" class="form-input"
                            placeholder="Enter profile picture URL" th:field="*{profilePictureUrl}">

@@ -5,7 +5,7 @@
   --muted: #cccccc;
   --accent: #850309;
   --secondary: #d30f0f;
-  --border: #333333;
+  --border: rgba(69, 69, 69, 0.52);
 }
 
 * {

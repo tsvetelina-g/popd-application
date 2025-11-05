@@ -12,6 +12,7 @@
     border-radius: 12px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px 0;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -70,8 +71,7 @@
     display: flex;
     align-items: center;
     gap: 30px;
-    /*margin-bottom: 40px;*/
-    /*padding-bottom: 30px;*/
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
 }
 
@@ -81,11 +81,12 @@
 }
 
 .profile-image {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--accent);
+    background-color: var(--accent);
     transition: transform 0.3s ease;
 }
 
@@ -370,6 +371,7 @@
         flex-direction: column;
         text-align: center;
         gap: 20px;
+        padding-bottom: 20px;
     }
 
     .profile-image {

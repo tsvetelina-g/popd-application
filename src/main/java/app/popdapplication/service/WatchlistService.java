@@ -1,20 +1,25 @@
 package app.popdapplication.service;
 
+import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
+import app.popdapplication.model.entity.WatchlistMovie;
 import app.popdapplication.model.enums.WatchlistType;
 import app.popdapplication.repository.WatchlistRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class WatchlistService {
 
     private final WatchlistRepository watchlistRepository;
+    private final WatchlistMovieService watchlistMovieService;
 
-    public WatchlistService(WatchlistRepository watchlistRepository) {
+    public WatchlistService(WatchlistRepository watchlistRepository, WatchlistMovieService watchlistMovieService) {
         this.watchlistRepository = watchlistRepository;
+        this.watchlistMovieService = watchlistMovieService;
     }
 
     public void createDefaultWatchlist(User user) {
@@ -26,6 +31,35 @@ public class WatchlistService {
                 .createdOn(LocalDateTime.now())
                 .updated(LocalDateTime.now())
                 .build();
+
+        watchlistRepository.save(watchlist);
+    }
+
+    public boolean movieIsInWatchlist(Movie movie, User user) {
+
+        Watchlist watchlist = watchlistRepository.findByUser(user);
+
+        Optional<WatchlistMovie> watchlistMovieOpt = watchlistMovieService.findByWatchlistAndMovie(watchlist, movie);
+
+        return watchlistMovieOpt.isPresent();
+    }
+
+    public void addToWatchlist(Movie movie, User user) {
+        Watchlist watchlist = watchlistRepository.findByUser(user);
+
+        watchlistMovieService.saveToWatchlist(watchlist, movie);
+
+        watchlist.setUpdated(LocalDateTime.now());
+
+        watchlistRepository.save(watchlist);
+    }
+
+    public void removeFromWatchlist(Movie movie, User user) {
+        Watchlist watchlist = watchlistRepository.findByUser(user);
+
+        watchlistMovieService.removeFromWatchlist(watchlist, movie);
+
+        watchlist.setUpdated(LocalDateTime.now());
 
         watchlistRepository.save(watchlist);
     }

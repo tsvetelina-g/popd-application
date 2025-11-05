@@ -1,14 +1,42 @@
 package app.popdapplication.service;
 
-import app.popdapplication.repository.WatchedMovieRepository;
+import app.popdapplication.model.entity.Movie;
+import app.popdapplication.model.entity.Watchlist;
+import app.popdapplication.model.entity.WatchlistMovie;
+import app.popdapplication.repository.WatchlistMovieRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class WatchlistMovieService {
 
-    private final WatchedMovieRepository watchedMovieRepository;
+    private final WatchlistMovieRepository watchlistMovieRepository;
 
-    public WatchlistMovieService(WatchedMovieRepository watchedMovieRepository) {
-        this.watchedMovieRepository = watchedMovieRepository;
+    public WatchlistMovieService(WatchlistMovieRepository watchlistMovieRepository) {
+        this.watchlistMovieRepository = watchlistMovieRepository;
+    }
+
+    public Optional<WatchlistMovie> findByWatchlistAndMovie(Watchlist watchlist, Movie movie) {
+        return watchlistMovieRepository.findByWatchlistAndMovie(watchlist, movie);
+    }
+
+    public void saveToWatchlist(Watchlist watchlist, Movie movie) {
+
+        WatchlistMovie watchlistMovie = WatchlistMovie.builder()
+                .movie(movie)
+                .watchlist(watchlist)
+                .addedOn(LocalDateTime.now())
+                .build();
+
+        watchlistMovieRepository.save(watchlistMovie);
+    }
+
+    public void removeFromWatchlist(Watchlist watchlist, Movie movie) {
+
+        Optional<WatchlistMovie> watchlistMovie = watchlistMovieRepository.findByWatchlistAndMovie(watchlist, movie);
+
+        watchlistMovieRepository.delete(watchlistMovie.get());
     }
 }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/artist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+
+                <nav class="nav">
+                    <a href="/login">Login</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/register">Register</a>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="artist-section">
+        <div class="artist-container">
+            <div class="artist-header">
+                <div class="artist-picture">
+                    <img th:src="${artist.imageUrl != null and !#strings.isEmpty(artist.imageUrl) ? artist.imageUrl : 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl'}"
+                         alt="Artist Picture" class="artist-image">
+                </div>
+                <div class="artist-info">
+                    <h1 class="artist-name" th:text="${artist.name}">Artist Name</h1>
+                    <div class="artist-birthdate-container">
+                        <p class="artist-birthdate" th:text="${artist.birthDate != null ? 'Born: ' + #temporals.format(artist.birthDate, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) : 'Born: N/A'}">Born: January 1, 1980</p>
+                    </div>
+                    <a th:href="@{'/artist/' + ${artist.id} + '/edit'}" class="action-button edit-button">
+                        <i class="fas fa-edit"></i>
+                        Edit Artist Profile
+                    </a>
+                    <div class="artist-biography">
+                        <h3 class="biography-title">Biography</h3>
+                        <p class="biography-text" th:text="${artist.biography != null and !#strings.isEmpty(artist.biography) ? artist.biography : 'N/A'}">
+                            This is where the artist's biography will be displayed. It can contain multiple paragraphs
+                            describing the artist's career, achievements, and background information. The biography
+                            provides context about the artist's work in the entertainment industry.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="artist-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Movie Credits</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credits Section with Dropdown -->
+        <div class="credits-section">
+            <div class="credits-header">
+                <h2 class="credits-title">Credits</h2>
+                <select id="role-select" class="role-select">
+                    <option value="actor" selected>Actor</option>
+                    <option value="director">Director</option>
+                    <option value="writer">Writer</option>
+                </select>
+            </div>
+            <div id="credits-list" class="credits-list">
+                <p class="no-credits-message" style="display: none;">Please select a role to view credits.</p>
+                
+                <!-- Actor Credits -->
+                <div class="credit-item" data-role="actor">
+                    <a href="/movie/1" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 1</span>
+                        <span class="credit-year">(2024)</span>
+                    </a>
+                </div>
+                <div class="credit-item" data-role="actor">
+                    <a href="/movie/2" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 2</span>
+                        <span class="credit-year">(2023)</span>
+                    </a>
+                </div>
+                <div class="credit-item" data-role="actor">
+                    <a href="/movie/3" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 3</span>
+                        <span class="credit-year">(2022)</span>
+                    </a>
+                </div>
+                
+                <!-- Director Credits -->
+                <div class="credit-item" data-role="director" style="display: none;">
+                    <a href="/movie/4" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 4</span>
+                        <span class="credit-year">(2024)</span>
+                    </a>
+                </div>
+                <div class="credit-item" data-role="director" style="display: none;">
+                    <a href="/movie/5" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 5</span>
+                        <span class="credit-year">(2023)</span>
+                    </a>
+                </div>
+                
+                <!-- Writer Credits -->
+                <div class="credit-item" data-role="writer" style="display: none;">
+                    <a href="/movie/6" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 6</span>
+                        <span class="credit-year">(2024)</span>
+                    </a>
+                </div>
+                <div class="credit-item" data-role="writer" style="display: none;">
+                    <a href="/movie/7" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 7</span>
+                        <span class="credit-year">(2023)</span>
+                    </a>
+                </div>
+                <div class="credit-item" data-role="writer" style="display: none;">
+                    <a href="/movie/8" class="credit-link">
+                        <span class="credit-movie-title">Movie Title 8</span>
+                        <span class="credit-year">(2022)</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role-select');
+        const creditsList = document.getElementById('credits-list');
+        const creditItems = creditsList.querySelectorAll('.credit-item');
+        const noCreditsMessage = creditsList.querySelector('.no-credits-message');
+        
+        function filterCredits(selectedRole) {
+            // Hide all credit items
+            creditItems.forEach(item => {
+                item.style.display = 'none';
+            });
+            
+            // Show message if no role is selected
+            if (!selectedRole) {
+                if (noCreditsMessage) {
+                    noCreditsMessage.style.display = 'block';
+                }
+                return;
+            }
+            
+            // Hide the "no credits" message
+            if (noCreditsMessage) {
+                noCreditsMessage.style.display = 'none';
+            }
+            
+            // Show credit items for the selected role
+            creditItems.forEach(item => {
+                if (item.getAttribute('data-role') === selectedRole) {
+                    item.style.display = 'block';
+                }
+            });
+        }
+        
+        // Set up change event listener
+        roleSelect.addEventListener('change', function() {
+            filterCredits(this.value);
+        });
+        
+        // Initialize with default selected role (actor)
+        filterCredits(roleSelect.value);
+    });
+</script>
+</body>
+</html>
+

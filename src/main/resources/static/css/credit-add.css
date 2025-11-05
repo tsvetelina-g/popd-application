@@ -1,4 +1,4 @@
-/* Register Page Specific Styles */
+/* Credit Add Page Specific Styles */
 
 /* Register Section */
 .register-section {
@@ -91,6 +91,94 @@
   color: var(--muted);
 }
 
+.form-hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Select Dropdown */
+.form-select {
+  padding: 12px 15px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 40px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(133, 3, 9, 0.1);
+}
+
+.form-select option {
+  background: var(--card);
+  color: var(--text);
+  padding: 10px;
+}
+
+/* Searchable Dropdown */
+.searchable-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.searchable-dropdown .form-input {
+  padding-right: 40px;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-option {
+  padding: 12px 15px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.dropdown-option:hover {
+  background: var(--bg);
+}
+
+.dropdown-option:first-child {
+  border-top: 1px solid var(--border);
+}
+
 /* Register Button */
 .register-button {
   background: var(--accent);
@@ -118,35 +206,28 @@
   transform: translateY(0);
 }
 
-/* Login Link */
-.login-link {
-  text-align: center;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-}
-
-.login-link p {
-  color: var(--muted);
-  font-size: 14px;
-  margin: 0;
-}
-
-.login-link-text {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.login-link-text:hover {
-  color: #6b0207;
-}
-
 /* Navigation Active State */
 .nav-active {
   color: var(--accent) !important;
   font-weight: 600;
+}
+
+/* Scrollbar styling for dropdown */
+.dropdown-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-options::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.dropdown-options::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.dropdown-options::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }
 
 /* Responsive Design */
@@ -155,15 +236,15 @@
     margin: 20px;
     padding: 30px 25px;
   }
-  
+
   .register-title {
     font-size: 24px;
   }
-  
+
   .register-section {
     padding: 40px 0;
   }
-  
+
   .warning-text {
     max-width: 150px;
     font-size: 11px;
@@ -175,15 +256,15 @@
     margin: 15px;
     padding: 25px 20px;
   }
-  
+
   .register-title {
     font-size: 22px;
   }
-  
+
   .label-row {
     flex-wrap: wrap;
   }
-  
+
   .warning-text {
     max-width: 100%;
     font-size: 10px;

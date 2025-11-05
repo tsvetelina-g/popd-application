@@ -1,0 +1,676 @@
+credits:
+  # The Shawshank Redemption
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Tim Robbins"
+    role: "ACTOR"
+
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Morgan Freeman"
+    role: "ACTOR"
+
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Frank Darabont"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Frank Darabont"
+    role: "WRITER"
+
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Roger Deakins"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Shawshank Redemption"
+    artistName: "Thomas Newman"
+    role: "COMPOSER"
+
+  # The Godfather
+  - movieTitle: "The Godfather"
+    artistName: "Marlon Brando"
+    role: "ACTOR"
+
+  - movieTitle: "The Godfather"
+    artistName: "Al Pacino"
+    role: "ACTOR"
+
+  - movieTitle: "The Godfather"
+    artistName: "Francis Ford Coppola"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Godfather"
+    artistName: "Francis Ford Coppola"
+    role: "WRITER"
+
+  - movieTitle: "The Godfather"
+    artistName: "Mario Puzo"
+    role: "WRITER"
+
+  - movieTitle: "The Godfather"
+    artistName: "Gordon Willis"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Godfather"
+    artistName: "Nino Rota"
+    role: "COMPOSER"
+
+  # The Dark Knight
+  - movieTitle: "The Dark Knight"
+    artistName: "Christian Bale"
+    role: "ACTOR"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Heath Ledger"
+    role: "ACTOR"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Christopher Nolan"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Christopher Nolan"
+    role: "WRITER"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Jonathan Nolan"
+    role: "WRITER"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Wally Pfister"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "Hans Zimmer"
+    role: "COMPOSER"
+
+  - movieTitle: "The Dark Knight"
+    artistName: "John Caglione Jr."
+    role: "MAKEUP_ARTIST"
+
+  # Pulp Fiction
+  - movieTitle: "Pulp Fiction"
+    artistName: "John Travolta"
+    role: "ACTOR"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Samuel L. Jackson"
+    role: "ACTOR"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Uma Thurman"
+    role: "ACTOR"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Quentin Tarantino"
+    role: "DIRECTOR"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Quentin Tarantino"
+    role: "WRITER"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Andrzej Sekula"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Pulp Fiction"
+    artistName: "Sally Menke"
+    role: "EDITOR"
+
+  # Inception
+  - movieTitle: "Inception"
+    artistName: "Leonardo DiCaprio"
+    role: "ACTOR"
+
+  - movieTitle: "Inception"
+    artistName: "Marion Cotillard"
+    role: "ACTOR"
+
+  - movieTitle: "Inception"
+    artistName: "Christopher Nolan"
+    role: "DIRECTOR"
+
+  - movieTitle: "Inception"
+    artistName: "Christopher Nolan"
+    role: "WRITER"
+
+  - movieTitle: "Inception"
+    artistName: "Wally Pfister"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Inception"
+    artistName: "Lee Smith"
+    role: "EDITOR"
+
+  - movieTitle: "Inception"
+    artistName: "Hans Zimmer"
+    role: "COMPOSER"
+
+  # Fight Club
+  - movieTitle: "Fight Club"
+    artistName: "Brad Pitt"
+    role: "ACTOR"
+
+  - movieTitle: "Fight Club"
+    artistName: "Edward Norton"
+    role: "ACTOR"
+
+  - movieTitle: "Fight Club"
+    artistName: "David Fincher"
+    role: "DIRECTOR"
+
+  - movieTitle: "Fight Club"
+    artistName: "Jim Uhls"
+    role: "WRITER"
+
+  - movieTitle: "Fight Club"
+    artistName: "Chuck Palahniuk"
+    role: "WRITER"
+
+  - movieTitle: "Fight Club"
+    artistName: "Jeff Cronenweth"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Fight Club"
+    artistName: "James Haygood"
+    role: "EDITOR"
+
+  # Forrest Gump
+  - movieTitle: "Forrest Gump"
+    artistName: "Tom Hanks"
+    role: "ACTOR"
+
+  - movieTitle: "Forrest Gump"
+    artistName: "Robin Wright"
+    role: "ACTOR"
+
+  - movieTitle: "Forrest Gump"
+    artistName: "Robert Zemeckis"
+    role: "DIRECTOR"
+
+  - movieTitle: "Forrest Gump"
+    artistName: "Eric Roth"
+    role: "WRITER"
+
+  - movieTitle: "Forrest Gump"
+    artistName: "Don Burgess"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Forrest Gump"
+    artistName: "Alan Silvestri"
+    role: "COMPOSER"
+
+  # The Matrix
+  - movieTitle: "The Matrix"
+    artistName: "Keanu Reeves"
+    role: "ACTOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Laurence Fishburne"
+    role: "ACTOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Carrie-Anne Moss"
+    role: "ACTOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Lana Wachowski"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Lilly Wachowski"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Lana Wachowski"
+    role: "WRITER"
+
+  - movieTitle: "The Matrix"
+    artistName: "Lilly Wachowski"
+    role: "WRITER"
+
+  - movieTitle: "The Matrix"
+    artistName: "Bill Pope"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Matrix"
+    artistName: "Zach Staenberg"
+    role: "EDITOR"
+
+  - movieTitle: "The Matrix"
+    artistName: "Don Davis"
+    role: "COMPOSER"
+
+  - movieTitle: "The Matrix"
+    artistName: "Yuen Woo-ping"
+    role: "STUNT_COORDINATOR"
+
+  # Goodfellas
+  - movieTitle: "Goodfellas"
+    artistName: "Robert De Niro"
+    role: "ACTOR"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Joe Pesci"
+    role: "ACTOR"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Martin Scorsese"
+    role: "DIRECTOR"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Martin Scorsese"
+    role: "WRITER"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Nicholas Pileggi"
+    role: "WRITER"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Michael Ballhaus"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Goodfellas"
+    artistName: "Thelma Schoonmaker"
+    role: "EDITOR"
+
+  # The Lord of the Rings: The Return of the King
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Elijah Wood"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Viggo Mortensen"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Ian McKellen"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Peter Jackson"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Peter Jackson"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Fran Walsh"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Philippa Boyens"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Andrew Lesnie"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Jamie Selkirk"
+    role: "EDITOR"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Howard Shore"
+    role: "COMPOSER"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Richard Taylor"
+    role: "MAKEUP_ARTIST"
+
+  - movieTitle: "The Lord of the Rings: The Return of the King"
+    artistName: "Richard Taylor"
+    role: "VISUAL_EFFECTS"
+
+  # Interstellar
+  - movieTitle: "Interstellar"
+    artistName: "Matthew McConaughey"
+    role: "ACTOR"
+
+  - movieTitle: "Interstellar"
+    artistName: "Anne Hathaway"
+    role: "ACTOR"
+
+  - movieTitle: "Interstellar"
+    artistName: "Jessica Chastain"
+    role: "ACTOR"
+
+  - movieTitle: "Interstellar"
+    artistName: "Christopher Nolan"
+    role: "DIRECTOR"
+
+  - movieTitle: "Interstellar"
+    artistName: "Christopher Nolan"
+    role: "WRITER"
+
+  - movieTitle: "Interstellar"
+    artistName: "Jonathan Nolan"
+    role: "WRITER"
+
+  - movieTitle: "Interstellar"
+    artistName: "Hoyte van Hoytema"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Interstellar"
+    artistName: "Lee Smith"
+    role: "EDITOR"
+
+  - movieTitle: "Interstellar"
+    artistName: "Hans Zimmer"
+    role: "COMPOSER"
+
+  - movieTitle: "Interstellar"
+    artistName: "Nathan Crowley"
+    role: "PRODUCTION_DESIGNER"
+
+  - movieTitle: "Interstellar"
+    artistName: "Paul Franklin"
+    role: "VISUAL_EFFECTS"
+
+  # The Silence of the Lambs
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Jodie Foster"
+    role: "ACTOR"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Anthony Hopkins"
+    role: "ACTOR"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Jonathan Demme"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Thomas Harris"
+    role: "WRITER"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Ted Tally"
+    role: "WRITER"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Tak Fujimoto"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Craig McKay"
+    role: "EDITOR"
+
+  - movieTitle: "The Silence of the Lambs"
+    artistName: "Howard Shore"
+    role: "COMPOSER"
+
+  # Parasite
+  - movieTitle: "Parasite"
+    artistName: "Song Kang-ho"
+    role: "ACTOR"
+
+  - movieTitle: "Parasite"
+    artistName: "Bong Joon-ho"
+    role: "DIRECTOR"
+
+  - movieTitle: "Parasite"
+    artistName: "Bong Joon-ho"
+    role: "WRITER"
+
+  - movieTitle: "Parasite"
+    artistName: "Han Jin-won"
+    role: "WRITER"
+
+  - movieTitle: "Parasite"
+    artistName: "Hong Kyung-pyo"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Parasite"
+    artistName: "Yang Jin-mo"
+    role: "EDITOR"
+
+  - movieTitle: "Parasite"
+    artistName: "Jung Jae-il"
+    role: "COMPOSER"
+
+  # The Green Mile
+  - movieTitle: "The Green Mile"
+    artistName: "Tom Hanks"
+    role: "ACTOR"
+
+  - movieTitle: "The Green Mile"
+    artistName: "Michael Clarke Duncan"
+    role: "ACTOR"
+
+  - movieTitle: "The Green Mile"
+    artistName: "David Morse"
+    role: "ACTOR"
+
+  - movieTitle: "The Green Mile"
+    artistName: "Frank Darabont"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Green Mile"
+    artistName: "Frank Darabont"
+    role: "WRITER"
+
+  - movieTitle: "The Green Mile"
+    artistName: "Stephen King"
+    role: "WRITER"
+
+  - movieTitle: "The Green Mile"
+    artistName: "David Tattersall"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Green Mile"
+    artistName: "Thomas Newman"
+    role: "COMPOSER"
+
+  # The Godfather: Part II
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Al Pacino"
+    role: "ACTOR"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Robert De Niro"
+    role: "ACTOR"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Robert Duvall"
+    role: "ACTOR"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Francis Ford Coppola"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Francis Ford Coppola"
+    role: "WRITER"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Mario Puzo"
+    role: "WRITER"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Gordon Willis"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Nino Rota"
+    role: "COMPOSER"
+
+  - movieTitle: "The Godfather: Part II"
+    artistName: "Barry Malkin"
+    role: "EDITOR"
+
+  # Schindler's List
+  - movieTitle: "Schindler's List"
+    artistName: "Liam Neeson"
+    role: "ACTOR"
+
+  - movieTitle: "Schindler's List"
+    artistName: "Ralph Fiennes"
+    role: "ACTOR"
+
+  - movieTitle: "Schindler's List"
+    artistName: "Steven Spielberg"
+    role: "DIRECTOR"
+
+  - movieTitle: "Schindler's List"
+    artistName: "Steven Zaillian"
+    role: "WRITER"
+
+  - movieTitle: "Schindler's List"
+    artistName: "Janusz Kamiński"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Schindler's List"
+    artistName: "Michael Kahn"
+    role: "EDITOR"
+
+  - movieTitle: "Schindler's List"
+    artistName: "John Williams"
+    role: "COMPOSER"
+
+  # The Lord of the Rings: The Fellowship of the Ring
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Elijah Wood"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Ian McKellen"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Sean Astin"
+    role: "ACTOR"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Peter Jackson"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Peter Jackson"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Fran Walsh"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Philippa Boyens"
+    role: "WRITER"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Andrew Lesnie"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Jamie Selkirk"
+    role: "EDITOR"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Howard Shore"
+    role: "COMPOSER"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Richard Taylor"
+    role: "MAKEUP_ARTIST"
+
+  - movieTitle: "The Lord of the Rings: The Fellowship of the Ring"
+    artistName: "Richard Taylor"
+    role: "VISUAL_EFFECTS"
+
+  # The Prestige
+  - movieTitle: "The Prestige"
+    artistName: "Hugh Jackman"
+    role: "ACTOR"
+
+  - movieTitle: "The Prestige"
+    artistName: "Christian Bale"
+    role: "ACTOR"
+
+  - movieTitle: "The Prestige"
+    artistName: "Scarlett Johansson"
+    role: "ACTOR"
+
+  - movieTitle: "The Prestige"
+    artistName: "Christopher Nolan"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Prestige"
+    artistName: "Christopher Nolan"
+    role: "WRITER"
+
+  - movieTitle: "The Prestige"
+    artistName: "Jonathan Nolan"
+    role: "WRITER"
+
+  - movieTitle: "The Prestige"
+    artistName: "Christopher Priest"
+    role: "WRITER"
+
+  - movieTitle: "The Prestige"
+    artistName: "Wally Pfister"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "The Prestige"
+    artistName: "Lee Smith"
+    role: "EDITOR"
+
+  - movieTitle: "The Prestige"
+    artistName: "David Julyan"
+    role: "COMPOSER"
+
+  # Gladiator
+  - movieTitle: "Gladiator"
+    artistName: "Russell Crowe"
+    role: "ACTOR"
+
+  - movieTitle: "Gladiator"
+    artistName: "Joaquin Phoenix"
+    role: "ACTOR"
+
+  - movieTitle: "Gladiator"
+    artistName: "Ridley Scott"
+    role: "DIRECTOR"
+
+  - movieTitle: "Gladiator"
+    artistName: "David Franzoni"
+    role: "WRITER"
+
+  - movieTitle: "Gladiator"
+    artistName: "John Mathieson"
+    role: "CINEMATOGRAPHER"
+
+  - movieTitle: "Gladiator"
+    artistName: "Pietro Scalia"
+    role: "EDITOR"
+
+  - movieTitle: "Gladiator"
+    artistName: "Lisa Westcott"
+    role: "MAKEUP_ARTIST"
+
+  - movieTitle: "Gladiator"
+    artistName: "Hans Zimmer"
+    role: "COMPOSER"
+
+  # The Lion King
+  - movieTitle: "The Lion King"
+    artistName: "James Earl Jones"
+    role: "ACTOR"
+
+  - movieTitle: "The Lion King"
+    artistName: "Jeremy Irons"
+    role: "ACTOR"
+
+  - movieTitle: "The Lion King"
+    artistName: "Roger Allers"
+    role: "DIRECTOR"
+
+  - movieTitle: "The Lion King"
+    artistName: "Irene Mecchi"
+    role: "WRITER"
+
+  - movieTitle: "The Lion King"
+    artistName: "Hans Zimmer"
+    role: "COMPOSER"
+
+  - movieTitle: "The Lion King"
+    artistName: "Elton John"
+    role: "COMPOSER"

@@ -1,7 +1,9 @@
 package app.popdapplication.web.dto;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,33 +11,23 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddMovieRequest {
+public class EditArtistRequest {
 
     @NotBlank
-    private String title;
+    private String name;
 
     @Nullable
-    private String description;
-
-    @Nullable
-    private LocalDate releaseDate;
-
-    @Nullable
-    private List<UUID> genresIds = new ArrayList<>();
+    private LocalDate birthDate;
 
     @Nullable
     @URL
-    private String posterUrl;
+    private String imageUrl;
 
     @Nullable
-    @URL
-    private String backgroundImage;
+    private String biography;
 }

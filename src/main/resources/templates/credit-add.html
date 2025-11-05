@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Credit - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/credit-add.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+
+                <nav class="nav">
+                    <a href="/login">Login</a>
+                    <span class="nav-separator">|</span>
+                    <a href="/register">Register</a>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="register-section">
+        <div class="register-container">
+            <h2 class="register-title">Add Credit</h2>
+            <p class="register-subtitle">Add a credit for this movie</p>
+
+            <form class="register-form" action="#" method="post">
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="artist" class="form-label">Artist</label>
+                        <span class="warning-text" id="artistWarning"></span>
+                    </div>
+                    <div class="searchable-dropdown">
+                        <input type="text"
+                               id="artist"
+                               name="artist"
+                               class="form-input"
+                               placeholder="Search for an artist..."
+                               autocomplete="off"
+                               required>
+                        <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+                        <div class="dropdown-options" id="artistOptions">
+                            <!-- Options will be populated dynamically or via Thymeleaf later -->
+                            <div class="dropdown-option" data-value="1">Actor Name 1</div>
+                            <div class="dropdown-option" data-value="2">Actor Name 2</div>
+                            <div class="dropdown-option" data-value="3">Director Name 1</div>
+                            <div class="dropdown-option" data-value="4">Writer Name 1</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="artistId" name="artistId" value="">
+                    <small class="form-hint">Type to search for an artist. Artist must exist in the database.</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="role" class="form-label">Role</label>
+                        <span class="warning-text" id="roleWarning"></span>
+                    </div>
+                    <select id="role" name="role" class="form-input form-select" required>
+                        <option value="">Select a role</option>
+                        <option value="ACTOR">Actor</option>
+                        <option value="DIRECTOR">Director</option>
+                        <option value="WRITER">Writer</option>
+                        <option value="PRODUCER">Producer</option>
+                        <option value="CINEMATOGRAPHER">Cinematographer</option>
+                        <option value="EDITOR">Editor</option>
+                        <option value="COMPOSER">Composer</option>
+                        <option value="COSTUME_DESIGNER">Costume Designer</option>
+                        <option value="PRODUCTION_DESIGNER">Production Designer</option>
+                        <option value="VISUAL_EFFECTS">Visual Effects</option>
+                        <option value="SOUND_DESIGNER">Sound Designer</option>
+                        <option value="MAKEUP_ARTIST">Makeup Artist</option>
+                        <option value="STUNT_COORDINATOR">Stunt Coordinator</option>
+                        <option value="CHOREOGRAPHER">Choreographer</option>
+                        <option value="CASTING_DIRECTOR">Casting Director</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="register-button">
+                    <i class="fas fa-plus"></i>
+                    Add Credit
+                </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+
+<script>
+    // Searchable dropdown functionality
+    const artistInput = document.getElementById('artist');
+    const artistOptions = document.getElementById('artistOptions');
+    const artistIdInput = document.getElementById('artistId');
+    const dropdownIcon = document.querySelector('.dropdown-icon');
+
+    // Toggle dropdown visibility
+    artistInput.addEventListener('focus', function () {
+        artistOptions.style.display = 'block';
+        dropdownIcon.style.transform = 'rotate(180deg)';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        const isClickInside = artistInput.contains(event.target) || artistOptions.contains(event.target);
+        if (!isClickInside) {
+            artistOptions.style.display = 'none';
+            dropdownIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Filter options as user types
+    artistInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const options = artistOptions.querySelectorAll('.dropdown-option');
+
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        artistOptions.style.display = 'block';
+    });
+
+    // Handle option selection
+    artistOptions.addEventListener('click', function (event) {
+        const option = event.target.closest('.dropdown-option');
+        if (option) {
+            artistInput.value = option.textContent;
+            artistIdInput.value = option.getAttribute('data-value');
+            artistOptions.style.display = 'none';
+            dropdownIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+</script>
+</body>
+</html>

@@ -51,9 +51,8 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/admin/movies/add">Add Movie</a>
-                            <a href="/admin/credits/add">Add Movie Credit</a>
-                            <a href="/admin/artists/add">Add Artist</a>
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
                         </div>
@@ -100,30 +99,35 @@
                               th:text="${user.active} ? 'Active' : 'Inactive'">Active</span>
                     </td>
                     <td>
-                        <span class="badge" th:classappend="${user.role.name() == 'ADMIN'} ? ' badge-role-admin' : ' badge-role-user'"
+                        <span class="badge"
+                              th:classappend="${user.role.name() == 'ADMIN'} ? ' badge-role-admin' : ' badge-role-user'"
                               th:text="${user.role}">USER</span>
                     </td>
                     <td th:text="${#temporals.format(user.createdOn, 'yyyy-MM-dd HH:mm')}">created</td>
                     <td th:text="${#temporals.format(user.updatedOn, 'yyyy-MM-dd HH:mm')}">updated</td>
                     <td class="actions">
-                        <form th:action="@{'/admin/users/' + ${user.id} + '/status'}" th:method="patch" style="display:inline;">
+                        <form th:action="@{'/admin/users/' + ${user.id} + '/status'}" th:method="patch"
+                              style="display:inline;">
                             <input type="hidden" name="page" th:value="${users.number}"/>
                             <input type="hidden" name="size" th:value="${users.size}"/>
                             <button class="profile-actions-button" type="submit">
                                 <p>Switch</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                     viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
                                 </svg>
                             </button>
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{'/admin/users/' + ${user.id} + '/role'}" th:method="patch" style="display:inline;">
+                        <form th:action="@{'/admin/users/' + ${user.id} + '/role'}" th:method="patch"
+                              style="display:inline;">
                             <input type="hidden" name="page" th:value="${users.number}"/>
                             <input type="hidden" name="size" th:value="${users.size}"/>
                             <button class="profile-actions-button" type="submit">
                                 <p>Switch</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                     viewBox="0 0 16 16">
                                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"></path>
                                 </svg>
                             </button>

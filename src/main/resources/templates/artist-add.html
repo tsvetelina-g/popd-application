@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - popd</title>
+    <title>Add Artist - popd</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/artist-add.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
-    <meta name="color-scheme" content="dark light">
-    <meta name="supported-color-schemes" content="dark light">
 </head>
 <body>
 <header class="site-header">
@@ -30,7 +28,7 @@
                 </div>
 
                 <nav class="nav">
-                    <a href="/login" class="nav-active">Login</a>
+                    <a href="/login">Login</a>
                     <span class="nav-separator">|</span>
                     <a href="/register">Register</a>
                     <span class="nav-separator">|</span>
@@ -67,49 +65,57 @@
 </header>
 
 <main class="container">
-    <section class="login-section">
-        <div class="login-container">
-            <h2 class="login-title">Welcome Back</h2>
-            <p class="login-subtitle">Sign in to your popd account</p>
+    <section class="register-section">
+        <div class="register-container">
+            <h2 class="register-title">Add Artist</h2>
+            <p class="register-subtitle">Create a new artist entry</p>
 
-            <form class="login-form" th:action="@{/login}" th:method="post">
+            <form class="register-form" th:action="@{/artist/add}" th:object="${addArtistRequest}" method="post">
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="username" class="form-label">Username</label>
-                        <span class="warning-text" id="usernameWarning" th:if="${param.error}">Invalid username or password</span>
+                        <label for="name" class="form-label">Name</label>
+                        <span class="warning-text" id="nameWarning" th:if="${#fields.hasErrors('name')}">Name cannot be empty</span>
                     </div>
-                    <input type="text" id="username" name="username" class="form-input"
-                           placeholder="Enter your username" required>
+                    <input th:field="*{name}" type="text" id="name" name="name" class="form-input" placeholder="Enter artist name"
+                           required>
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="password" class="form-label">Password</label>
-                        <span class="warning-text" id="passwordWarning" th:if="${param.error}">Invalid username or password</span>
+                        <label for="birthdate" class="form-label">Birthdate</label>
                     </div>
-                    <input type="password" id="password" name="password" class="form-input"
-                           placeholder="Enter your password" required>
+                    <input th:field="*{birthDate}" type="date" id="birthdate" name="birthdate" class="form-input">
                 </div>
 
-                <button type="submit" class="login-button">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Sign In
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="imageUrl" class="form-label">Image URL</label>
+                    </div>
+                    <input th:field="*{imageUrl}" type="url" id="imageUrl" name="imageUrl" class="form-input"
+                           placeholder="https://...">
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="biography" class="form-label">Biography</label>
+                    </div>
+                    <textarea th:field="*{biography}" id="biography" name="biography" class="form-input"
+                              placeholder="Enter biography" rows="5" style="resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" class="register-button">
+                    <i class="fas fa-plus"></i>
+                    Save Artist
                 </button>
             </form>
-
-            <div class="login-link">
-                <p>Don't have an account? <a href="/register" class="login-link-text">Create one here</a></p>
-            </div>
         </div>
     </section>
 </main>
 
-
 <footer class="site-footer">
     <div class="container">
-        <p>&copy; <span>2025</span> POPd</p>
+        <p>&copy; <span>2025</span> popd</p>
     </div>
 </footer>
 </body>
 </html>
-

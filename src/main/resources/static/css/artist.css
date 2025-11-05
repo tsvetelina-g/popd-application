@@ -1,0 +1,388 @@
+/* Artist Page Styles - matching profile page theme */
+
+/* Artist Section */
+.artist-section {
+    padding: 40px 0;
+    min-height: 80vh;
+}
+
+.artist-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Artist Header */
+.artist-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.artist-picture {
+    flex-shrink: 0;
+}
+
+.artist-image {
+    width: 180px;
+    height: 250px;
+    border-radius: 8px;
+    object-fit: cover;
+    /*border: 3px solid var(--accent);*/
+    background-color: var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.artist-image:hover {
+    transform: scale(1.05);
+}
+
+.artist-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.artist-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--text);
+    margin: 0;
+}
+
+.artist-birthdate-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.artist-birthdate {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.artist-biography {
+    margin-top: 10px;
+}
+
+.biography-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.biography-text {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Artist Stats */
+.artist-stats {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.artist-stats .stat-item {
+    text-align: center;
+    padding: 20px;
+    background: var(--bg);
+    min-width: 150px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artist-stats .stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.artist-stats .stat-number {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+.artist-stats .stat-label {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Credits Section */
+.credits-section {
+    margin-top: 20px;
+    padding: 30px;
+    border-bottom: 1px solid var(--border);
+}
+
+.credits-section:last-child {
+    border-bottom: none;
+}
+
+.credits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+}
+
+.credits-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 0;
+}
+
+.role-select {
+    padding: 10px 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.role-select:hover {
+    border-color: var(--accent);
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(133, 3, 9, 0.2);
+}
+
+.role-select option {
+    background: var(--card);
+    color: var(--text);
+}
+
+.no-credits-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+    margin: 0;
+}
+
+.credits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.credit-item {
+    padding: 12px 15px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.credit-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent);
+}
+
+.credit-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.credit-movie-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.credit-year {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .artist-container {
+        margin: 20px;
+    }
+
+    .artist-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 10px;
+    }
+
+    .artist-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .artist-name {
+        font-size: 28px;
+    }
+
+    .artist-birthdate-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .artist-stats {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .credits-section {
+        padding: 20px;
+    }
+
+    .credits-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .credits-title {
+        font-size: 20px;
+    }
+
+    .role-select {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .artist-container {
+        margin: 15px;
+    }
+
+    .artist-name {
+        font-size: 24px;
+    }
+
+    .artist-birthdate-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .artist-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .artist-stats .stat-item {
+        min-width: 120px;
+        padding: 15px;
+    }
+
+    .artist-stats .stat-number {
+        font-size: 20px;
+    }
+
+    .credits-section {
+        padding: 15px;
+    }
+
+    .credits-header {
+        gap: 10px;
+    }
+
+    .credits-title {
+        font-size: 18px;
+    }
+
+    .role-select {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .credit-item {
+        padding: 10px 12px;
+    }
+
+    .credit-movie-title {
+        font-size: 14px;
+    }
+
+    .credit-year {
+        font-size: 12px;
+    }
+}
+
+/* Action Button Styles */
+.action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.action-button i {
+    font-size: 14px;
+}
+
+.artist-info .edit-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    margin: 8px 0;
+    white-space: nowrap;
+}
+
+.artist-info .edit-button i {
+    font-size: 14px;
+}
+
+.edit-button {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: #6b0207;
+    max-width: 180px;
+}
+
+.edit-button:hover {
+    background: #6b0207;
+    color: var(--text);
+    transform: translateY(-2px);
+}
+

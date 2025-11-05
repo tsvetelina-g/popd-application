@@ -1,0 +1,571 @@
+artists:
+  # The Shawshank Redemption
+  - name: "Tim Robbins"
+    birthDate: "1958-10-16"
+    imageUrl: "https://image.tmdb.org/t/p/w500/A4fHNLX73EQs78f2G5O0U39B1Tw.jpg"
+    biography: "Timothy Francis Robbins is an American actor, screenwriter, director, producer, and musician."
+
+  - name: "Morgan Freeman"
+    birthDate: "1937-06-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/oGJQhOpT8S1F1594iYMsBpphn4o.jpg"
+    biography: "Morgan Freeman is an American actor, producer, and narrator known for his distinctive deep voice."
+
+  - name: "Frank Darabont"
+    birthDate: "1959-01-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/8WdsBu8FJ0r2DqL8Y9qQ6qJ5Q8.jpg"
+    biography: "Frank Darabont is an American film director, screenwriter, and producer."
+
+  - name: "Roger Deakins"
+    birthDate: "1949-05-24"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Roger Alexander Deakins is an English cinematographer."
+
+  - name: "Thomas Newman"
+    birthDate: "1955-10-20"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Thomas Montgomery Newman is an American composer and conductor."
+
+  # The Godfather
+  - name: "Marlon Brando"
+    birthDate: "1924-04-03"
+    imageUrl: "https://image.tmdb.org/t/p/w500/3W4Od1l3E47IdGJ7D1e3rtYUbY2.jpg"
+    biography: "Marlon Brando Jr. was an American actor and activist."
+
+  - name: "Al Pacino"
+    birthDate: "1940-04-25"
+    imageUrl: "https://image.tmdb.org/t/p/w500/sM33SANp9z6rXW8Itn7NnG1GOEs.jpg"
+    biography: "Alfredo James Pacino is an American actor and filmmaker."
+
+  - name: "Francis Ford Coppola"
+    birthDate: "1939-04-07"
+    imageUrl: "https://image.tmdb.org/t/p/w500/eJ5mwZgJX3r1z8kKq5z5Y5Y5Y5Y5Y.jpg"
+    biography: "Francis Ford Coppola is an American film director, producer, and screenwriter."
+
+  - name: "Mario Puzo"
+    birthDate: "1920-10-15"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Mario Gianluigi Puzo was an American author, screenwriter, and journalist."
+
+  - name: "Gordon Willis"
+    birthDate: "1931-05-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Gordon Willis was an American cinematographer."
+
+  - name: "Nino Rota"
+    birthDate: "1911-12-03"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Nino Rota was an Italian composer, pianist, conductor, and academic."
+
+  # The Dark Knight
+  - name: "Christian Bale"
+    birthDate: "1974-01-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/3qx2crvM3BaJhZrVvVl5Q5Q5Q5Q5Q.jpg"
+    biography: "Christian Charles Philip Bale is an English actor known for his intense method acting."
+
+  - name: "Heath Ledger"
+    birthDate: "1979-04-04"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Heath Andrew Ledger was an Australian actor and director."
+
+  - name: "Christopher Nolan"
+    birthDate: "1970-07-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/xuAIuYSmsUzKlUMBFGVZaWsY3D.jpg"
+    biography: "Christopher Edward Nolan is a British-American film director, producer, and screenwriter."
+
+  - name: "Jonathan Nolan"
+    birthDate: "1976-06-06"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jonathan Nolan is a British-American screenwriter, producer, and director."
+
+  - name: "Wally Pfister"
+    birthDate: "1961-07-08"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Wally Pfister is an American cinematographer and film director."
+
+  - name: "Hans Zimmer"
+    birthDate: "1957-09-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/tpQnVp91GJYz3o7r1YhbXj1f3Xy.jpg"
+    biography: "Hans Florian Zimmer is a German film score composer and music producer."
+
+  - name: "John Caglione Jr."
+    birthDate: "1957-12-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "John Caglione Jr. is an American makeup artist."
+
+  # Pulp Fiction
+  - name: "John Travolta"
+    birthDate: "1954-02-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/7S0XwX9T0Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "John Joseph Travolta is an American actor, dancer, and singer."
+
+  - name: "Samuel L. Jackson"
+    birthDate: "1948-12-21"
+    imageUrl: "https://image.tmdb.org/t/p/w500/9W4YqJ1QJ1QJ1QJ1QJ1QJ1QJ1QJ1Q.jpg"
+    biography: "Samuel Leroy Jackson is an American actor and film producer."
+
+  - name: "Uma Thurman"
+    birthDate: "1970-04-29"
+    imageUrl: "https://image.tmdb.org/t/p/w500/xnpW5tl0w5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Uma Karuna Thurman is an American actress and model."
+
+  - name: "Quentin Tarantino"
+    birthDate: "1963-03-27"
+    imageUrl: "https://image.tmdb.org/t/p/w500/9sgBmNq5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Quentin Jerome Tarantino is an American film director, screenwriter, producer, and actor."
+
+  - name: "Andrzej Sekula"
+    birthDate: "1954-01-25"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Andrzej Sekula is a Polish cinematographer."
+
+  - name: "Sally Menke"
+    birthDate: "1953-12-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sally Joanne Menke was an American film editor."
+
+  # Inception
+  - name: "Leonardo DiCaprio"
+    birthDate: "1974-11-11"
+    imageUrl: "https://image.tmdb.org/t/p/w500/4mF0tQbK5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Leonardo Wilhelm DiCaprio is an American actor and film producer."
+
+  - name: "Marion Cotillard"
+    birthDate: "1975-09-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/7V7Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Marion Cotillard is a French actress, singer, and environmental activist."
+
+  - name: "Lee Smith"
+    birthDate: "1960-12-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Lee Smith is an Australian film editor."
+
+  # Fight Club
+  - name: "Brad Pitt"
+    birthDate: "1963-12-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/cckcYc2v0yh1tc9QjRelptcOBko.jpg"
+    biography: "William Bradley Pitt is an American actor and film producer."
+
+  - name: "Edward Norton"
+    birthDate: "1969-08-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Edward Harrison Norton is an American actor and filmmaker."
+
+  - name: "David Fincher"
+    birthDate: "1962-08-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/9Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "David Andrew Leo Fincher is an American film director."
+
+  - name: "Chuck Palahniuk"
+    birthDate: "1962-02-21"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Charles Michael Palahniuk is an American novelist who describes his work as transgressional fiction."
+
+  - name: "Jeff Cronenweth"
+    birthDate: "1962-01-14"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jeff Cronenweth is an American cinematographer."
+
+  - name: "James Haygood"
+    birthDate: "1953-05-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "James Haygood is an American film editor."
+
+  # Forrest Gump
+  - name: "Tom Hanks"
+    birthDate: "1956-07-09"
+    imageUrl: "https://image.tmdb.org/t/p/w500/xxPMucou2wRDxLrudviTi2QoCN5.jpg"
+    biography: "Thomas Jeffrey Hanks is an American actor and filmmaker."
+
+  - name: "Robin Wright"
+    birthDate: "1966-04-08"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robin Gayle Wright is an American actress and director."
+
+  - name: "Robert Zemeckis"
+    birthDate: "1952-05-14"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robert Lee Zemeckis is an American filmmaker and producer."
+
+  - name: "Eric Roth"
+    birthDate: "1945-03-22"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Eric Roth is an American screenwriter and film producer."
+
+  - name: "Don Burgess"
+    birthDate: "1956-05-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Don Burgess is an American cinematographer."
+
+  - name: "Alan Silvestri"
+    birthDate: "1950-03-26"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Alan Anthony Silvestri is an American composer and conductor."
+
+  # The Matrix
+  - name: "Keanu Reeves"
+    birthDate: "1964-09-02"
+    imageUrl: "https://image.tmdb.org/t/p/w500/4D0PpHD0lP1IM5qkqiaEBDxAY0q.jpg"
+    biography: "Keanu Charles Reeves is a Canadian actor and musician."
+
+  - name: "Laurence Fishburne"
+    birthDate: "1961-07-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Laurence John Fishburne III is an American actor, playwright, and producer."
+
+  - name: "Carrie-Anne Moss"
+    birthDate: "1967-08-21"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Carrie-Anne Moss is a Canadian actress."
+
+  - name: "Lana Wachowski"
+    birthDate: "1965-06-21"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Lana Wachowski is an American film director, screenwriter, and producer."
+
+  - name: "Lilly Wachowski"
+    birthDate: "1967-12-29"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Lilly Wachowski is an American film director, screenwriter, and producer."
+
+  - name: "Bill Pope"
+    birthDate: "1952-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Bill Pope is an American cinematographer."
+
+  - name: "Zach Staenberg"
+    birthDate: "1953-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Zach Staenberg is an American film editor."
+
+  - name: "Don Davis"
+    birthDate: "1957-02-04"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Don Davis is an American composer and conductor."
+
+  # Goodfellas
+  - name: "Robert De Niro"
+    birthDate: "1943-08-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/cT8qjFpO3hBqNYJ5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robert Anthony De Niro Jr. is an American actor, producer, and director."
+
+  - name: "Joe Pesci"
+    birthDate: "1943-02-09"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Joseph Frank Pesci is an American actor, comedian, and musician."
+
+  - name: "Martin Scorsese"
+    birthDate: "1942-11-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/9U9Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Martin Charles Scorsese is an American film director, producer, screenwriter, and film historian."
+
+  - name: "Nicholas Pileggi"
+    birthDate: "1933-02-22"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Nicholas Pileggi is an American author, screenwriter, and producer."
+
+  - name: "Michael Ballhaus"
+    birthDate: "1935-08-05"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Michael Ballhaus was a German cinematographer."
+
+  - name: "Thelma Schoonmaker"
+    birthDate: "1940-01-03"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Thelma Schoonmaker is an American film editor."
+
+  - name: "Robby Müller"
+    birthDate: "1940-04-04"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robby Müller was a Dutch cinematographer."
+
+  # The Lord of the Rings: The Return of the King
+  - name: "Elijah Wood"
+    birthDate: "1981-01-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Elijah Jordan Wood is an American actor and DJ."
+
+  - name: "Viggo Mortensen"
+    birthDate: "1958-10-20"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Viggo Peter Mortensen Jr. is a Danish-American actor, author, musician, photographer, poet, and painter."
+
+  - name: "Ian McKellen"
+    birthDate: "1939-05-25"
+    imageUrl: "https://image.tmdb.org/t/p/w500/coWjgMEYJ5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sir Ian Murray McKellen is an English actor."
+
+  - name: "Peter Jackson"
+    birthDate: "1961-10-31"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sir Peter Robert Jackson is a New Zealand film director, screenwriter, and producer."
+
+  - name: "Fran Walsh"
+    birthDate: "1959-01-10"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Fran Walsh is a New Zealand screenwriter, film producer, and lyricist."
+
+  - name: "Philippa Boyens"
+    birthDate: "1962-10-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Philippa Boyens is a New Zealand screenwriter and film producer."
+
+  - name: "Andrew Lesnie"
+    birthDate: "1956-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Andrew Lesnie was an Australian cinematographer."
+
+  - name: "Jamie Selkirk"
+    birthDate: "1952-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jamie Selkirk is a New Zealand film editor."
+
+  - name: "Howard Shore"
+    birthDate: "1946-10-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Howard Leslie Shore is a Canadian composer and conductor."
+
+  - name: "Richard Taylor"
+    birthDate: "1965-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Richard Taylor is a New Zealand special effects and makeup artist."
+
+  # Interstellar
+  - name: "Matthew McConaughey"
+    birthDate: "1969-11-04"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Matthew David McConaughey is an American actor and producer."
+
+  - name: "Anne Hathaway"
+    birthDate: "1982-11-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Anne Jacqueline Hathaway is an American actress."
+
+  - name: "Jessica Chastain"
+    birthDate: "1977-03-24"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jessica Chastain is an American actress and producer."
+
+  - name: "Hoyte van Hoytema"
+    birthDate: "1971-10-04"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Hoyte van Hoytema is a Dutch-Swedish cinematographer."
+
+  - name: "Nathan Crowley"
+    birthDate: "1966-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Nathan Crowley is a British production designer."
+
+  # The Silence of the Lambs
+  - name: "Jodie Foster"
+    birthDate: "1962-11-19"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Alicia Christian Foster is an American actress, director, and producer."
+
+  - name: "Anthony Hopkins"
+    birthDate: "1937-12-31"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sir Philip Anthony Hopkins is a Welsh actor, director, and producer."
+
+  - name: "Jonathan Demme"
+    birthDate: "1944-02-22"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robert Jonathan Demme was an American director, producer, and screenwriter."
+
+  - name: "Thomas Harris"
+    birthDate: "1940-04-11"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Thomas Harris is an American author and screenwriter."
+
+  - name: "Tak Fujimoto"
+    birthDate: "1939-07-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Tak Fujimoto is an American cinematographer."
+
+  - name: "Craig McKay"
+    birthDate: "1941-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Craig McKay is an American film editor."
+
+  - name: "Howard Shore"
+    birthDate: "1946-10-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Howard Leslie Shore is a Canadian composer and conductor."
+
+  # Parasite
+  - name: "Song Kang-ho"
+    birthDate: "1967-01-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Song Kang-ho is a South Korean actor."
+
+  - name: "Bong Joon-ho"
+    birthDate: "1969-09-14"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Bong Joon-ho is a South Korean film director, producer, and screenwriter."
+
+  - name: "Han Jin-won"
+    birthDate: "1980-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Han Jin-won is a South Korean screenwriter."
+
+  - name: "Hong Kyung-pyo"
+    birthDate: "1971-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Hong Kyung-pyo is a South Korean cinematographer."
+
+  - name: "Yang Jin-mo"
+    birthDate: "1981-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Yang Jin-mo is a South Korean film editor."
+
+  - name: "Jung Jae-il"
+    birthDate: "1981-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jung Jae-il is a South Korean composer and music producer."
+
+  # The Green Mile
+  - name: "Michael Clarke Duncan"
+    birthDate: "1957-12-10"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Michael Clarke Duncan was an American actor."
+
+  - name: "David Morse"
+    birthDate: "1953-10-11"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "David Morse is an American actor, director, and screenwriter."
+
+  - name: "Stephen King"
+    birthDate: "1947-09-21"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Stephen Edwin King is an American author of horror, supernatural fiction, suspense, crime, science-fiction, and fantasy novels."
+
+  # The Godfather: Part II
+  - name: "Robert Duvall"
+    birthDate: "1931-01-05"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Robert Selden Duvall is an American actor and filmmaker."
+
+  # Schindler's List
+  - name: "Liam Neeson"
+    birthDate: "1952-06-07"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "William John Neeson is a Northern Irish actor."
+
+  - name: "Ralph Fiennes"
+    birthDate: "1962-12-22"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Ralph Nathaniel Twisleton-Wykeham-Fiennes is an English actor, film producer, and director."
+
+  - name: "Steven Spielberg"
+    birthDate: "1946-12-18"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Steven Allan Spielberg is an American film director, producer, and screenwriter."
+
+  - name: "Steven Zaillian"
+    birthDate: "1953-01-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Steven Zaillian is an American screenwriter, film director, and producer."
+
+  - name: "Janusz Kamiński"
+    birthDate: "1959-06-27"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Janusz Zygmunt Kamiński is a Polish cinematographer and film director."
+
+  - name: "Michael Kahn"
+    birthDate: "1935-12-08"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Michael Kahn is an American film editor."
+
+  - name: "John Williams"
+    birthDate: "1932-02-08"
+    imageUrl: "https://image.tmdb.org/t/p/w500/tmO5JLl7Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "John Towner Williams is an American composer, conductor, and pianist."
+
+  # The Lord of the Rings: The Fellowship of the Ring
+  - name: "Sean Astin"
+    birthDate: "1971-02-25"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sean Patrick Astin is an American actor, voice actor, director, and producer."
+
+  # The Prestige
+  - name: "Hugh Jackman"
+    birthDate: "1968-10-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Hugh Michael Jackman is an Australian actor, singer, and producer."
+
+  - name: "Scarlett Johansson"
+    birthDate: "1984-11-22"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Scarlett Ingrid Johansson is an American actress and singer."
+
+  - name: "Christopher Priest"
+    birthDate: "1943-07-14"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Christopher Priest was a British science fiction writer."
+
+  # Gladiator
+  - name: "Russell Crowe"
+    birthDate: "1964-04-07"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Russell Ira Crowe is a New Zealand-Australian actor, film producer, and musician."
+
+  - name: "Joaquin Phoenix"
+    birthDate: "1974-10-28"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Joaquin Rafael Phoenix is an American actor and producer."
+
+  - name: "Ridley Scott"
+    birthDate: "1937-11-30"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sir Ridley Scott is an English film director and producer."
+
+  - name: "David Franzoni"
+    birthDate: "1947-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "David Franzoni is an American screenwriter and film producer."
+
+  - name: "John Mathieson"
+    birthDate: "1961-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "John Mathieson is a British cinematographer."
+
+  - name: "Pietro Scalia"
+    birthDate: "1960-03-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Pietro Scalia is an Italian film editor."
+
+  - name: "Lisa Westcott"
+    birthDate: "1960-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Lisa Westcott is a British makeup artist."
+
+  # The Lion King
+  - name: "James Earl Jones"
+    birthDate: "1931-01-17"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "James Earl Jones is an American actor."
+
+  - name: "Jeremy Irons"
+    birthDate: "1948-09-19"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Jeremy John Irons is an English actor."
+
+  - name: "Roger Allers"
+    birthDate: "1949-06-29"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Roger Allers is an American film director and screenwriter."
+
+  - name: "Irene Mecchi"
+    birthDate: "1949-01-01"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Irene Mecchi is an American screenwriter and playwright."
+
+  - name: "Hans Zimmer"
+    birthDate: "1957-09-12"
+    imageUrl: "https://image.tmdb.org/t/p/w500/tpQnVp91GJYz3o7r1YhbXj1f3Xy.jpg"
+    biography: "Hans Florian Zimmer is a German film score composer and music producer."
+
+  - name: "Elton John"
+    birthDate: "1947-03-25"
+    imageUrl: "https://image.tmdb.org/t/p/w500/5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y5Y.jpg"
+    biography: "Sir Elton Hercules John is an English singer, songwriter, and pianist."
+

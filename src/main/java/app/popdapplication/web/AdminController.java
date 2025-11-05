@@ -1,6 +1,7 @@
 package app.popdapplication.web;
 
 import app.popdapplication.model.entity.Genre;
+import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.service.GenreService;
 import app.popdapplication.service.MovieService;
@@ -51,7 +52,7 @@ public class AdminController {
 
     @PatchMapping
     @RequestMapping("users/{userId}/status")
-    public String changeUserStatus(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size){
+    public String changeUserStatus(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size) {
 
         userService.switchStatus(userId);
 
@@ -60,37 +61,12 @@ public class AdminController {
 
     @PatchMapping
     @RequestMapping("users/{userId}/role")
-    public String changeUserRole(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size){
+    public String changeUserRole(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size) {
 
         userService.switchRole(userId);
 
         return "redirect:/admin/users?page=" + page + "&size=" + size;
     }
 
-    @GetMapping
-    @RequestMapping("/movies/add")
-    public ModelAndView addMovie(){
 
-        List<Genre> genres = genreService.findAll();
-
-        ModelAndView modelAndView = new ModelAndView("movies-add");
-        modelAndView.addObject("addMovieRequest", new AddMovieRequest());
-        modelAndView.addObject("genres", genres);
-
-        return modelAndView;
-    }
-
-    @PostMapping("/movies/add")
-    public ModelAndView register(@Valid AddMovieRequest addMovieRequest, BindingResult bindingResult){
-
-        if (bindingResult.hasErrors()){
-            ModelAndView modelAndView = new ModelAndView("/movies/add");
-            List<Genre> genres = genreService.findAll();
-            modelAndView.addObject("genres", genres);
-            return modelAndView;
-        }
-
-        movieService.addMovie(addMovieRequest);
-        return new ModelAndView("redirect:/login");
-    }
 }

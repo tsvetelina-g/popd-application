@@ -34,4 +34,7 @@ public class Movie {
 
     @Column
     private String posterUrl;
+
+    @Column
+    private String backgroundImage;
 }
