@@ -1,0 +1,271 @@
+/* Credit Edit Page Specific Styles */
+
+.credit-edit-section {
+    padding: 60px 0;
+    min-height: 70vh;
+}
+
+.credit-edit-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.credit-edit-header {
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+}
+
+.credit-edit-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.movie-name-text-below {
+    font-size: 16px;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.movie-name {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.credit-edit-subtitle {
+    color: var(--muted);
+    font-size: 16px;
+}
+
+/* Credits Section */
+.credits-section {
+    margin-top: 10px;
+    padding: 0;
+    border-bottom: none;
+    background: var(--card);
+}
+
+.credits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+}
+
+.credits-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent);
+    margin: 0;
+}
+
+.role-select {
+    padding: 10px 15px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.role-select:hover {
+    border-color: var(--accent);
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(133, 3, 9, 0.2);
+}
+
+.role-select option {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.no-credits-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Credits List */
+/* Footer */
+.credit-edit-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border);
+    display: flex;
+    justify-content: flex-start;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.back-button i {
+    font-size: 14px;
+}
+
+/* Empty State */
+.credits-list:empty::after {
+    content: "No credits found for this role.";
+    display: block;
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+    padding: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .credit-edit-container {
+        padding: 30px 20px;
+    }
+
+    .credit-edit-title {
+        font-size: 28px;
+    }
+
+    .credits-section {
+        padding: 20px;
+    }
+
+    .credits-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .credits-title {
+        font-size: 20px;
+    }
+
+    .role-select {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .credits-list {
+        gap: 15px;
+    }
+
+    .credit-card {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .credit-image-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+
+    .credit-name {
+        font-size: 16px;
+    }
+
+    .credit-actions {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .credit-edit-section {
+        padding: 40px 0;
+    }
+
+    .credit-edit-container {
+        padding: 20px 15px;
+    }
+
+    .credit-edit-title {
+        font-size: 24px;
+    }
+
+    .credit-edit-subtitle {
+        font-size: 14px;
+    }
+
+    .credits-section {
+        padding: 15px;
+    }
+
+    .credits-header {
+        gap: 10px;
+    }
+
+    .credits-title {
+        font-size: 18px;
+    }
+
+    .role-select {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .credit-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .credit-image-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+
+    .credit-info {
+        align-items: center;
+    }
+
+    .credit-actions {
+        width: 100%;
+    }
+}
+

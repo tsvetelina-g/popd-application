@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - popd</title>
+    <title>User Profile - popd</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/user-profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
 </head>
@@ -23,8 +24,8 @@
                 <div class="search-section">
                     <form class="search-bar" action="/find" method="get" role="search">
                         <input type="text" name="query"
-                               placeholder="Search Movies or Artists"
-                               aria-label="Search Movies or Artists">
+                               placeholder="Search Movies, Artists or Users"
+                               aria-label="Search Movies, Artists or Users">
                         <button type="submit">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -74,84 +75,67 @@
         <div class="profile-container">
             <div class="profile-header">
                 <div class="profile-picture">
-                    <img th:src="${#strings.isEmpty(user.getProfilePicture()) ? 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl' : user.getProfilePicture()}"
-                         alt="Profile Picture" class="profile-image">
+                    <img class="profile-image"
+                         th:src="${#strings.isEmpty(user.profilePicture) ? 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl' : user.profilePicture}"
+                         th:alt="${user.username}">
                 </div>
                 <div class="profile-info">
-                    <h1 class="profile-name" th:text="${user.username}">John Doe</h1>
-                    <a th:href="@{'/profile/' + ${user.getId()} + '/edit'}" class="action-button edit-button">
-                        <i class="fas fa-edit"></i>
-                        Edit Profile
-                    </a>
+                    <h1 class="profile-name" th:text="${user.username}">Username</h1>
+                    <p class="profile-username"
+                       th:if="${!(#strings.isEmpty(user.firstName) && #strings.isEmpty(user.lastName))}"
+                       th:text="${(user.firstName != null ? user.firstName : '') + ' ' + (user.lastName != null ? user.lastName : '')}">
+                        Display name
+                    </p>
                     <p class="profile-join-date"
-                       th:text="'Joined ' + ${#temporals.format(user.createdOn, 'MMMM dd, YYYY', T(java.util.Locale).ENGLISH)}">
-                        Joined January 15, 2024</p>
+                       th:if="${user.createdOn != null}"
+                       th:text="'Joined ' + ${#temporals.format(user.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH)}">
+                        Joined January 01, 2024
+                    </p>
                 </div>
-
-                <div class="profile-stats">
+                <div class="profile-stats public-profile-stats">
                     <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesRated}">42</span>
+                        <span class="stat-number">156</span>
+                        <span class="stat-label">Movies Watched</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">42</span>
                         <span class="stat-label">Movies Rated</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesReviewed}">18</span>
+                        <span class="stat-number">18</span>
                         <span class="stat-label">Reviews Written</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesWatched}">156</span>
-                        <span class="stat-label">Movies Watched</span>
-                    </div>
                 </div>
             </div>
 
-            <div class="profile-actions">
-                <div class="first-set-buttons">
-                    <button class="action-button watched-movies-button">
-                        <i class="fas fa-eye"></i>
-                        Watched Movies
-                    </button>
-                    <button class="action-button ratings-button">
+            <div class="recent-activity public-recent-activity">
+                <h3 class="activity-title">Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
                         <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="Popcorn" class="popcorn-icon">
-                        My Ratings
-                    </button>
-                    <button class="action-button reviews-button">
-                        <i class="fas fa-comment"></i>
-                        My Reviews
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="recent-activity">
-            <h3 class="activity-title">Recent Activity</h3>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                         alt="Popcorn" class="activity-icon popcorn-icon">
-                    <div class="activity-content">
-                        <span class="activity-text">Rated "The Dark Knight" 5 popcorns</span>
-                        <span class="activity-date">2 hours ago</span>
+                             alt="Popcorn" class="activity-icon popcorn-icon">
+                        <div class="activity-content">
+                            <span class="activity-text">Rated "The Dark Knight" 5 popcorns</span>
+                            <span class="activity-date">2 hours ago</span>
+                        </div>
                     </div>
-                </div>
-                <div class="activity-item">
-                    <i class="fas fa-comment activity-icon"></i>
-                    <div class="activity-content">
-                        <span class="activity-text">Wrote a review for "Inception"</span>
-                        <span class="activity-date">1 day ago</span>
+                    <div class="activity-item">
+                        <i class="fas fa-comment activity-icon"></i>
+                        <div class="activity-content">
+                            <span class="activity-text">Wrote a review for "Inception"</span>
+                            <span class="activity-date">1 day ago</span>
+                        </div>
                     </div>
-                </div>
-                <div class="activity-item">
-                    <i class="fas fa-film activity-icon"></i>
-                    <div class="activity-content">
-                        <span class="activity-text">Added "Interstellar" to watchlist</span>
-                        <span class="activity-date">3 days ago</span>
+                    <div class="activity-item">
+                        <i class="fas fa-film activity-icon"></i>
+                        <div class="activity-content">
+                            <span class="activity-text">Added "Interstellar" to watchlist</span>
+                            <span class="activity-date">3 days ago</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
 </main>
 
@@ -162,3 +146,4 @@
 </footer>
 </body>
 </html>
+

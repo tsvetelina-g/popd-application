@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,18 +20,23 @@
             </div>
             <div class="header-top">
                 <div class="search-section">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies or Artists"
+                               aria-label="Search Movies or Artists">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <nav class="nav">
-                    <a href="/login">Login</a>
-                    <span class="nav-separator">|</span>
-                    <a href="/register">Register</a>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
                         <a href="/profile" class="profile-btn">
                             <i class="fa-solid fa-user"></i>
                             Profile
@@ -42,8 +47,8 @@
                             <a href="/logout">Logout</a>
                         </div>
                     </div>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
                         <a href="/admin" class="profile-btn">
                             <i class="fa-solid fa-gear"></i>
                             Admin

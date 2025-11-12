@@ -28,7 +28,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "profile_picture")
+    @Column(name = "profile_picture", columnDefinition = "LONGTEXT")
     private String profilePicture;
 
     @Column(unique = true, nullable = false)

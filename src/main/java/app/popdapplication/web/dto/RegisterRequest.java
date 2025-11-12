@@ -26,4 +26,15 @@ public class RegisterRequest {
     @Email
     private String email;
 
+    public void setUsername(String username) {
+        this.username = (username == null) ? null : username.trim();
+    }
+
+    public void setPassword(String password) {
+        this.password = (password == null) ? null : password.trim();
+    }
+
+    public void setEmail(String email) {
+        this.email = (email == null) ? null : email.trim();
+    }
 }

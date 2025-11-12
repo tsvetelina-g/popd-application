@@ -64,9 +64,6 @@ public class IndexController {
         }
 
         return modelAndView;
-        //TODO: Return error in html with "Invalid username or password"
     }
-
-
 
 }

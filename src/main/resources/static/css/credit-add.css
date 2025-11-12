@@ -127,56 +127,76 @@
   padding: 10px;
 }
 
-/* Searchable Dropdown */
-.searchable-dropdown {
+/* Datalist Wrapper */
+.datalist-wrapper {
   position: relative;
   width: 100%;
 }
 
-.searchable-dropdown .form-input {
-  padding-right: 40px;
+/* Datalist Input */
+.datalist-input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.dropdown-icon {
+.datalist-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(133, 3, 9, 0.1);
+}
+
+.datalist-input::placeholder {
+  color: var(--muted);
+}
+
+.datalist-icon {
   position: absolute;
-  right: 15px;
+  right: 12px;   /* align to right edge of input */
   top: 50%;
   transform: translateY(-50%);
   color: var(--muted);
+  font-size: 12px;
   pointer-events: none;
-  transition: transform 0.3s ease;
+  z-index: 1;
 }
 
+/* Custom Dropdown Options */
 .dropdown-options {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
   background: var(--card);
   border: 1px solid var(--border);
-  border-top: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px;
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
-  display: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .dropdown-option {
-  padding: 12px 15px;
+  padding: 10px 15px;
   color: var(--text);
   cursor: pointer;
-  transition: background-color 0.2s ease;
   font-size: 14px;
+  transition: background-color 0.2s ease;
 }
 
-.dropdown-option:hover {
+.dropdown-option:hover,
+.dropdown-option.highlighted {
   background: var(--bg);
+  color: var(--accent);
 }
 
-.dropdown-option:first-child {
-  border-top: 1px solid var(--border);
+.dropdown-option.hidden {
+  display: none;
 }
 
 /* Register Button */

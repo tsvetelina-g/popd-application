@@ -6,6 +6,7 @@ import app.popdapplication.web.dto.AddArtistRequest;
 import app.popdapplication.web.dto.EditArtistRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,5 +44,21 @@ public class ArtistService {
         artist.setImageUrl(editArtistRequest.getImageUrl());
 
         artistRepository.save(artist);
+    }
+
+    public List<Artist> searchArtists(String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return artistRepository.findAllByOrderByName();
+        }
+        return artistRepository.findByNameContainingIgnoreCase(searchTerm.trim());
+    }
+    
+    public Artist findByName(String name) {
+        return artistRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new RuntimeException("Artist with name [%s] not found".formatted(name)));
+    }
+
+    public List<Artist> searchByName(String query) {
+        return artistRepository.findByNameContainingIgnoreCase(query);
     }
 }

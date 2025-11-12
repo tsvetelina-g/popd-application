@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,18 +22,23 @@
             </div>
             <div class="header-top">
                 <div class="search-section">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies or Artists"
+                               aria-label="Search Movies or Artists">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <nav class="nav">
-                    <a href="/login">Login</a>
-                    <span class="nav-separator">|</span>
-                    <a href="/register">Register</a>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
                         <a href="/profile" class="profile-btn">
                             <i class="fa-solid fa-user"></i>
                             Profile
@@ -43,8 +49,8 @@
                             <a href="/logout">Logout</a>
                         </div>
                     </div>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
                         <a href="/admin" class="profile-btn">
                             <i class="fa-solid fa-gear"></i>
                             Admin
@@ -68,7 +74,8 @@
     <section class="movie-details-section">
         <div class="movie-container">
             <!-- Movie Header -->
-            <div class="movie-header" th:style="${movie.backgroundImage != null and !#strings.isEmpty(movie.backgroundImage)} ? '--bg-image-url:url(' + ${movie.backgroundImage} + '); --show-overlay:1;' : '--bg-image-url:none; --show-overlay:0;'">
+            <div class="movie-header"
+                 th:style="${movie.backgroundImage != null and !#strings.isEmpty(movie.backgroundImage)} ? '--bg-image-url:url(' + ${movie.backgroundImage} + '); --show-overlay:1;' : '--bg-image-url:none; --show-overlay:0;'">
                 <div class="movie-poster">
                     <img th:src="${movie.posterUrl != null and !#strings.isEmpty(movie.posterUrl) ? movie.posterUrl : 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl'}"
                          alt="Movie poster" class="poster-image">
@@ -80,7 +87,7 @@
                     <div class="movie-meta">
                         <div class="meta-item">
                             <i class="fas fa-calendar"></i>
-                            <span th:text="${movie.releaseDate != null ? #temporals.format(movie.releaseDate, 'yyyy') : 'N/A'}">2024</span>
+                            <span th:text="${movie.releaseDate != null ? 'Release date: ' + #temporals.format(movie.releaseDate, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) : 'N/A'}">2024</span>
                         </div>
                         <div class="meta-item">
                             <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
@@ -126,14 +133,16 @@
             </div>
 
             <div class="movie-actions">
-                <form th:if="${!movieIsInWatchlist}" th:action="@{'/movie/' + ${movie.getId()} + '/watchlist'}"
+                <form sec:authorize="isAuthenticated()" th:if="${!movieIsInWatchlist}"
+                      th:action="@{'/movie/' + ${movie.getId()} + '/watchlist'}"
                       th:method="post" class="inline-form">
                     <button type="submit" class="action-button add-to-watchlist-button">
                         <i class="fas fa-plus-circle"></i>
                         Add to Watchlist
                     </button>
                 </form>
-                <form th:if="${movieIsInWatchlist}" th:action="@{'/movie/' + ${movie.id} + '/delete-from-watchlist'}"
+                <form sec:authorize="isAuthenticated()" th:if="${movieIsInWatchlist}"
+                      th:action="@{'/movie/' + ${movie.id} + '/delete-from-watchlist'}"
                       th:method="delete" class="inline-form">
                     <input type="hidden" name="_method" value="delete">
                     <button type="submit" class="action-button add-to-watchlist-button added-to-watchlist-button">
@@ -141,14 +150,16 @@
                         Added to Watchlist
                     </button>
                 </form>
-                <form th:if="${!isWatched}" th:action="@{'/movie/' + ${movie.id} + '/watched'}" th:method="post"
+                <form sec:authorize="isAuthenticated()" th:if="${!isWatched}"
+                      th:action="@{'/movie/' + ${movie.id} + '/watched'}" th:method="post"
                       class="inline-form">
                     <button type="submit" class="action-button add-to-watched-button">
                         <i class="fas fa-check-circle"></i>
                         Mark as Watched
                     </button>
                 </form>
-                <form th:if="${isWatched}" th:action="@{'/movie/' + ${movie.id} + '/delete-watched'}" th:method="delete"
+                <form sec:authorize="isAuthenticated()" th:if="${isWatched}"
+                      th:action="@{'/movie/' + ${movie.id} + '/delete-watched'}" th:method="delete"
                       class="inline-form">
                     <input type="hidden" name="_method" value="delete">
                     <button type="submit" class="action-button add-to-watched-button watched-button">
@@ -156,7 +167,16 @@
                         Watched
                     </button>
                 </form>
-                <form th:action="@{'/movie/' + ${movie.getId()} + '/edit'}" method="get" class="inline-form">
+
+                <div sec:authorize="isAnonymous()" class="guest-actions-wrapper">
+                    <a href="/login" class="action-button add-to-watchlist-button guest-watchlist-button">
+                        <i class="fas fa-plus-circle"></i>
+                        Log in to Manage Watchlist
+                    </a>
+                </div>
+
+                <form sec:authorize="hasRole('ADMIN')" th:action="@{'/movie/' + ${movie.getId()} + '/edit'}"
+                      method="get" class="inline-form">
                     <button type="submit" class="action-button edit-button">
                         <i class="fas fa-edit"></i>
                         Edit Movie
@@ -171,7 +191,7 @@
             <!-- Rating Section -->
             <div class="movie-rating-section">
                 <h3 class="section-title-rating">Your Rating</h3>
-                <div class="rating-options">
+                <div class="rating-options" sec:authorize="isAuthenticated()">
                     <button class="rating-button" type="button" value="10">
                         <span class="rating-number">10</span>
                         <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
@@ -223,56 +243,73 @@
                              alt="1" class="popcorn-rating-icon">
                     </button>
                 </div>
+                <div class="rating-login-prompt" sec:authorize="isAnonymous()">
+                    <a href="/login" class="action-button add-to-watchlist-button">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="Popcorn" class="popcorn-icon-small">
+                        Log in to Rate This Movie
+                    </a>
+                </div>
             </div>
         </div>
 
         <div class="movie-container">
             <!-- Movie Credits -->
             <div class="movie-credits-section">
-                <div class="credits-header">
-                    <h3 class="section-title">Cast & Crew</h3>
-                    <a th:href="'/credit/' + ${movie.id} + '/add'" class="action-button edit-credits-button">
-                        <i class="fas fa-plus"></i>
-                        Add Credit
-                    </a>
-                </div>
-                <div class="credits-container">
-                    <div class="credits-category">
-                        <h4 class="category-title">Actors</h4>
-                        <div class="credits-list">
-                            <a href="/artists/1" class="credit-item">
-                                <span class="credit-name">Actor Name 1</span>
-                            </a>
-                            <a href="/artists/2" class="credit-item">
-                                <span class="credit-name">Actor Name 2</span>
-                            </a>
-                            <a href="/artists/3" class="credit-item">
-                                <span class="credit-name">Actor Name 3</span>
+                <div class="credits-section">
+                    <div class="credits-header">
+                        <div class="credits-header-left">
+                            <h2 class="credits-title">Credits</h2>
+                            <a sec:authorize="hasRole('ADMIN')" th:href="'/credit/' + ${movie.id} + '/edit'"
+                               class="action-button edit-credits-button">
+                                <i class="fas fa-edit"></i>
+                                Edit Credits
                             </a>
                         </div>
+                        <select id="role-select" class="role-select">
+                            <option value="ACTOR" selected>Cast</option>
+                            <option value="DIRECTOR">Director</option>
+                            <option value="WRITER">Writer</option>
+                            <option value="PRODUCER">Producer</option>
+                            <option value="CINEMATOGRAPHER">Cinematographer</option>
+                            <option value="EDITOR">Editor</option>
+                            <option value="COMPOSER">Composer</option>
+                            <option value="COSTUME_DESIGNER">Costume Designer</option>
+                            <option value="PRODUCTION_DESIGNER">Production Designer</option>
+                            <option value="VISUAL_EFFECTS">Visual Effects</option>
+                            <option value="SOUND_DESIGNER">Sound Designer</option>
+                            <option value="MAKEUP_ARTIST">Makeup Artist</option>
+                            <option value="STUNT_COORDINATOR">Stunt Coordinator</option>
+                            <option value="CHOREOGRAPHER">Choreographer</option>
+                            <option value="CASTING_DIRECTOR">Casting Director</option>
+                        </select>
                     </div>
-                    <div class="credits-category">
-                        <h4 class="category-title">Directors</h4>
-                        <div class="credits-list">
-                            <a href="/artists/4" class="credit-item">
-                                <span class="credit-name">Director Name</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="credits-category">
-                        <h4 class="category-title">Writers</h4>
-                        <div class="credits-list">
-                            <a href="/artists/5" class="credit-item">
-                                <span class="credit-name">Writer Name 1</span>
-                            </a>
-                            <a href="/artists/6" class="credit-item">
-                                <span class="credit-name">Writer Name 2</span>
-                            </a>
+                    <div id="credits-list" class="credits-list">
+                        <p class="no-credits-message" style="display: none;">No credits yet.</p>
+
+                        <!-- Credit items for each role -->
+                        <div th:if="${creditsByRole != null and !creditsByRole.isEmpty()}">
+                            <div th:each="roleEntry : ${creditsByRole}" class="credits-images-row">
+                                <div th:each="credit : ${roleEntry.value}"
+                                     class="credit-item"
+                                     th:attr="data-role=${roleEntry.key.name()}">
+                                    <a th:href="@{'/artist/' + ${credit.artist.id}}" class="credit-link">
+                                        <div class="credit-image-container">
+                                            <img th:src="${credit.artist.imageUrl != null and !#strings.isEmpty(credit.artist.imageUrl) ? credit.artist.imageUrl : 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl'}"
+                                                 th:alt="${credit.artist.name}"
+                                                 class="credit-artist-image">
+                                        </div>
+                                        <span class="credit-artist-name"
+                                              th:text="${credit.artist.name}">Artist Name</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!--        <div class="movie-container">-->
         <!-- Reviews/Comment Section -->
@@ -312,7 +349,7 @@
 
             <div class="review-form-section">
                 <h4 class="section-title review-form-title">Write a Review</h4>
-                <form class="review-form">
+                <form class="review-form" sec:authorize="isAuthenticated()">
                         <textarea class="review-textarea"
                                   placeholder="Share your thoughts about this movie..."></textarea>
                     <button type="submit" class="action-button submit-review-button">
@@ -320,9 +357,14 @@
                         Submit Review
                     </button>
                 </form>
+                <div class="review-login-prompt" sec:authorize="isAnonymous()">
+                    <a href="/login" class="action-button submit-review-button">
+                        <i class="fas fa-paper-plane"></i>
+                        Log in to Write a Review
+                    </a>
+                </div>
             </div>
         </div>
-        <!--        </div>-->
 
     </section>
 </main>
@@ -332,6 +374,126 @@
         <p>&copy; <span>2025</span> popd</p>
     </div>
 </footer>
+
+<script>
+    // Credits filtering functionality + AJAX form handling
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('role-select');
+        const creditsList = document.getElementById('credits-list');
+
+        if (roleSelect && creditsList) {
+            const creditItems = creditsList.querySelectorAll('.credit-item');
+            const noCreditsMessage = creditsList.querySelector('.no-credits-message');
+
+            function filterCredits(selectedRole) {
+                if (!selectedRole) {
+                    return;
+                }
+
+                // Hide all credit items
+                creditItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+
+                // Hide the "no credits" message initially
+                if (noCreditsMessage) {
+                    noCreditsMessage.style.display = 'none';
+                }
+
+                // Show credit items for the selected role
+                let foundCredits = false;
+                creditItems.forEach(item => {
+                    if (item.getAttribute('data-role') === selectedRole) {
+                        item.style.display = 'flex';
+                        foundCredits = true;
+                    }
+                });
+
+                // Show message if no credits found for selected role
+                if (!foundCredits && noCreditsMessage) {
+                    noCreditsMessage.style.display = 'block';
+                }
+            }
+
+            // Set up change event listener
+            roleSelect.addEventListener('change', function () {
+                filterCredits(this.value);
+            });
+
+            // Initialize with "Actor" selected (default)
+            filterCredits(roleSelect.value);
+        }
+
+        const storedScrollY = sessionStorage.getItem('movieScrollY');
+        if (storedScrollY !== null) {
+            window.scrollTo(0, parseInt(storedScrollY, 10));
+            sessionStorage.removeItem('movieScrollY');
+        }
+
+        const ajaxFormSelectors = [
+            'form.inline-form[action*="/watchlist"]',
+            'form.inline-form[action*="/watched"]',
+            'form.inline-form[action*="/delete-from-watchlist"]',
+            'form.inline-form[action*="/delete-watched"]',
+            'form.delete-form[action*="/credit/"]'
+        ];
+
+        const ajaxForms = document.querySelectorAll(ajaxFormSelectors.join(', '));
+
+        ajaxForms.forEach(form => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalButtonContent = submitButton ? submitButton.innerHTML : null;
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
+
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        redirect: 'follow'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Request failed');
+                    }
+
+                    if (form.classList.contains('delete-form') && form.closest('.credit-item')) {
+                        const creditItem = form.closest('.credit-item');
+                        const creditsRow = creditItem.parentElement;
+                        creditItem.remove();
+
+                        if (creditsRow && creditsRow.querySelectorAll('.credit-item').length === 0 && creditsList) {
+                            const selectedRole = roleSelect ? roleSelect.value : null;
+                            if (selectedRole) {
+                                filterCredits(selectedRole);
+                            }
+                        }
+                    } else {
+                        sessionStorage.setItem('movieScrollY', window.scrollY.toString());
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert('Unable to process your request. Please try again.');
+                } finally {
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonContent;
+                    }
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
 

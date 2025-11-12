@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/find.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies, Artists or Users"
+                               aria-label="Search Movies, Artists or Users"
+                               th:value="${query}">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <nav class="nav">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container find-container">
+    <h2 class="find-title">Search results for "<span th:text="${query}">term</span>"</h2>
+
+    <section th:if="${movies != null}">
+        <h3 class="results-title">Movies</h3>
+        <div class="movies-grid">
+            <div class="movie-card" th:each="movie : ${movies}">
+                <a th:href="@{'/movie/' + ${movie.id}}">
+                    <img class="poster-image" th:src="${movie.posterUrl}" th:alt="${movie.title}">
+                    <div class="movie-info">
+                        <div class="movie-title" th:text="${movie.title}"></div>
+                        <div class="movie-description" th:text="${movie.description}"></div>
+                    </div>
+                </a>
+            </div>
+            <div class="no-results-card" th:if="${movies.isEmpty()}">
+                <p>No movies found for "<span th:text="${query}">term</span>".</p>
+            </div>
+        </div>
+    </section>
+
+    <section th:if="${artists != null}">
+        <h3 class="results-title">Artists</h3>
+        <div class="artists-grid">
+            <div class="artist-card" th:each="artist : ${artists}">
+                <a th:href="@{'/artist/' + ${artist.id}}">
+                    <img class="result-thumbnail" th:src="${artist.imageUrl}" th:alt="${artist.name}">
+                    <div class="artist-info">
+                        <div class="artist-name" th:text="${artist.name}"></div>
+                        <div class="artist-biography" th:text="${artist.biography}"></div>
+                    </div>
+                </a>
+            </div>
+            <div class="no-results-card" th:if="${artists.isEmpty()}">
+                <p>No artists found for "<span th:text="${query}">term</span>".</p>
+            </div>
+        </div>
+    </section>
+
+    <section th:if="${users != null}">
+        <h3 class="results-title">Users</h3>
+        <div class="users-grid">
+            <a class="user-card" th:each="user : ${users}" th:href="@{'/users/' + ${user.id}}">
+                <div class="user-avatar">
+                    <img class="user-image"
+                         th:src="${#strings.isEmpty(user.profilePicture) ? 'https://dl.dropboxusercontent.com/scl/fi/n6js2mekqny5wlsr8pl7k/User-image-default.png?rlkey=snhcvubwp3rpko1ei3sotym0u&st=q23rykyl' : user.profilePicture}"
+                         th:alt="${user.username}">
+                </div>
+                <div class="user-info">
+                    <div class="user-username" th:text="${user.username}">username</div>
+                    <div class="user-name"
+                         th:text="${#strings.isEmpty(user.firstName) && #strings.isEmpty(user.lastName) ? '—' : (user.firstName != null ? user.firstName : '') + ' ' + (user.lastName != null ? user.lastName : '')}">
+                        Full Name
+                    </div>
+                    <div class="user-email" th:text="${user.email}">email@example.com</div>
+                </div>
+            </a>
+            <div class="no-results-card" th:if="${users.isEmpty()}">
+                <p>No users found for "<span th:text="${query}">term</span>".</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>

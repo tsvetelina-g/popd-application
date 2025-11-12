@@ -1,0 +1,12 @@
+.public-profile-stats {
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.public-profile-stats .stat-item {
+    min-width: 180px;
+}
+
+.public-recent-activity {
+    margin-top: 30px;
+}

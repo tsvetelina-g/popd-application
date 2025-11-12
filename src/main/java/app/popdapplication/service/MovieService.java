@@ -56,4 +56,8 @@ public class MovieService {
 
         movieRepository.save(movie);
     }
+
+    public List<Movie> searchByTitle(String query) {
+        return movieRepository.findByTitleContainingIgnoreCase(query);
+    }
 }

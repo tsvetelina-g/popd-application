@@ -1,9 +1,11 @@
 package app.popdapplication.web;
 
 import app.popdapplication.model.entity.Artist;
+import app.popdapplication.model.entity.MovieCredit;
+import app.popdapplication.model.enums.ArtistRole;
 import app.popdapplication.service.ArtistService;
+import app.popdapplication.service.MovieCreditService;
 import app.popdapplication.web.dto.AddArtistRequest;
-import app.popdapplication.web.dto.AddMovieRequest;
 import app.popdapplication.web.dto.EditArtistRequest;
 import app.popdapplication.web.dto.dtoMappers.DtoMapper;
 import jakarta.validation.Valid;
@@ -12,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -19,9 +23,11 @@ import java.util.UUID;
 public class ArtistController {
 
     private final ArtistService artistService;
+    private final MovieCreditService movieCreditService;
 
-    public ArtistController(ArtistService artistService) {
+    public ArtistController(ArtistService artistService, MovieCreditService movieCreditService) {
         this.artistService = artistService;
+        this.movieCreditService = movieCreditService;
     }
 
     @GetMapping("/add")
@@ -51,8 +57,12 @@ public class ArtistController {
 
         ModelAndView modelAndView = new ModelAndView("artist");
         Artist artist = artistService.findById(artistId);
+        int movieCreditsCount = movieCreditService.findAllCreditsByArtist(artist);
+        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCreditService.getCreditsByArtistGrouped(artist);
 
         modelAndView.addObject("artist", artist);
+        modelAndView.addObject("movieCreditsCount", movieCreditsCount);
+        modelAndView.addObject("creditsByRole", creditsByRole);
 
         return modelAndView;
     }

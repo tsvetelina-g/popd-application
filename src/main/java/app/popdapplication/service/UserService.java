@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,8 +61,6 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         watchlistService.createDefaultWatchlist(user);
-
-        //TODO: add default watchlist
     }
 
     public User findById(UUID userId) {
@@ -106,5 +105,9 @@ public class UserService implements UserDetailsService {
 
         user.setUpdatedOn(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public List<User> searchUsers(String query) {
+        return userRepository.findAllByUsernameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(query, query, query);
     }
 }

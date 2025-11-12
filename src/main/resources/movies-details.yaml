@@ -1,0 +1,200 @@
+movies:
+  - title: "The Shawshank Redemption"
+    description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
+    releaseDate: "1994-09-23"
+    genres:
+      - "Drama"
+    posterUrl: "https://image.tmdb.org/t/p/w500/lyQBXzOQSuE59IsHyhrp0qIiPAz.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg"
+
+  - title: "The Godfather"
+    description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son."
+    releaseDate: "1972-03-24"
+    genres:
+      - "Crime"
+      - "Drama"
+    posterUrl: "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
+
+  - title: "The Dark Knight"
+    description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice."
+    releaseDate: "2008-07-18"
+    genres:
+      - "Action"
+      - "Crime"
+      - "Drama"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/dqK9Hag1054tghRQSqLSfrkvQnA.jpg"
+
+  - title: "Pulp Fiction"
+    description: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption."
+    releaseDate: "1994-10-14"
+    genres:
+      - "Crime"
+      - "Drama"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
+
+  - title: "Inception"
+    description: "A skilled thief is given a chance at redemption if he can perform the impossible task of inception: planting an idea in someone's mind."
+    releaseDate: "2010-07-16"
+    genres:
+      - "Action"
+      - "Sci‑Fi"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
+
+  - title: "Fight Club"
+    description: "An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much, much more."
+    releaseDate: "1999-10-15"
+    genres:
+      - "Drama"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg"
+
+  - title: "Forrest Gump"
+    description: "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75."
+    releaseDate: "1994-07-06"
+    genres:
+      - "Drama"
+      - "Romance"
+    posterUrl: "https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/qdIMHd4sEfJSckfVJfKQvisL02a.jpg"
+
+  - title: "The Matrix"
+    description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers."
+    releaseDate: "1999-03-31"
+    genres:
+      - "Action"
+      - "Sci‑Fi"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/fNG7i7RqMErkcqhohV2a6cV1Ehy.jpg"
+
+  - title: "Goodfellas"
+    description: "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners."
+    releaseDate: "1990-09-21"
+    genres:
+      - "Crime"
+      - "Drama"
+      - "Biography"
+    posterUrl: "https://upload.wikimedia.org/wikipedia/en/7/7b/Goodfellas.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/sw7mordbZxgITU877yTpZCud90M.jpg"
+
+  - title: "The Lord of the Rings: The Return of the King"
+    description: "Aragorn is revealed as the heir to the ancient kings as he, Gandalf and the other members of the broken fellowship struggle to save Gondor."
+    releaseDate: "2003-12-17"
+    genres:
+      - "Action"
+      - "Adventure"
+      - "Drama"
+      - "Fantasy"
+    posterUrl: "https://image.tmdb.org/t/p/w500/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg"
+    backgroundImage: "https://media.themoviedb.org/t/p/w1066_and_h600_bestv2/2u7zbn8EudG6kLlBzUYqP8RyFU4.jpg"
+
+  - title: "Interstellar"
+    description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
+    releaseDate: "2014-11-07"
+    genres:
+      - "Adventure"
+      - "Drama"
+      - "Sci‑Fi"
+    posterUrl: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+
+  - title: "The Silence of the Lambs"
+    description: "A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer."
+    releaseDate: "1991-02-14"
+    genres:
+      - "Crime"
+      - "Drama"
+      - "Thriller"
+      - "Horror"
+    posterUrl: "https://image.tmdb.org/t/p/w500/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg"
+
+  - title: "Parasite"
+    description: "All unemployed, Ki-taek's family takes peculiar interest in the wealthy Park family, leading them to infiltrate the Parks' household and pose as unrelated, highly qualified individuals."
+    releaseDate: "2019-05-30"
+    genres:
+      - "Comedy"
+      - "Drama"
+      - "Thriller"
+    posterUrl: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"
+
+  - title: "The Green Mile"
+    description: "The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift."
+    releaseDate: "1999-12-10"
+    genres:
+      - "Crime"
+      - "Drama"
+      - "Fantasy"
+    posterUrl: "https://image.tmdb.org/t/p/w500/velWPhVMQeQKcxggNEU8YmIo52R.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/velWPhVMQeQKcxggNEU8YmIo52R.jpg"
+
+  - title: "The Godfather: Part II"
+    description: "The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate."
+    releaseDate: "1974-12-20"
+    genres:
+      - "Crime"
+      - "Drama"
+    posterUrl: "https://image.tmdb.org/t/p/w500/bMadFzhjy9T7R8J48QGq1ngWNAK.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/oo4PVK6AyLZN49BokxDFGyclN86.jpg"
+
+  - title: "Schindler's List"
+    description: "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis."
+    releaseDate: "1993-12-15"
+    genres:
+      - "Biography"
+      - "Drama"
+      - "History"
+      - "War"
+    posterUrl: "https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg"
+
+  - title: "The Lord of the Rings: The Fellowship of the Ring"
+    description: "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron."
+    releaseDate: "2001-12-19"
+    genres:
+      - "Action"
+      - "Adventure"
+      - "Drama"
+      - "Fantasy"
+    posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face/4WlVLp55zgBlgMTKcHK14sZFaMH.jpg"
+    backgroundImage: "https://media.themoviedb.org/t/p/w1066_and_h600_bestv2/z51Wzj94hvAIsWfknifKTqKJRwp.jpg"
+
+  - title: "The Prestige"
+    description: "After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion while sacrificing everything they have to outwit each other."
+    releaseDate: "2006-10-20"
+    genres:
+      - "Drama"
+      - "Mystery"
+      - "Thriller"
+    posterUrl: "https://upload.wikimedia.org/wikipedia/en/d/d2/Prestige_poster.jpg"
+    backgroundImage: "https://media.themoviedb.org/t/p/w1000_and_h563_face/nUVgFcN4rzDi8812Txp0JxITmAR.jpg"
+
+  - title: "Gladiator"
+    description: "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery."
+    releaseDate: "2000-05-05"
+    genres:
+      - "Action"
+      - "Adventure"
+      - "Drama"
+    posterUrl: "https://media.themoviedb.org/t/p/w440_and_h660_face/9xLIugjmparUuJBuoncNh4jEEaI.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/swpjSgGmBCx6QgfO4rgv5vBzqHL.jpg"
+
+  - title: "The Lion King"
+    description: "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself."
+    releaseDate: "1994-06-24"
+    genres:
+      - "Animation"
+      - "Adventure"
+      - "Drama"
+      - "Family"
+    posterUrl: "https://image.tmdb.org/t/p/w500/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg"
+    backgroundImage: "https://image.tmdb.org/t/p/original/sKCr78MXSLixwmZ8DyJLrpMsd15.jpg"

@@ -1,0 +1,204 @@
+.find-container {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    gap: 40px;
+}
+
+.find-intro {
+    text-align: center;
+}
+
+.find-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.movies-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.movie-card {
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border);
+    position: relative;
+    width: 200px;
+    /*height: 300px;*/
+}
+
+.find-subtitle {
+    font-size: 16px;
+    color: var(--muted);
+}
+
+.search-submit {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.search-submit:hover {
+    color: var(--text);
+}
+
+.find-container section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.artists-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.artist-card {
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border);
+    width: 200px;
+}
+
+.artist-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.artist-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.artist-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+.artist-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.artist-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.artist-biography {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.3;
+    line-clamp: 4;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.no-results-card {
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 250px;
+    color: var(--muted);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.no-results-card span {
+    color: var(--accent);
+}
+
+.users-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.user-card {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: var(--card);
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    min-width: 260px;
+    max-width: 320px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.user-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid var(--accent);
+}
+
+.user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-username {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.user-name {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.user-email {
+    font-size: 12px;
+    color: var(--muted);
+    word-break: break-all;
+}
+
+@media (max-width: 768px) {
+    .find-container {
+        gap: 30px;
+    }
+}
+

@@ -18,23 +18,58 @@
 /* Artist Header */
 .artist-header {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     gap: 20px;
     padding: 20px;
     justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--card);
+    width: 100%;
+    border-radius: 12px;
+}
+
+.artist-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-image-url);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+    opacity: 0.8;
+}
+
+.artist-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: var(--show-overlay);
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.artist-header > * {
+    position: relative;
+    z-index: 2;
 }
 
 .artist-picture {
     flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
 }
 
 .artist-image {
-    width: 180px;
-    height: 250px;
+    width: 300px;
+    height: 400px;
     border-radius: 8px;
     object-fit: cover;
     /*border: 3px solid var(--accent);*/
-    background-color: var(--accent);
+    background-color: var(--bg);
     transition: transform 0.3s ease;
 }
 
@@ -46,7 +81,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    justify-content: space-between;
 }
 
 .artist-name {
@@ -96,6 +131,7 @@
 }
 
 .artist-stats .stat-item {
+    max-height: 120px;
     text-align: center;
     padding: 20px;
     background: var(--bg);
@@ -376,7 +412,7 @@
 .edit-button {
     background: var(--bg);
     border: 1px solid var(--border);
-    color: #6b0207;
+    color: var(--accent);
     max-width: 180px;
 }
 

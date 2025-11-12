@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,18 +21,23 @@
             </div>
             <div class="header-top">
                 <div class="search-section">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search Movies" aria-label="Search Movies">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies or Artists"
+                               aria-label="Search Movies or Artists">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <nav class="nav">
-                    <a href="/login">Login</a>
-                    <span class="nav-separator">|</span>
-                    <a href="/register">Register</a>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
                         <a href="/profile" class="profile-btn">
                             <i class="fa-solid fa-user"></i>
                             Profile
@@ -43,8 +48,8 @@
                             <a href="/logout">Logout</a>
                         </div>
                     </div>
-                    <span class="nav-separator">|</span>
-                    <div class="dropdown">
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
                         <a href="/admin" class="profile-btn">
                             <i class="fa-solid fa-gear"></i>
                             Admin
@@ -70,55 +75,49 @@
             <h2 class="register-title">Add Credit</h2>
             <p class="register-subtitle">Add a credit for this movie</p>
 
-            <form class="register-form" action="#" method="post">
+            <form class="register-form" 
+                  th:action="@{'/credit/' + ${movie.id} + '/add'}" 
+                  th:method="post"
+                  th:object="${addCreditRequest}">
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="artist" class="form-label">Artist</label>
-                        <span class="warning-text" id="artistWarning"></span>
+                        <label for="artistName" class="form-label">Artist</label>
+                        <span class="warning-text" th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}"></span>
                     </div>
-                    <div class="searchable-dropdown">
+                    <div class="datalist-wrapper">
                         <input type="text"
-                               id="artist"
-                               name="artist"
-                               class="form-input"
-                               placeholder="Search for an artist..."
+                               id="artistName"
+                               name="artistName"
+                               class="form-input datalist-input"
+                               placeholder="Type artist name..."
                                autocomplete="off"
+                               th:field="*{artistName}"
                                required>
-                        <i class="fa-solid fa-chevron-down dropdown-icon"></i>
-                        <div class="dropdown-options" id="artistOptions">
-                            <!-- Options will be populated dynamically or via Thymeleaf later -->
-                            <div class="dropdown-option" data-value="1">Actor Name 1</div>
-                            <div class="dropdown-option" data-value="2">Actor Name 2</div>
-                            <div class="dropdown-option" data-value="3">Director Name 1</div>
-                            <div class="dropdown-option" data-value="4">Writer Name 1</div>
+                        <i class="fa-solid fa-chevron-down datalist-icon"></i>
+                        <div class="dropdown-options" id="artistDropdown" style="display: none;">
+                            <!-- Options will be populated via AJAX -->
                         </div>
                     </div>
-                    <input type="hidden" id="artistId" name="artistId" value="">
-                    <small class="form-hint">Type to search for an artist. Artist must exist in the database.</small>
+                    <small class="form-hint">
+                        Start typing to see suggestions. Artist will be looked up by name when you submit.
+                    </small>
                 </div>
 
                 <div class="form-group">
                     <div class="label-row">
                         <label for="role" class="form-label">Role</label>
-                        <span class="warning-text" id="roleWarning"></span>
+                        <span class="warning-text" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
                     </div>
-                    <select id="role" name="role" class="form-input form-select" required>
+                    <select id="role" 
+                            name="role" 
+                            class="form-input form-select" 
+                            th:field="*{role}"
+                            required>
                         <option value="">Select a role</option>
-                        <option value="ACTOR">Actor</option>
-                        <option value="DIRECTOR">Director</option>
-                        <option value="WRITER">Writer</option>
-                        <option value="PRODUCER">Producer</option>
-                        <option value="CINEMATOGRAPHER">Cinematographer</option>
-                        <option value="EDITOR">Editor</option>
-                        <option value="COMPOSER">Composer</option>
-                        <option value="COSTUME_DESIGNER">Costume Designer</option>
-                        <option value="PRODUCTION_DESIGNER">Production Designer</option>
-                        <option value="VISUAL_EFFECTS">Visual Effects</option>
-                        <option value="SOUND_DESIGNER">Sound Designer</option>
-                        <option value="MAKEUP_ARTIST">Makeup Artist</option>
-                        <option value="STUNT_COORDINATOR">Stunt Coordinator</option>
-                        <option value="CHOREOGRAPHER">Choreographer</option>
-                        <option value="CASTING_DIRECTOR">Casting Director</option>
+                        <option th:each="role : ${roles}" 
+                                th:value="${role.name()}" 
+                                th:text="${role.getDisplayName()}">
+                        </option>
                     </select>
                 </div>
 
@@ -138,54 +137,219 @@
 </footer>
 
 <script>
-    // Searchable dropdown functionality
-    const artistInput = document.getElementById('artist');
-    const artistOptions = document.getElementById('artistOptions');
-    const artistIdInput = document.getElementById('artistId');
-    const dropdownIcon = document.querySelector('.dropdown-icon');
+    (function() {
+        const artistInput = document.getElementById('artistName');
+        const dropdown = document.getElementById('artistDropdown');
+        const icon = document.querySelector('.datalist-wrapper .datalist-icon');
+        let allOptions = [];
+        let highlightedIndex = -1;
+        let searchTimeout = null;
 
-    // Toggle dropdown visibility
-    artistInput.addEventListener('focus', function () {
-        artistOptions.style.display = 'block';
-        dropdownIcon.style.transform = 'rotate(180deg)';
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function (event) {
-        const isClickInside = artistInput.contains(event.target) || artistOptions.contains(event.target);
-        if (!isClickInside) {
-            artistOptions.style.display = 'none';
-            dropdownIcon.style.transform = 'rotate(0deg)';
+        // Debug: Check if elements are found
+        if (!artistInput) {
+            console.error('Artist input not found');
+            return;
         }
-    });
+        if (!dropdown) {
+            console.error('Dropdown not found');
+            return;
+        }
 
-    // Filter options as user types
-    artistInput.addEventListener('input', function () {
-        const searchTerm = this.value.toLowerCase();
-        const options = artistOptions.querySelectorAll('.dropdown-option');
+        function populateDropdown(artistNames) {
+            if (!dropdown) return;
 
-        options.forEach(option => {
-            const text = option.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-                option.style.display = 'block';
+            // Clear existing options
+            dropdown.innerHTML = '';
+            allOptions = [];
+
+            // Create option elements
+            artistNames.forEach(name => {
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.setAttribute('data-value', name);
+                option.textContent = name;
+                dropdown.appendChild(option);
+                allOptions.push(option);
+            });
+        }
+
+        function searchArtists(query) {
+            // Cancel previous timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+
+            // Debounce the search - wait 300ms after user stops typing
+            searchTimeout = setTimeout(function() {
+                const trimmedQuery = query ? query.trim() : '';
+                if (trimmedQuery.length === 0) {
+                    hideDropdown();
+                    return;
+                }
+
+                const searchQuery = encodeURIComponent(trimmedQuery);
+                const url = '/credit/artists/search?query=' + searchQuery;
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(artistNames => {
+                        if (Array.isArray(artistNames)) {
+                            populateDropdown(artistNames);
+                            if (artistNames.length > 0) {
+                                showDropdown();
+                            } else {
+                                hideDropdown();
+                            }
+                            highlightedIndex = -1;
+                        } else {
+                            console.error('Invalid response format:', artistNames);
+                            hideDropdown();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error searching artists:', error);
+                        console.error('URL was:', url);
+                        hideDropdown();
+                    });
+            }, 300);
+        }
+
+        function showDropdown() {
+            if (dropdown && allOptions.length > 0) {
+                dropdown.style.display = 'block';
+            }
+        }
+
+        function hideDropdown() {
+            if (dropdown) {
+                dropdown.style.display = 'none';
+            }
+            highlightedIndex = -1;
+        }
+
+        function selectOption(option) {
+            if (option) {
+                const value = option.getAttribute('data-value') || option.textContent;
+                artistInput.value = value;
+                hideDropdown();
+                artistInput.focus();
+            }
+        }
+
+        function highlightOption(index) {
+            const visibleOptions = allOptions.filter(opt => !opt.classList.contains('hidden'));
+            if (visibleOptions.length === 0) return;
+
+            // Remove previous highlight
+            allOptions.forEach(opt => opt.classList.remove('highlighted'));
+
+            // Ensure index is within bounds
+            if (index < 0) index = visibleOptions.length - 1;
+            if (index >= visibleOptions.length) index = 0;
+
+            highlightedIndex = index;
+            visibleOptions[index].classList.add('highlighted');
+            visibleOptions[index].scrollIntoView({ block: 'nearest' });
+        }
+
+        // Input event - search artists as user types
+        if (artistInput) {
+            artistInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                
+                if (searchTerm.trim().length === 0) {
+                    // If empty, show all artists
+                    searchArtists('');
+                } else if (searchTerm.trim().length >= 2) {
+                    // Only search if at least 2 characters
+                    searchArtists(searchTerm);
+                } else {
+                    // Hide dropdown if less than 2 characters
+                    hideDropdown();
+                }
+            });
+
+            // Focus event - show dropdown with all artists
+            artistInput.addEventListener('focus', function() {
+                if (artistInput.value.trim().length >= 2) {
+                    searchArtists(artistInput.value);
+                }
+            });
+
+            // Click on icon - toggle dropdown
+            if (icon) {
+                icon.style.pointerEvents = 'auto';
+                icon.style.cursor = 'pointer';
+                icon.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                        if (artistInput.value.trim().length >= 2) {
+                            searchArtists(artistInput.value);
+                        }
+                        artistInput.focus();
+                    } else {
+                        hideDropdown();
+                    }
+                });
             } else {
-                option.style.display = 'none';
+                console.warn('Datalist icon not found');
+            }
+
+            // Keyboard navigation
+            artistInput.addEventListener('keydown', function(e) {
+                const visibleOptions = allOptions.filter(opt => !opt.classList.contains('hidden'));
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                        if (artistInput.value.trim().length >= 2) {
+                            searchArtists(artistInput.value);
+                        }
+                    }
+                    // Wait a bit for dropdown to populate, then highlight
+                    setTimeout(() => {
+                        highlightOption(highlightedIndex + 1);
+                    }, 50);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    highlightOption(highlightedIndex - 1);
+                } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+                    e.preventDefault();
+                    if (visibleOptions[highlightedIndex]) {
+                        selectOption(visibleOptions[highlightedIndex]);
+                    }
+                } else if (e.key === 'Escape') {
+                    hideDropdown();
+                }
+            });
+        }
+
+        // Click on dropdown option
+        if (dropdown) {
+            dropdown.addEventListener('click', function(e) {
+                const option = e.target.closest('.dropdown-option');
+                if (option && !option.classList.contains('hidden')) {
+                    selectOption(option);
+                }
+            });
+        }
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (artistInput && dropdown) {
+                const wrapper = artistInput.closest('.datalist-wrapper');
+                if (wrapper && !wrapper.contains(e.target)) {
+                    hideDropdown();
+                }
             }
         });
-
-        artistOptions.style.display = 'block';
-    });
-
-    // Handle option selection
-    artistOptions.addEventListener('click', function (event) {
-        const option = event.target.closest('.dropdown-option');
-        if (option) {
-            artistInput.value = option.textContent;
-            artistIdInput.value = option.getAttribute('data-value');
-            artistOptions.style.display = 'none';
-            dropdownIcon.style.transform = 'rotate(0deg)';
-        }
-    });
+    })();
 </script>
 </body>
 </html>
