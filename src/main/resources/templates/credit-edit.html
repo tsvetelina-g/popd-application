@@ -46,7 +46,9 @@
                         </a>
                         <div class="dropdown-menu">
                             <a href="/profile">Profile</a>
-                            <a href="/logout">Logout</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
                         </div>
                     </div>
                     <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>

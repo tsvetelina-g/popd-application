@@ -2,7 +2,6 @@ package app.popdapplication.web;
 
 import app.popdapplication.model.entity.User;
 import app.popdapplication.security.UserData;
-import app.popdapplication.service.RatingService;
 import app.popdapplication.service.ReviewService;
 import app.popdapplication.service.UserService;
 import app.popdapplication.service.WatchedMovieService;
@@ -25,13 +24,11 @@ import java.util.UUID;
 public class ProfileController {
 
     private final UserService userService;
-    private final RatingService ratingService;
     private final ReviewService reviewService;
     private final WatchedMovieService watchedMovieService;
 
-    public ProfileController(UserService userService, RatingService ratingService, ReviewService reviewService, WatchedMovieService watchedMovieService) {
+    public ProfileController(UserService userService, ReviewService reviewService, WatchedMovieService watchedMovieService) {
         this.userService = userService;
-        this.ratingService = ratingService;
         this.reviewService = reviewService;
         this.watchedMovieService = watchedMovieService;
     }
@@ -39,14 +36,18 @@ public class ProfileController {
     @GetMapping
     public ModelAndView getProfilePage(@AuthenticationPrincipal UserData userData){
 
+        if (userData == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
         ModelAndView modelAndView = new ModelAndView("profile");
         User user = userService.findById(userData.getUserId());
-        int moviesRatedCount = ratingService.countMoviesRated(user);
+//        int moviesRatedCount = ratingService.countMoviesRated(user);
         int reviewedMoviesCount = reviewService.countMoviesReviewed(user);
         int watchedMoviesCount = watchedMovieService.countWatchedMovies(user);
 
         modelAndView.addObject("user", user);
-        modelAndView.addObject("moviesRated", moviesRatedCount);
+//        modelAndView.addObject("moviesRated", moviesRatedCount);
         modelAndView.addObject("moviesReviewed", reviewedMoviesCount);
         modelAndView.addObject("moviesWatched", watchedMoviesCount);
 

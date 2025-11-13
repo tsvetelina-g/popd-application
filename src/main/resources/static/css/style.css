@@ -163,6 +163,30 @@ html, body {
   background: var(--bg);
 }
 
+.logout-form {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.logout-link {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.logout-link:hover {
+  background: var(--bg);
+}
+
 /* Search Section */
 .search-section {
   flex-grow: 1;

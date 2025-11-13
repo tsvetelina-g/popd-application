@@ -45,7 +45,9 @@
                         </a>
                         <div class="dropdown-menu">
                             <a href="/profile">Profile</a>
-                            <a href="/logout">Logout</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
                         </div>
                     </div>
                     <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
@@ -90,11 +92,11 @@
 
                 <div class="profile-stats">
                     <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesRated}">42</span>
+                        <span class="stat-number">42</span>
                         <span class="stat-label">Movies Rated</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesReviewed}">18</span>
+                        <span class="stat-number">18</span>
                         <span class="stat-label">Reviews Written</span>
                     </div>
                     <div class="stat-item">

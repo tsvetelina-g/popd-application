@@ -46,7 +46,9 @@
                         </a>
                         <div class="dropdown-menu">
                             <a href="/profile">Profile</a>
-                            <a href="/logout">Logout</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
                         </div>
                     </div>
                     <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
@@ -190,67 +192,51 @@
 
             <!-- Rating Section -->
             <div class="movie-rating-section">
-                <h3 class="section-title-rating">Your Rating</h3>
-                <div class="rating-options" sec:authorize="isAuthenticated()">
-                    <button class="rating-button" type="button" value="10">
-                        <span class="rating-number">10</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="10" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="9">
-                        <span class="rating-number">9</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="9" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="8">
-                        <span class="rating-number">8</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="8" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="7">
-                        <span class="rating-number">7</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="7" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="6">
-                        <span class="rating-number">6</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="6" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="5">
-                        <span class="rating-number">5</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="5" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="4">
-                        <span class="rating-number">4</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="4" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="3">
-                        <span class="rating-number">3</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="3" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="2">
-                        <span class="rating-number">2</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="2" class="popcorn-rating-icon">
-                    </button>
-                    <button class="rating-button" type="button" value="1">
-                        <span class="rating-number">1</span>
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="1" class="popcorn-rating-icon">
-                    </button>
-                </div>
-                <div class="rating-login-prompt" sec:authorize="isAnonymous()">
-                    <a href="/login" class="action-button add-to-watchlist-button">
-                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                             alt="Popcorn" class="popcorn-icon-small">
-                        Log in to Rate This Movie
-                    </a>
+                <h3 class="section-title-rating" th:text="${rating != null} ? 'Your Rating' : 'Rate This Movie'">Rate This Movie</h3>
+
+                <form sec:authorize="isAuthenticated()"
+                      th:action="@{'/rating/' + ${movie.id} + '/add'}"
+                      th:method="post"
+                      class="rating-form">
+
+                    <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                    <div class="rating-options"
+                         th:classappend="${rating != null} ? 'has-rating' : 'no-rating'">
+
+                        <label th:each="i : ${#numbers.sequence(10, 1, -1)}" class="rating-label">
+                            <input type="radio"
+                                   name="value"
+                                   th:value="${i}"
+                                   th:checked="${rating != null and rating == i}"
+                                   class="rating-radio">
+                            <button type="button"
+                                    class="rating-button"
+                                    th:attr="data-rating-value=${i}"
+                                    th:classappend="${rating != null and rating >= i} ? ' rated' : ''">
+                                <span class="rating-number" th:text="${i}">10</span>
+                                <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                     alt="Popcorn"
+                                     class="popcorn-rating-icon"
+                                     th:classappend="${rating != null and rating >= i} ? ' red' : ''">
+                            </button>
+                        </label>
+                    </div>
+                </form>
+
+                <!-- show delete if rating exists -->
+                <div th:if="${rating != null}" class="rating-delete-section">
+                    <form th:action="@{'/rating/' + ${movie.id} + '/delete'}" method="post" class="delete-rating-form">
+                        <input type="hidden" name="_method" value="delete">
+                        <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="action-button delete-rating-button">
+                            <i class="fas fa-trash-alt"></i>
+                            Remove Rating
+                        </button>
+                    </form>
                 </div>
             </div>
+
         </div>
 
         <div class="movie-container">
@@ -435,7 +421,9 @@
             'form.inline-form[action*="/watched"]',
             'form.inline-form[action*="/delete-from-watchlist"]',
             'form.inline-form[action*="/delete-watched"]',
-            'form.delete-form[action*="/credit/"]'
+            'form.delete-form[action*="/credit/"]',
+            'form.rating-form[action*="/rating/"]',
+            'form.delete-rating-form[action*="/rating/"]'
         ];
 
         const ajaxForms = document.querySelectorAll(ajaxFormSelectors.join(', '));
@@ -452,11 +440,21 @@
                 }
 
                 try {
+                    // Manually build URL-encoded data from form
                     const formData = new FormData(form);
+                    const urlEncodedData = new URLSearchParams();
+                    for (const [key, value] of formData.entries()) {
+                        urlEncodedData.append(key, value);
+                    }
+
+                    console.log('Form action:', form.action);
+                    console.log('Form data:', urlEncodedData.toString());
+
                     const response = await fetch(form.action, {
                         method: 'POST',
-                        body: formData,
+                        body: urlEncodedData.toString(),
                         headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
                             'X-Requested-With': 'XMLHttpRequest'
                         },
                         redirect: 'follow'
@@ -489,6 +487,36 @@
                         submitButton.disabled = false;
                         submitButton.innerHTML = originalButtonContent;
                     }
+                }
+            });
+        });
+
+        // Handle rating button clicks - trigger form submission (form is already in ajaxFormSelectors)
+        const ratingButtons = document.querySelectorAll('.rating-button');
+        ratingButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                const form = this.closest('form.rating-form');
+                if (form) {
+                    const radio = this.previousElementSibling;
+                    if (radio && radio.type === 'radio') {
+                        radio.checked = true;
+                        // Trigger submit event directly
+                        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                        form.dispatchEvent(submitEvent);
+                    }
+                }
+            });
+        });
+
+        // Handle radio button changes - trigger form submission
+        const ratingRadios = document.querySelectorAll('.rating-radio');
+        ratingRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const form = this.closest('form.rating-form');
+                if (form) {
+                    form.requestSubmit(); // Triggers submit event, caught by AJAX handler
                 }
             });
         });

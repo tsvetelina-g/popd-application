@@ -197,6 +197,7 @@
     align-items: stretch;
     width: 100%;
     gap: 10px; /* consistent spacing between buttons */
+    margin-top: 15px;
     padding: 20px;
 }
 
@@ -251,7 +252,7 @@
     background: var(--card);
     color: var(--accent);
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 10px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
@@ -310,7 +311,7 @@
     background: var(--card);
     color: var(--accent);
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 10px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
@@ -417,6 +418,11 @@
     padding: 20px;
 }
 
+.rating-form {
+    margin: 0;
+    padding: 0;
+}
+
 .rating-options {
     display: flex;
     gap: 5px;
@@ -424,6 +430,23 @@
     justify-content: center;
     flex-wrap: wrap;
     flex-direction: row-reverse;
+}
+
+.rating-label {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.rating-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
 }
 
 .rating-button {
@@ -445,19 +468,29 @@
     transform: translateY(-2px);
 }
 
-.rating-button.active {
-    background: rgba(133, 3, 9, 0.2);
-}
-
-.rating-button.active .popcorn-rating-icon {
-    filter: brightness(0) saturate(100%) invert(16%) sepia(84%) saturate(3031%) hue-rotate(334deg) brightness(94%) contrast(95%);
+.rating-button.active,
+.rating-radio:checked + .rating-button {
 }
 
 .popcorn-rating-icon {
     width: 30px;
     height: 30px;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Permanent yellow state when rating exists */
+.popcorn-rating-icon.red {
+    background-color: #FFD700;
+    border-radius: 50%;
+    padding: 2px;
+    filter: brightness(0.8) contrast(1.5) sepia(100%) saturate(200%) hue-rotate(20deg) !important;
+}
+
+/* Hide permanent yellow state when hovering (so hover effect can show only selected ones) */
+.rating-options.has-rating:hover .popcorn-rating-icon.red {
+    filter: brightness(0) invert(1) !important;
 }
 
 .rating-number {
@@ -473,17 +506,55 @@
     color: var(--accent);
 }
 
-.rating-options:hover .rating-button {
+/* Hover effect: when hovering over a label, make its popcorn and all lower ones yellow (only when no existing rating) */
+.rating-options.no-rating .rating-label:hover .popcorn-rating-icon,
+.rating-options.no-rating .rating-label:hover ~ .rating-label .popcorn-rating-icon {
+    background-color: #FFD700;
+    border-radius: 50%;
+    padding: 2px;
+    filter: brightness(0.8) contrast(1.5) sepia(100%) saturate(200%) hue-rotate(20deg) !important;
+}
+
+/* Hover effect: when hovering over a label, make its popcorn and all lower ones yellow (even when rating exists) */
+.rating-options.has-rating .rating-label:hover .popcorn-rating-icon,
+.rating-options.has-rating .rating-label:hover ~ .rating-label .popcorn-rating-icon {
+    background-color: #FFD700;
+    border-radius: 50%;
+    padding: 2px;
+    filter: brightness(0.8) contrast(1.5) sepia(100%) saturate(200%) hue-rotate(20deg) !important;
+}
+
+/* Opacity effects only when no rating exists */
+.rating-options.no-rating:hover .rating-button {
     opacity: 0.5;
 }
 
-.rating-options .rating-button:hover ~ .rating-button {
+.rating-options.no-rating .rating-button:hover ~ .rating-button {
     opacity: 1;
 }
 
-.rating-options .rating-button:hover .popcorn-rating-icon,
-.rating-options .rating-button:hover ~ .rating-button .popcorn-rating-icon {
-    filter: brightness(0) saturate(100%) invert(16%) sepia(84%) saturate(3031%) hue-rotate(334deg) brightness(94%) contrast(95%);
+.rating-delete-section {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.delete-rating-form {
+    margin: 0;
+    padding: 0;
+}
+
+.delete-rating-button {
+    margin-top: 10px;
+    background: var(--card);
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.delete-rating-button:hover {
+    background: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
 /* Movie Credits */

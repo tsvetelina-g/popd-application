@@ -31,14 +31,16 @@ public class MovieController {
     private final WatchlistService watchlistService;
     private final GenreService genreService;
     private final MovieCreditService movieCreditService;
+    private final RatingService ratingService;
 
-    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService) {
+    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService, RatingService ratingService) {
         this.movieService = movieService;
         this.userService = userService;
         this.watchedMovieService = watchedMovieService;
         this.watchlistService = watchlistService;
         this.genreService = genreService;
         this.movieCreditService = movieCreditService;
+        this.ratingService = ratingService;
     }
 
     @GetMapping
@@ -72,21 +74,24 @@ public class MovieController {
 
     @GetMapping
     @RequestMapping("/{id}")
-    public ModelAndView getMoviePage(@PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView getMoviePage(@PathVariable("id") UUID movieId, @AuthenticationPrincipal UserData userData) {
 
-        Movie movie = movieService.findById(id);
+        Movie movie = movieService.findById(movieId);
 
         boolean movieIsWatched = false;
         boolean movieIsInWatchlist = false;
         User user = null;
+        Integer rating = null;
 
         if (userData != null) {
             user = userService.findById(userData.getUserId());
             movieIsWatched = watchedMovieService.movieIsWatched(movie, user);
             movieIsInWatchlist = watchlistService.movieIsInWatchlist(movie, user);
+            rating = ratingService.getRatingByUserAndMovie(user.getId(), movieId);
         }
 
-        int usersWatchedCount = watchedMovieService.usersWatchedCount(id);
+
+        int usersWatchedCount = watchedMovieService.usersWatchedCount(movieId);
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
         Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
                 .collect(Collectors.groupingBy(MovieCredit::getRoleType));
@@ -99,6 +104,7 @@ public class MovieController {
         modelAndView.addObject("usersWatchedCount", usersWatchedCount);
         modelAndView.addObject("movieCredits", movieCredits);
         modelAndView.addObject("creditsByRole", creditsByRole);
+        modelAndView.addObject("rating", rating);
 
         return modelAndView;
     }
