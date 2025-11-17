@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Review - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/review-edit.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies or Artists"
+                               aria-label="Search Movies or Artists">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <nav class="nav">
+                    <span>
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <form action="/logout" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                    <span class="nav-separator">|</span>
+                    <div class="dropdown">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="register-section">
+        <div class="register-container">
+            <h2 class="register-title">Edit Review</h2>
+            <p class="register-subtitle">Update your review</p>
+
+            <form class="register-form" th:action="@{'/review/' + ${movieId} + '/edit'}" th:method="put"  th:object="${editReviewRequest}">
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="title" class="form-label">Title</label>
+                        <span class="warning-text" id="titleWarning"></span>
+                    </div>
+                    <input th:field="*{title}" type="text" id="title" name="title" class="form-input"
+                           placeholder="Enter review title" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="content" class="form-label">Content</label>
+                        <span class="warning-text" id="contentWarning"></span>
+                    </div>
+                    <textarea th:field="*{content}" id="content" name="content" class="form-input"
+                              placeholder="Enter your review content" rows="8" style="resize: vertical;" required></textarea>
+                    <p class="alert-warning" th:if="${#fields.hasErrors('content')}">Invalid content</p>
+
+                </div>
+
+                <button type="submit" class="register-button">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>
+

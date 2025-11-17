@@ -6,6 +6,7 @@ import app.popdapplication.model.entity.MovieCredit;
 import app.popdapplication.model.enums.ArtistRole;
 import app.popdapplication.repository.MovieCreditRepository;
 import app.popdapplication.web.dto.AddCreditRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -22,12 +23,12 @@ public class MovieCreditService {
     private final MovieService movieService;
     private final ArtistService artistService;
 
+    @Autowired
     public MovieCreditService(MovieCreditRepository movieCreditRepository, MovieService movieService, ArtistService artistService) {
         this.movieCreditRepository = movieCreditRepository;
         this.movieService = movieService;
         this.artistService = artistService;
     }
-
 
     public void saveCredit(AddCreditRequest addCreditRequest, UUID movieId) {
 

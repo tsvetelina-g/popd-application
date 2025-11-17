@@ -2,9 +2,7 @@ package app.popdapplication.web;
 
 import app.popdapplication.model.entity.User;
 import app.popdapplication.security.UserData;
-import app.popdapplication.service.ReviewService;
-import app.popdapplication.service.UserService;
-import app.popdapplication.service.WatchedMovieService;
+import app.popdapplication.service.*;
 import app.popdapplication.web.dto.dtoMappers.DtoMapper;
 import app.popdapplication.web.dto.EditProfileRequest;
 import jakarta.validation.Valid;
@@ -26,11 +24,17 @@ public class ProfileController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final WatchedMovieService watchedMovieService;
+    private final RatingService ratingService;
+    private final WatchlistMovieService watchlistMovieService;
+    private final WatchlistService watchlistService;
 
-    public ProfileController(UserService userService, ReviewService reviewService, WatchedMovieService watchedMovieService) {
+    public ProfileController(UserService userService, ReviewService reviewService, WatchedMovieService watchedMovieService, RatingService ratingService, WatchlistMovieService watchlistMovieService, WatchlistService watchlistService) {
         this.userService = userService;
         this.reviewService = reviewService;
         this.watchedMovieService = watchedMovieService;
+        this.ratingService = ratingService;
+        this.watchlistMovieService = watchlistMovieService;
+        this.watchlistService = watchlistService;
     }
 
     @GetMapping
@@ -42,20 +46,28 @@ public class ProfileController {
 
         ModelAndView modelAndView = new ModelAndView("profile");
         User user = userService.findById(userData.getUserId());
-//        int moviesRatedCount = ratingService.countMoviesRated(user);
-        int reviewedMoviesCount = reviewService.countMoviesReviewed(user);
         int watchedMoviesCount = watchedMovieService.countWatchedMovies(user);
+        int moviesInWatchlistCount = watchlistService.countMoviesInWatchlist(user);
+        Integer ratedMoviesCount = ratingService.getTotalMoviesRatedByUser(user.getId());
 
         modelAndView.addObject("user", user);
-//        modelAndView.addObject("moviesRated", moviesRatedCount);
-        modelAndView.addObject("moviesReviewed", reviewedMoviesCount);
         modelAndView.addObject("moviesWatched", watchedMoviesCount);
+        modelAndView.addObject("ratedMoviesCount", ratedMoviesCount);
+        modelAndView.addObject("moviesInWatchlistCount", moviesInWatchlistCount);
 
         return modelAndView;
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView getEditProfilePage(@PathVariable UUID id){
+    public ModelAndView getEditProfilePage(@PathVariable UUID id, @AuthenticationPrincipal UserData userData){
+
+        if (userData == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        if (!userData.getUserId().equals(id) && !userData.getRole().name().equals("ADMIN")) {
+            return new ModelAndView("redirect:/profile");
+        }
 
         ModelAndView modelAndView = new ModelAndView("edit-profile");
         User user = userService.findById(id);

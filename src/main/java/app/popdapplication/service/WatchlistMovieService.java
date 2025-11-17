@@ -1,12 +1,15 @@
 package app.popdapplication.service;
 
 import app.popdapplication.model.entity.Movie;
+import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.model.entity.WatchlistMovie;
 import app.popdapplication.repository.WatchlistMovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +17,7 @@ public class WatchlistMovieService {
 
     private final WatchlistMovieRepository watchlistMovieRepository;
 
+    @Autowired
     public WatchlistMovieService(WatchlistMovieRepository watchlistMovieRepository) {
         this.watchlistMovieRepository = watchlistMovieRepository;
     }
@@ -38,5 +42,9 @@ public class WatchlistMovieService {
         Optional<WatchlistMovie> watchlistMovie = watchlistMovieRepository.findByWatchlistAndMovie(watchlist, movie);
 
         watchlistMovieRepository.delete(watchlistMovie.get());
+    }
+
+    public List<WatchlistMovie> findAllByWatchlist(Watchlist watchlist) {
+        return watchlistMovieRepository.findAllByWatchlist(watchlist);
     }
 }

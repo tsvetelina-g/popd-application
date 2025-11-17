@@ -94,7 +94,8 @@
                         <div class="meta-item">
                             <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
                                  alt="Popcorn" class="popcorn-icon-small">
-                            <span>4.5</span>
+                            <span th:if="${averageRating != null}" th:text="${averageRating}">4.5</span>
+                            <span th:if="${averageRating == null}">No ratings yet</span>
                         </div>
                     </div>
 
@@ -118,7 +119,8 @@
                         <!-- Movie Stats -->
                         <div class="movie-stats">
                             <div class="stat-item">
-                                <span class="stat-number">150</span>
+                                <span class="stat-number" th:if="${totalMovieRatingsCount == null}">0</span>
+                                <span class="stat-number" th:if="${totalMovieRatingsCount != null}" th:text="${totalMovieRatingsCount}">0</span>
                                 <span class="stat-label">Total Ratings</span>
                             </div>
                             <div class="stat-item">
@@ -193,6 +195,13 @@
             <!-- Rating Section -->
             <div class="movie-rating-section">
                 <h3 class="section-title-rating" th:text="${rating != null} ? 'Your Rating' : 'Rate This Movie'">Rate This Movie</h3>
+
+                <div sec:authorize="isAnonymous()" class="guest-actions-wrapper">
+                    <a href="/login" class="action-button add-to-watchlist-button guest-watchlist-button">
+                        <i class="fas fa-plus-circle"></i>
+                        Log in to Rate this Movie
+                    </a>
+                </div>
 
                 <form sec:authorize="isAuthenticated()"
                       th:action="@{'/rating/' + ${movie.id} + '/add'}"
@@ -302,53 +311,179 @@
         <div class="reviews-section">
             <div class="reviews-header">
                 <h3 class="section-title">User Reviews</h3>
-                <a th:href="@{'/movies/' + ${movie.id} + '/reviews'}" class="action-button view-all-reviews-button">
+                <a th:href="@{'/reviews/' + ${movie.id}}" class="action-button view-all-reviews-button">
                     <i class="fas fa-eye"></i>
                     View All Reviews
                 </a>
             </div>
-            <div class="reviews-list">
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <span class="reviewer-name">John Doe</span>
-                            <span class="review-date">Jan 15, 2024</span>
+            
+            <!-- My Review Section (with edit/delete buttons) -->
+            <div th:if="${userReview != null}" class="my-review-section">
+                <h4 class="section-title my-review-section-title">My Review</h4>
+                <div class="reviews-list">
+                    <div class="review-item my-review">
+                        <!-- Review Display -->
+                        <div class="review-display">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <span class="reviewer-name my-review-label">My Review</span>
+                                    <span class="review-date" th:if="${userReview.createdOn != null and (userReview.updatedOn == null or userReview.createdOn.equals(userReview.updatedOn))}" 
+                                          th:text="${' • ' + #temporals.format(userReview.createdOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • Jan 15, 2024 14:30</span>
+                                    <span class="review-date" th:if="${userReview.updatedOn != null and userReview.createdOn != null and !userReview.createdOn.equals(userReview.updatedOn)}" 
+                                          th:text="${' • edited on ' + #temporals.format(userReview.updatedOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • edited on Jan 15, 2024 14:30</span>
+                                </div>
+                                <div class="review-actions">
+                                    <form th:action="@{'/review/' + ${movie.id} + '/edit'}" method="get" class="inline-form">
+                                        <button type="submit" class="action-button edit-review-button">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </button>
+                                    </form>
+                                    <form th:action="@{'/review/' + ${movie.id}}" method="post" class="delete-review-form inline-form">
+                                        <input type="hidden" name="_method" value="delete">
+                                        <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                        <button type="submit" class="action-button delete-review-button">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <h4 class="review-title" th:text="${userReview.title}">Review Title</h4>
+                                <p th:text="${userReview.content}">Review content goes here.</p>
+                            </div>
+                            <!-- Mini Rating Display -->
+                            <div class="mini-rating-display" th:if="${userReview.rating != null}">
+                                <div class="mini-rating-popcorns">
+                                    <span th:each="i : ${#numbers.sequence(1, 10)}" class="mini-popcorn-wrapper">
+                                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                             alt="Popcorn"
+                                             class="mini-popcorn-icon"
+                                             th:classappend="${userReview.rating >= i} ? ' rated' : ''">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mini-rating-display" th:if="${userReview.rating == null}">
+                                <span class="no-rating-text">No rating yet</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="review-content">
-                        <p>This was an amazing movie! The cinematography was stunning and the acting was
-                            top-notch.</p>
-                    </div>
-                </div>
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <span class="reviewer-name">Jane Smith</span>
-                            <span class="review-date">Jan 10, 2024</span>
+                        
+                        <!-- Edit Form (hidden by default) -->
+                        <div class="review-edit-form" style="display: none;">
+                            <form class="review-form" th:action="@{'/review/' + ${movie.id}}" method="post">
+                                <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <input type="text" name="title" class="review-title-input" th:value="${userReview.title}" required>
+                                <textarea class="review-textarea" name="content" required th:text="${userReview.content}"></textarea>
+                                
+                                <!-- Mini Rating Display (read-only) -->
+                                <div class="mini-rating-display-form">
+                                    <label class="mini-rating-label">Your Rating:</label>
+                                    <div class="mini-rating-popcorns" th:if="${userReview.rating != null}">
+                                        <span th:each="i : ${#numbers.sequence(1, 10)}" class="mini-popcorn-wrapper">
+                                            <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                                 alt="Popcorn"
+                                                 class="mini-popcorn-icon"
+                                                 th:classappend="${userReview.rating >= i} ? ' rated' : ''">
+                                        </span>
+                                    </div>
+                                    <div class="mini-rating-popcorns" th:if="${userReview.rating == null}">
+                                        <span class="no-rating-text">No rating yet</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="review-form-buttons">
+                                    <button type="submit" class="action-button submit-review-button">
+                                        <i class="fas fa-save"></i>
+                                        Save
+                                    </button>
+                                    <button type="button" class="action-button cancel-edit-button" onclick="toggleEditReview()">
+                                        <i class="fas fa-times"></i>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Absolutely loved it! One of the best films I've seen this year.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="review-form-section">
+            <!-- Latest Reviews Section (Latest 5, including user's review without edit/delete buttons) -->
+            <div class="latest-reviews-section" th:if="${latestFiveReviews != null and !latestFiveReviews.isEmpty()}">
+                <h4 class="section-title latest-reviews-section-title">Latest Reviews</h4>
+                <div class="reviews-list">
+                    <div th:each="review : ${latestFiveReviews}" class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <a th:href="@{'/users/' + ${review.userId}}" class="reviewer-name-link">
+                                    <span class="reviewer-name" 
+                                          th:classappend="${userReview != null and review.userId == userReview.userId} ? 'my-review-label' : ''"
+                                          th:text="${userIdToUsernameMap.get(review.userId)}">Username</span>
+                                </a>
+                                <span class="review-date" th:if="${review.createdOn != null and (review.updatedOn == null or review.createdOn.equals(review.updatedOn))}" 
+                                      th:text="${' • ' + #temporals.format(review.createdOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • Jan 15, 2024 14:30</span>
+                                <span class="review-date" th:if="${review.updatedOn != null and review.createdOn != null and !review.createdOn.equals(review.updatedOn)}" 
+                                      th:text="${' • edited on ' + #temporals.format(review.updatedOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • edited on Jan 15, 2024 14:30</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <h4 class="review-title" th:text="${review.title}">Review Title</h4>
+                            <p th:text="${review.content}">Review content goes here.</p>
+                        </div>
+                        <!-- Mini Rating Display -->
+                        <div class="mini-rating-display" th:if="${review.rating != null}">
+                            <div class="mini-rating-popcorns">
+                                <span th:each="i : ${#numbers.sequence(1, 10)}" class="mini-popcorn-wrapper">
+                                    <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                         alt="Popcorn"
+                                         class="mini-popcorn-icon"
+                                         th:classappend="${review.rating >= i} ? ' rated' : ''">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mini-rating-display" th:if="${review.rating == null}">
+                            <span class="no-rating-text">No rating yet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Form (only show if user doesn't have a review) -->
+            <div class="review-form-section" th:if="${userReview == null}" sec:authorize="isAuthenticated()">
                 <h4 class="section-title review-form-title">Write a Review</h4>
-                <form class="review-form" sec:authorize="isAuthenticated()">
-                        <textarea class="review-textarea"
-                                  placeholder="Share your thoughts about this movie..."></textarea>
+                <form class="review-form" th:action="@{'/review/' + ${movie.id}}" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="text" name="title" class="review-title-input" placeholder="Review Title" required>
+                    <textarea class="review-textarea" name="content"
+                              placeholder="Share your thoughts about this movie..." required></textarea>
+                    
+                    <!-- Mini Rating Display (read-only) -->
+                    <div class="mini-rating-display-form">
+                        <label class="mini-rating-label">Your Rating:</label>
+                        <div class="mini-rating-popcorns" th:if="${rating != null}">
+                            <span th:each="i : ${#numbers.sequence(1, 10)}" class="mini-popcorn-wrapper">
+                                <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                     alt="Popcorn"
+                                     class="mini-popcorn-icon"
+                                     th:classappend="${rating >= i} ? ' rated' : ''">
+                            </span>
+                        </div>
+                        <div class="mini-rating-popcorns" th:if="${rating == null}">
+                            <span class="no-rating-text">No rating yet</span>
+                        </div>
+                    </div>
+                    
                     <button type="submit" class="action-button submit-review-button">
                         <i class="fas fa-paper-plane"></i>
                         Submit Review
                     </button>
                 </form>
-                <div class="review-login-prompt" sec:authorize="isAnonymous()">
-                    <a href="/login" class="action-button submit-review-button">
-                        <i class="fas fa-paper-plane"></i>
-                        Log in to Write a Review
-                    </a>
-                </div>
+            </div>
+            <div class="review-login-prompt" sec:authorize="isAnonymous()">
+                <a href="/login" class="action-button submit-review-button">
+                    <i class="fas fa-paper-plane"></i>
+                    Log in to Write a Review
+                </a>
             </div>
         </div>
 
@@ -423,7 +558,9 @@
             'form.inline-form[action*="/delete-watched"]',
             'form.delete-form[action*="/credit/"]',
             'form.rating-form[action*="/rating/"]',
-            'form.delete-rating-form[action*="/rating/"]'
+            'form.delete-rating-form[action*="/rating/"]',
+            'form.review-form[action*="/review/"]',
+            'form.delete-review-form[action*="/review/"]'
         ];
 
         const ajaxForms = document.querySelectorAll(ajaxFormSelectors.join(', '));
@@ -520,6 +657,21 @@
                 }
             });
         });
+
+        // Toggle edit review form
+        function toggleEditReview() {
+            const reviewItem = document.querySelector('.my-review');
+            if (!reviewItem) return;
+            
+            const display = reviewItem.querySelector('.review-display');
+            const editForm = reviewItem.querySelector('.review-edit-form');
+            
+            if (display && editForm) {
+                const isEditing = editForm.style.display !== 'none';
+                display.style.display = isEditing ? 'block' : 'none';
+                editForm.style.display = isEditing ? 'none' : 'block';
+            }
+        }
     });
 </script>
 </body>

@@ -5,6 +5,7 @@ import app.popdapplication.model.entity.Movie;
 import app.popdapplication.repository.MovieRepository;
 import app.popdapplication.web.dto.AddMovieRequest;
 import app.popdapplication.web.dto.EditMovieRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final GenreService genreService;
 
+    @Autowired
     public MovieService(MovieRepository movieRepository, GenreService genreService) {
         this.movieRepository = movieRepository;
         this.genreService = genreService;

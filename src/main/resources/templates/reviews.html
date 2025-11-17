@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/movie.css">
+    <link rel="stylesheet" href="/css/reviews.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies or Artists"
+                               aria-label="Search Movies or Artists">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <nav class="nav">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="reviews-page-section">
+        <div class="reviews-page-header">
+            <h1 class="reviews-page-title">Reviews for <span th:text="${movie.title}">Movie Title</span></h1>
+            <a th:href="@{'/movie/' + ${movie.id}}" class="action-button back-to-movie-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Movie
+            </a>
+        </div>
+
+        <div class="reviews-list" th:if="${reviews != null and !reviews.content.isEmpty()}">
+            <div th:each="review : ${reviews.content}" class="review-item">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <a th:href="@{'/users/' + ${review.userId}}" class="reviewer-name-link">
+                            <span class="reviewer-name" th:text="${userIdToUsernameMap.get(review.userId)}">Username</span>
+                        </a>
+                        <span class="review-date" th:if="${review.createdOn != null and (review.updatedOn == null or review.createdOn.equals(review.updatedOn))}" 
+                              th:text="${' • ' + #temporals.format(review.createdOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • Jan 15, 2024 14:30</span>
+                        <span class="review-date" th:if="${review.updatedOn != null and review.createdOn != null and !review.createdOn.equals(review.updatedOn)}" 
+                              th:text="${' • edited on ' + #temporals.format(review.updatedOn, 'MMM dd, yyyy HH:mm', T(java.util.Locale).ENGLISH)}"> • edited on Jan 15, 2024 14:30</span>
+                    </div>
+                </div>
+                <div class="review-content">
+                    <h4 class="review-title" th:text="${review.title}">Review Title</h4>
+                    <p th:text="${review.content}">Review content goes here.</p>
+                </div>
+                <!-- Mini Rating Display -->
+                <div class="mini-rating-display" th:if="${review.rating != null}">
+                    <div class="mini-rating-popcorns">
+                        <span th:each="i : ${#numbers.sequence(1, 10)}" class="mini-popcorn-wrapper">
+                            <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                                 alt="Popcorn"
+                                 class="mini-popcorn-icon"
+                                 th:classappend="${review.rating >= i} ? ' rated' : ''">
+                        </span>
+                    </div>
+                </div>
+                <div class="mini-rating-display" th:if="${review.rating == null}">
+                    <span class="no-rating-text">No rating yet</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-reviews" th:if="${reviews == null or reviews.content.isEmpty()}">
+            <p>No reviews yet</p>
+        </div>
+
+        <div class="pagination" th:if="${reviews != null and reviews.totalPages > 1}">
+            <a class="page-btn"
+               th:href="@{/reviews/{movieId}(movieId=${movie.id}, page=0, size=${reviews.size})}"
+               th:ariaDisabled="${reviews.first}">
+                <i class="fa-solid fa-angles-left"></i>
+            </a>
+            <a class="page-btn"
+               th:href="@{/reviews/{movieId}(movieId=${movie.id}, page=${reviews.number - 1}, size=${reviews.size})}"
+               th:ariaDisabled="${reviews.first}">
+                <i class="fa-solid fa-angle-left"></i>
+            </a>
+            <span class="page-info"
+                  th:text="${'Page ' + (reviews.number + 1) + ' of ' + (reviews.totalPages == 0 ? 1 : reviews.totalPages)}">Page</span>
+            <a class="page-btn"
+               th:href="@{/reviews/{movieId}(movieId=${movie.id}, page=${reviews.number + 1}, size=${reviews.size})}"
+               th:ariaDisabled="${reviews.last}">
+                <i class="fa-solid fa-angle-right"></i>
+            </a>
+            <a class="page-btn"
+               th:href="@{/reviews/{movieId}(movieId=${movie.id}, page=${reviews.totalPages - 1}, size=${reviews.size})}"
+               th:ariaDisabled="${reviews.last}">
+                <i class="fa-solid fa-angles-right"></i>
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>
+

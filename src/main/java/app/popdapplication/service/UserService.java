@@ -6,6 +6,7 @@ import app.popdapplication.repository.UserRepository;
 import app.popdapplication.security.UserData;
 import app.popdapplication.web.dto.EditProfileRequest;
 import app.popdapplication.web.dto.RegisterRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final WatchlistService watchlistService;
 
+    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, WatchlistService watchlistService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

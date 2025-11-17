@@ -1,4 +1,4 @@
-package app.popdapplication.client.dto;
+package app.popdapplication.client.RatingDto;
 
 import lombok.Builder;
 import lombok.Data;

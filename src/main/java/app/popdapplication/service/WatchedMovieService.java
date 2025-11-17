@@ -4,6 +4,7 @@ import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.WatchedMovie;
 import app.popdapplication.repository.WatchedMovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ public class WatchedMovieService {
 
     private final WatchedMovieRepository watchedMovieRepository;
 
+    @Autowired
     public WatchedMovieService(WatchedMovieRepository watchedMovieRepository) {
         this.watchedMovieRepository = watchedMovieRepository;
     }

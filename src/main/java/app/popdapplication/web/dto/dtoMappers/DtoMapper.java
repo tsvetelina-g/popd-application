@@ -1,5 +1,6 @@
 package app.popdapplication.web.dto.dtoMappers;
 
+import app.popdapplication.client.ReviewDto.ReviewResponse;
 import app.popdapplication.model.entity.Artist;
 import app.popdapplication.model.entity.Genre;
 import app.popdapplication.model.entity.Movie;
@@ -7,6 +8,7 @@ import app.popdapplication.model.entity.User;
 import app.popdapplication.web.dto.EditArtistRequest;
 import app.popdapplication.web.dto.EditMovieRequest;
 import app.popdapplication.web.dto.EditProfileRequest;
+import app.popdapplication.web.dto.EditReviewRequest;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -48,4 +50,11 @@ public class DtoMapper {
                 .build();
     }
 
+    public static EditReviewRequest fromReviewResponse(ReviewResponse response) {
+
+        return EditReviewRequest.builder()
+                .title(response.getTitle())
+                .content(response.getContent())
+                .build();
+    }
 }

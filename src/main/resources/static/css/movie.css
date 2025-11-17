@@ -808,18 +808,38 @@
 
 .review-header {
     margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .reviewer-info {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 4px;
+    flex-wrap: wrap;
 }
 
 .reviewer-name {
     font-size: 14px;
     font-weight: bold;
     color: var(--text);
+}
+
+.reviewer-name-link {
+    text-decoration: none;
+    color: var(--text);
+    transition: color 0.3s ease;
+}
+
+.reviewer-name-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.reviewer-name-link .reviewer-name {
+    color: inherit;
 }
 
 .review-date {
@@ -910,6 +930,7 @@
 }
 
 .submit-review-button {
+    margin-top: 20px;
     align-self: flex-end;
     background: var(--accent);
     color: white;
@@ -922,7 +943,171 @@
     transform: translateY(-2px);
 }
 
+/* Mini Rating Display */
+.mini-rating-display {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
 
+.mini-rating-display-form {
+    margin: 15px 0;
+    padding: 10px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.mini-rating-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.mini-rating-popcorns {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.mini-popcorn-wrapper {
+    display: inline-block;
+}
+
+.mini-popcorn-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+}
+
+.mini-popcorn-icon.rated {
+    background-color: #FFD700;
+    border-radius: 50%;
+    padding: 1px;
+    filter: brightness(0.8) contrast(1.5) sepia(100%) saturate(200%) hue-rotate(20deg) !important;
+}
+
+.no-rating-text {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* My Review Section */
+.my-review-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+}
+
+.my-review-section-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--accent);
+}
+
+.latest-reviews-section {
+    margin-top: 20px;
+}
+
+.latest-reviews-section-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* My Review Styles */
+.my-review {
+    background: var(--card);
+    border: 2px solid var(--accent);
+}
+
+.my-review-label {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.review-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+}
+
+.review-title-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.review-title-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.review-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.edit-review-button,
+.delete-review-button {
+    padding: 8px 15px;
+    font-size: 12px;
+}
+
+.edit-review-button {
+    background: var(--card);
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.edit-review-button:hover {
+    background: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.delete-review-button {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+.delete-review-button:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+.review-form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-end;
+}
+
+.cancel-edit-button {
+    background: var(--card);
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.cancel-edit-button:hover {
+    background: var(--bg);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

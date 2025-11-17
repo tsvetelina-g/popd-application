@@ -4,6 +4,7 @@ import app.popdapplication.model.entity.Artist;
 import app.popdapplication.repository.ArtistRepository;
 import app.popdapplication.web.dto.AddArtistRequest;
 import app.popdapplication.web.dto.EditArtistRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class ArtistService {
 
     private final ArtistRepository artistRepository;
 
+    @Autowired
     public ArtistService(ArtistRepository artistRepository) {
         this.artistRepository = artistRepository;
     }

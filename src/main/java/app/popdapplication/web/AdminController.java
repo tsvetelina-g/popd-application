@@ -10,6 +10,7 @@ import app.popdapplication.web.dto.AddMovieRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,14 @@ public class AdminController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAdminPage() {
         return "admin";
     }
 
     @GetMapping
     @RequestMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView list(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         ModelAndView modelAndView = new ModelAndView("admin-users");
@@ -52,6 +55,7 @@ public class AdminController {
 
     @PatchMapping
     @RequestMapping("users/{userId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public String changeUserStatus(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size) {
 
         userService.switchStatus(userId);
@@ -61,6 +65,7 @@ public class AdminController {
 
     @PatchMapping
     @RequestMapping("users/{userId}/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public String changeUserRole(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size) {
 
         userService.switchRole(userId);

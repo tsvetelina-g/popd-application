@@ -6,9 +6,11 @@ import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.model.entity.WatchlistMovie;
 import app.popdapplication.model.enums.WatchlistType;
 import app.popdapplication.repository.WatchlistRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +19,7 @@ public class WatchlistService {
     private final WatchlistRepository watchlistRepository;
     private final WatchlistMovieService watchlistMovieService;
 
+    @Autowired
     public WatchlistService(WatchlistRepository watchlistRepository, WatchlistMovieService watchlistMovieService) {
         this.watchlistRepository = watchlistRepository;
         this.watchlistMovieService = watchlistMovieService;
@@ -62,5 +65,11 @@ public class WatchlistService {
         watchlist.setUpdated(LocalDateTime.now());
 
         watchlistRepository.save(watchlist);
+    }
+
+    public int countMoviesInWatchlist(User user) {
+        Watchlist watchlist = watchlistRepository.findByUser(user);
+
+        return watchlistMovieService.findAllByWatchlist(watchlist).size();
     }
 }

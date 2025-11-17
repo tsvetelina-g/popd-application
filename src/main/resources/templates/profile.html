@@ -92,16 +92,20 @@
 
                 <div class="profile-stats">
                     <div class="stat-item">
-                        <span class="stat-number">42</span>
+                        <span class="stat-number" th:text="${moviesInWatchlistCount}">156</span>
+                        <span class="stat-label">Movies In Watchlist</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" th:text="${moviesWatched}">156</span>
+                        <span class="stat-label">Movies Watched</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" th:text="${ratedMoviesCount != null ? ratedMoviesCount : 0}">0</span>
                         <span class="stat-label">Movies Rated</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number">18</span>
                         <span class="stat-label">Reviews Written</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" th:text="${moviesWatched}">156</span>
-                        <span class="stat-label">Movies Watched</span>
                     </div>
                 </div>
             </div>
@@ -109,17 +113,21 @@
             <div class="profile-actions">
                 <div class="first-set-buttons">
                     <button class="action-button watched-movies-button">
+                        <i class="fas fa-list"></i>
+                        Movies In Watchlist
+                    </button>
+                    <button class="action-button watched-movies-button">
                         <i class="fas fa-eye"></i>
                         Watched Movies
                     </button>
                     <button class="action-button ratings-button">
                         <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
                              alt="Popcorn" class="popcorn-icon">
-                        My Ratings
+                        My Latest Ratings
                     </button>
                     <button class="action-button reviews-button">
                         <i class="fas fa-comment"></i>
-                        My Reviews
+                        My Latest Reviews
                     </button>
                 </div>
             </div>

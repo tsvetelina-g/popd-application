@@ -1,5 +1,6 @@
 package app.popdapplication.web;
 
+import app.popdapplication.client.ReviewDto.ReviewResponse;
 import app.popdapplication.model.entity.Genre;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.MovieCredit;
@@ -32,8 +33,9 @@ public class MovieController {
     private final GenreService genreService;
     private final MovieCreditService movieCreditService;
     private final RatingService ratingService;
+    private final ReviewService reviewService;
 
-    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService, RatingService ratingService) {
+    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService, RatingService ratingService, ReviewService reviewService) {
         this.movieService = movieService;
         this.userService = userService;
         this.watchedMovieService = watchedMovieService;
@@ -41,6 +43,7 @@ public class MovieController {
         this.genreService = genreService;
         this.movieCreditService = movieCreditService;
         this.ratingService = ratingService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -82,19 +85,26 @@ public class MovieController {
         boolean movieIsInWatchlist = false;
         User user = null;
         Integer rating = null;
+        Double averageRating = null;
+        ReviewResponse userReview = null;
 
         if (userData != null) {
             user = userService.findById(userData.getUserId());
             movieIsWatched = watchedMovieService.movieIsWatched(movie, user);
             movieIsInWatchlist = watchlistService.movieIsInWatchlist(movie, user);
             rating = ratingService.getRatingByUserAndMovie(user.getId(), movieId);
+            averageRating = ratingService.getAverageRatingForAMovie(movieId);
+            userReview = reviewService.getReviewByUserAndMovie(user.getId(), movieId);
         }
 
-
+        Integer totalMovieRatingsCount = ratingService.getTotalRatingsCountForAMovie(movieId);
+        List<ReviewResponse> latestFiveReviews = reviewService.getLatestFiveReviewsForAMovie(movieId);
         int usersWatchedCount = watchedMovieService.usersWatchedCount(movieId);
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
         Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
                 .collect(Collectors.groupingBy(MovieCredit::getRoleType));
+
+        Map<UUID, String> userIdToUsernameMap = reviewService.getUsernamesForReviews(latestFiveReviews);
 
         ModelAndView modelAndView = new ModelAndView("movie");
         modelAndView.addObject("movie", movie);
@@ -105,6 +115,11 @@ public class MovieController {
         modelAndView.addObject("movieCredits", movieCredits);
         modelAndView.addObject("creditsByRole", creditsByRole);
         modelAndView.addObject("rating", rating);
+        modelAndView.addObject("averageRating", averageRating);
+        modelAndView.addObject("totalMovieRatingsCount", totalMovieRatingsCount);
+        modelAndView.addObject("userReview", userReview);
+        modelAndView.addObject("latestFiveReviews", latestFiveReviews);
+        modelAndView.addObject("userIdToUsernameMap", userIdToUsernameMap);
 
         return modelAndView;
     }
