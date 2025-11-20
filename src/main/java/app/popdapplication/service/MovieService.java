@@ -1,5 +1,6 @@
 package app.popdapplication.service;
 
+import app.popdapplication.client.RatingDto.Rating;
 import app.popdapplication.model.entity.Genre;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.repository.MovieRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -62,4 +64,6 @@ public class MovieService {
     public List<Movie> searchByTitle(String query) {
         return movieRepository.findByTitleContainingIgnoreCase(query);
     }
+
+
 }

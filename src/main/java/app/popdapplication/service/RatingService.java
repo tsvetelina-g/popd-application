@@ -6,11 +6,16 @@ import app.popdapplication.client.RatingDto.Rating;
 import app.popdapplication.client.RatingDto.RatingRequest;
 import app.popdapplication.client.RatingDto.UserRatingStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
+import app.popdapplication.model.entity.Movie;
+import app.popdapplication.model.entity.User;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -19,11 +24,15 @@ public class RatingService {
 
     private final RatingClient client;
     private final ReviewService reviewService;
+    private final UserService userService;
+    private final MovieService movieService;
 
     @Autowired
-    public RatingService(RatingClient client, ReviewService reviewService) {
+    public RatingService(RatingClient client, ReviewService reviewService, UserService userService, MovieService movieService) {
         this.client = client;
         this.reviewService = reviewService;
+        this.userService = userService;
+        this.movieService = movieService;
     }
 
     public void upsertRating(UUID userId, UUID movieId, int value) {
@@ -36,11 +45,11 @@ public class RatingService {
                     .build();
             client.upsertRating(ratingRequest);
 
-          ReviewResponse reviewResponse = reviewService.getReviewByUserAndMovie(userId, movieId);
+            ReviewResponse reviewResponse = reviewService.getReviewByUserAndMovie(userId, movieId);
 
-          if (reviewResponse != null) {
-              reviewService.upsertReview(userId, movieId, value, reviewResponse.getTitle(), reviewResponse.getContent());
-          }
+            if (reviewResponse != null) {
+                reviewService.upsertReview(userId, movieId, value, reviewResponse.getTitle(), reviewResponse.getContent());
+            }
 
         } catch (FeignException e) {
             log.error("Failed to upsert rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
@@ -100,14 +109,54 @@ public class RatingService {
         //todo: throw custom exceptions if needed
     }
 
-    public Integer getTotalMoviesRatedByUser(UUID userId){
+    public Integer getTotalMoviesRatedByUser(UUID userId) {
         try {
             UserRatingStatsResponse ratingStats = client.getUserRatingStats(userId).getBody();
             return ratingStats != null ? ratingStats.getRatedMovies() : null;
         } catch (FeignException e) {
-            log.error("Failed to fetch total ratings for user {}: {}", userId, e.getMessage());
+            log.error("Failed to fetch total ratings for user with id {}: {}", userId, e.getMessage());
             return null;
         }
         //todo: throw custom exceptions if needed
     }
+
+    public List<Rating> getLatestRatingsByUserId(UUID userId) {
+        try {
+            return client.getLatestRatingsByUser(userId).getBody();
+        } catch (FeignException.NotFound e) {
+            return null;
+        }catch (FeignException e) {
+            log.error("Failed to fetch latest ratings for user with id {}: {}", userId, e.getMessage());
+            return null;
+        }
+    }
+
+    public Map<UUID, String> getMovieNamesForRatings(List<Rating> ratings) {
+
+        Map<UUID, String> result = new HashMap<>();
+
+        if (ratings == null || ratings.isEmpty()) {
+            return result;
+        }
+
+        for (Rating rating : ratings) {
+            UUID movieId = rating.getMovieId();
+
+            if (movieId == null || result.containsKey(movieId)) {
+                continue; // skip nulls and already processed users
+            }
+
+            try {
+                Movie movie = movieService.findById(movieId);
+                if (movie != null) {
+                    result.put(movieId, movie.getTitle());
+                }
+            } catch (Exception e) {
+                log.warn("Movie not found for movieId {}: {}", movieId, e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
 }

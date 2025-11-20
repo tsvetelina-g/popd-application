@@ -18,7 +18,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
         httpSecurity.authorizeHttpRequests(matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register", "/movie", "/artist").permitAll()
+                        .requestMatchers("/", "/register", "/movie", "/artist", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/find",
                                 "/find/**",
@@ -39,6 +39,10 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
+                        .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/login")
                 );
 
         return httpSecurity.build();

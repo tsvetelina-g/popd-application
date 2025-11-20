@@ -3,6 +3,7 @@ package app.popdapplication.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -22,4 +23,7 @@ public class WatchedMovie {
 
     @ManyToOne(optional = false)
     private Movie movie;
+
+    @Column(name = "created_on", nullable = false)
+    private LocalDateTime createdOn;
 }

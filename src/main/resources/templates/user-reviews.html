@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Latest Reviews - ' + user.username + ' - popd'}">Latest Reviews - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/user-reviews.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies, Artists or Users"
+                               aria-label="Search Movies, Artists or Users">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <nav class="nav">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container user-reviews">
+    <div class="reviews-header">
+        <div class="reviews-page-header">
+            <h1 class="reviews-page-title">Latest Reviews</h1>
+            <a th:href="@{'/profile'}" class="action-button back-to-profile-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Profile
+            </a>
+        </div>
+        <p class="reviews-user">
+            <span>by </span>
+            <a th:href="@{'/users/' + ${user.id}}" th:text="${user.username}">username</a>
+        </p>
+    </div>
+
+    <div class="reviews-list" th:if="${reviews != null && !reviews.isEmpty()}">
+        <div class="review-item" th:each="review, iterStat : ${reviews}">
+            <div class="review-content">
+                <div class="review-movie-info">
+                    <div class="review-details">
+                        <a th:href="@{'/movie/' + ${review.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(review.movieId)}">Movie Name</a>
+                        <h3 class="review-title" th:text="${review.title}">Review Title</h3>
+                    </div>
+                </div>
+                <div class="review-text-container">
+                    <div class="review-text">
+                        <span class="review-text-content" th:text="${review.content}">Review content...</span>
+                    </div>
+                    <button class="read-more-btn" style="display: none;">
+                        <span class="read-more-text">Read more</span>
+                        <span class="read-less-text" style="display: none;">Read less</span>
+                    </button>
+                </div>
+                <div class="review-date" th:if="${review.createdOn != null}"
+                     th:text="${#temporals.format(review.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(review.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                    January 15, 2024 at 14:30
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-results-card" th:if="${reviews == null || reviews.isEmpty()}">
+        <p>No reviews yet.</p>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewItems = document.querySelectorAll('.review-item');
+        const COLLAPSED_HEIGHT = 120; // Max height when collapsed in pixels
+        
+        reviewItems.forEach(function(item) {
+            const reviewTextContainer = item.querySelector('.review-text');
+            const reviewTextContent = item.querySelector('.review-text-content');
+            const readMoreBtn = item.querySelector('.read-more-btn');
+            const readMoreText = item.querySelector('.read-more-text');
+            const readLessText = item.querySelector('.read-less-text');
+            
+            if (reviewTextContent && readMoreBtn) {
+                const fullText = reviewTextContent.textContent;
+                
+                // Check if content exceeds collapsed height
+                reviewTextContainer.style.maxHeight = 'none';
+                const contentHeight = reviewTextContainer.scrollHeight;
+                
+                if (contentHeight > COLLAPSED_HEIGHT) {
+                    // Content is too long, enable expand/collapse
+                    reviewTextContainer.style.maxHeight = COLLAPSED_HEIGHT + 'px';
+                    readMoreBtn.style.display = 'block';
+                    
+                    readMoreBtn.addEventListener('click', function() {
+                        const isExpanded = item.classList.contains('expanded');
+                        
+                        if (isExpanded) {
+                            // Collapse
+                            reviewTextContainer.style.maxHeight = COLLAPSED_HEIGHT + 'px';
+                            item.classList.remove('expanded');
+                            readMoreText.style.display = 'inline';
+                            readLessText.style.display = 'none';
+                        } else {
+                            // Expand
+                            reviewTextContainer.style.maxHeight = 'none';
+                            item.classList.add('expanded');
+                            readMoreText.style.display = 'none';
+                            readLessText.style.display = 'inline';
+                        }
+                    });
+                } else {
+                    // Content fits, hide button
+                    readMoreBtn.style.display = 'none';
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
+

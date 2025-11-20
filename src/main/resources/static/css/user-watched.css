@@ -1,0 +1,125 @@
+.user-watched {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    gap: 30px;
+}
+
+.watched-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.watched-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.watched-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.back-to-profile-button {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 20px;
+    font-size: 14px;
+}
+.action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    /*padding: 15px 20px;*/
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s
+    ease;
+    text-align: center;
+}
+
+.back-to-profile-button:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.watched-user {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.watched-user a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.watched-user a:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(.disabled) {
+    background: var(--bg);
+    border-color: var(--accent);
+}
+
+.page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.page-info {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 0 10px;
+}
+
+@media (max-width: 768px) {
+    .user-watched {
+        gap: 20px;
+    }
+
+    .watched-title {
+        font-size: 24px;
+    }
+}
+

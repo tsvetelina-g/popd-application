@@ -24,13 +24,10 @@ import java.util.UUID;
 public class AdminController {
 
     private final UserService userService;
-    private final MovieService movieService;
-    private final GenreService genreService;
 
-    public AdminController(UserService userService, MovieService movieService, GenreService genreService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.movieService = movieService;
-        this.genreService = genreService;
+
     }
 
     @GetMapping

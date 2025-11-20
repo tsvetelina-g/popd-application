@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${watchlist.name + ' - ' + user.username + ' - popd'}">Watchlist - popd</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/find.css">
+    <link rel="stylesheet" href="/css/user-watchlist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <div class="header-bar">
+            <div class="logo-section">
+                <a class="logo" href="/">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/w1ql10wqc755r981aodun/Popd-logo-new.png?rlkey=ln1va7jaaqb5s8p7cqfi9d4v5&st=53c30za0"
+                         alt="POPd Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="header-top">
+                <div class="search-section">
+                    <form class="search-bar" action="/find" method="get" role="search">
+                        <input type="text" name="query"
+                               placeholder="Search Movies, Artists or Users"
+                               aria-label="Search Movies, Artists or Users">
+                        <button type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <nav class="nav">
+                    <span sec:authorize="isAnonymous()">
+                        <a href="/login">Login</a>
+                        <span class="nav-separator">|</span>
+                        <a href="/register">Register</a>
+                    </span>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <a href="/profile" class="profile-btn">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/profile">Profile</a>
+                            <form th:action="@{/logout}" method="post" class="logout-form">
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                    <span class="nav-separator" sec:authorize="hasRole('ADMIN')">|</span>
+                    <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin" class="profile-btn">
+                            <i class="fa-solid fa-gear"></i>
+                            Admin
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
+                    </div>
+                    <a href="/movies" class="nav-button">Movies</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container user-watchlist">
+    <div class="watchlist-header">
+        <div class="watchlist-page-header">
+            <h1 class="watchlist-page-title" th:text="${watchlist.name + ' Watchlist'}">Watchlist Name</h1>
+            <a th:href="@{'/profile'}" class="action-button back-to-profile-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Profile
+            </a>
+        </div>
+        <p class="watchlist-user">
+            <span>by </span>
+            <a th:href="@{'/users/' + ${user.id}}" th:text="${user.username}">username</a>
+        </p>
+    </div>
+
+    <div class="movies-grid" th:if="${!watchlistMovies.content.isEmpty()}">
+        <div class="movie-card" th:each="watchlistMovie : ${watchlistMovies.content}">
+            <a th:href="@{'/movie/' + ${watchlistMovie.movie.id}}">
+                <img class="poster-image" th:src="${watchlistMovie.movie.posterUrl}" th:alt="${watchlistMovie.movie.title}">
+                <div class="movie-info">
+                    <div class="movie-title" th:text="${watchlistMovie.movie.title}"></div>
+                    <div class="movie-description" th:text="${watchlistMovie.movie.description}"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="no-results-card" th:if="${watchlistMovies.content.isEmpty()}">
+        <p>No movies in this watchlist.</p>
+    </div>
+
+    <div class="pagination" th:if="${watchlistMovies.totalPages > 1}" th:with="baseUrl=${'/profile/' + user.id + '/watchlist'}">
+        <a class="page-btn"
+           th:href="@{${baseUrl}(page=0, size=${watchlistMovies.size})}"
+           th:classappend="${watchlistMovies.first} ? 'disabled' : ''"
+           th:ariaDisabled="${watchlistMovies.first}">
+            <i class="fa-solid fa-angles-left"></i>
+        </a>
+        <a class="page-btn"
+           th:href="@{${baseUrl}(page=${watchlistMovies.number - 1}, size=${watchlistMovies.size})}"
+           th:classappend="${watchlistMovies.first} ? 'disabled' : ''"
+           th:ariaDisabled="${watchlistMovies.first}">
+            <i class="fa-solid fa-angle-left"></i>
+        </a>
+        <span class="page-info"
+              th:text="${'Page ' + (watchlistMovies.number + 1) + ' of ' + (watchlistMovies.totalPages == 0 ? 1 : watchlistMovies.totalPages)}">Page</span>
+        <a class="page-btn"
+           th:href="@{${baseUrl}(page=${watchlistMovies.number + 1}, size=${watchlistMovies.size})}"
+           th:classappend="${watchlistMovies.last} ? 'disabled' : ''"
+           th:ariaDisabled="${watchlistMovies.last}">
+            <i class="fa-solid fa-angle-right"></i>
+        </a>
+        <a class="page-btn"
+           th:href="@{${baseUrl}(page=${watchlistMovies.totalPages - 1}, size=${watchlistMovies.size})}"
+           th:classappend="${watchlistMovies.last} ? 'disabled' : ''"
+           th:ariaDisabled="${watchlistMovies.last}">
+            <i class="fa-solid fa-angles-right"></i>
+        </a>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; <span>2025</span> popd</p>
+    </div>
+</footer>
+</body>
+</html>
+

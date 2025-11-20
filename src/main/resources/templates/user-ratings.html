@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - popd</title>
+    <title th:text="${'Latest Ratings - ' + user.username + ' - popd'}">Latest Ratings - popd</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/user-ratings.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
-    <meta name="color-scheme" content="dark light">
-    <meta name="supported-color-schemes" content="dark light">
-
 </head>
 <body>
 <header class="site-header">
@@ -26,8 +23,8 @@
                 <div class="search-section">
                     <form class="search-bar" action="/find" method="get" role="search">
                         <input type="text" name="query"
-                               placeholder="Search Movies or Artists"
-                               aria-label="Search Movies or Artists">
+                               placeholder="Search Movies, Artists or Users"
+                               aria-label="Search Movies, Artists or Users">
                         <button type="submit">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -74,39 +71,50 @@
     </div>
 </header>
 
-<main class="container">
-    <section class="admin-section">
-        <div class="admin-container">
-            <div class="admin-header">
-                <h1 class="admin-title">Admin Functions</h1>
-                <p class="admin-subtitle">Manage movies, artists and users</p>
-            </div>
+<main class="container user-ratings">
+    <div class="ratings-header">
+        <div class="ratings-page-header">
+            <h1 class="ratings-page-title">Latest Ratings</h1>
+            <a th:href="@{'/profile'}" class="action-button back-to-profile-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Profile
+            </a>
+        </div>
+        <p class="ratings-user">
+            <span>by </span>
+            <a th:href="@{'/users/' + ${user.id}}" th:text="${user.username}">username</a>
+        </p>
+    </div>
 
-            <div class="admin-actions">
-                <a class="action-button movie-button" href="/movie/add">
-                    <i class="fas fa-film"></i>
-                    Add Movie
-                </a>
-                <a class="action-button artist-button" href="/artist/add">
-                    <i class="fas fa-masks-theater"></i>
-                    Add Artist
-                </a>
-                <a class="action-button panel-button" href="admin/users">
-                    <i class="fas fa-screwdriver-wrench"></i>
-                    Manage Users
-                </a>
+    <div class="ratings-list" th:if="${!ratings.isEmpty()}">
+        <div class="rating-item" th:each="rating : ${ratings}">
+            <div class="rating-content">
+                <div class="rating-movie-info">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                         alt="Popcorn" class="popcorn-icon">
+                    <div class="movie-rating-details">
+                        <a th:href="@{'/movie/' + ${rating.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(rating.movieId)}">Movie Name</a>
+                        <span class="rating-value" th:text="${rating.value + ' popcorns'}">5 popcorns</span>
+                    </div>
+                </div>
+                <div class="rating-date" th:if="${rating.createdOn != null}"
+                     th:text="${#temporals.format(rating.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(rating.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                    January 15, 2024 at 14:30
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="no-results-card" th:if="${ratings.isEmpty()}">
+        <p>No ratings yet.</p>
+    </div>
 </main>
 
 <footer class="site-footer">
     <div class="container">
         <p>&copy; <span>2025</span> popd</p>
     </div>
-
 </footer>
 </body>
 </html>
-
 

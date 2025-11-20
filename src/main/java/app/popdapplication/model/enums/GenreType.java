@@ -13,7 +13,7 @@ public enum GenreType {
     FANTASY("Fantasy"),
     HISTORY("History"),
     HORROR("Horror"),
-    MUSIC("Music"),
+    MUSICAL("Musical"),
     MYSTERY("Mystery"),
     ROMANCE("Romance"),
     SCI_FI("Sci‑Fi"),

@@ -124,7 +124,8 @@
                                 <span class="stat-label">Total Ratings</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-number">45</span>
+                                <span class="stat-number" th:if="${totalMovieReviewsCount == null}">0</span>
+                                <span class="stat-number" th:if="${totalMovieReviewsCount != null}" th:text="${totalMovieReviewsCount}">45</span>
                                 <span class="stat-label">Reviews</span>
                             </div>
                             <div class="stat-item">

@@ -28,8 +28,6 @@ public class RatingController {
     }
 
 
-//    "@{'/rating/' + ${movie.id} + '/delete'}"
-
     @DeleteMapping("/{movieId}/delete")
     public ModelAndView deleteReview(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
 

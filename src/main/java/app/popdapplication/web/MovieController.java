@@ -88,6 +88,15 @@ public class MovieController {
         Double averageRating = null;
         ReviewResponse userReview = null;
 
+        Integer totalMovieRatingsCount = ratingService.getTotalRatingsCountForAMovie(movieId);
+        Integer totalMovieReviewsCount = reviewService.getMovieReviewsCount(movieId);
+        List<ReviewResponse> latestFiveReviews = reviewService.getLatestFiveReviewsForAMovie(movieId);
+        int usersWatchedCount = watchedMovieService.usersWatchedCount(movieId);
+        List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
+        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
+                .collect(Collectors.groupingBy(MovieCredit::getRoleType));
+        Map<UUID, String> userIdToUsernameMap = reviewService.getUsernamesForReviews(latestFiveReviews);
+
         if (userData != null) {
             user = userService.findById(userData.getUserId());
             movieIsWatched = watchedMovieService.movieIsWatched(movie, user);
@@ -96,15 +105,6 @@ public class MovieController {
             averageRating = ratingService.getAverageRatingForAMovie(movieId);
             userReview = reviewService.getReviewByUserAndMovie(user.getId(), movieId);
         }
-
-        Integer totalMovieRatingsCount = ratingService.getTotalRatingsCountForAMovie(movieId);
-        List<ReviewResponse> latestFiveReviews = reviewService.getLatestFiveReviewsForAMovie(movieId);
-        int usersWatchedCount = watchedMovieService.usersWatchedCount(movieId);
-        List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
-        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
-                .collect(Collectors.groupingBy(MovieCredit::getRoleType));
-
-        Map<UUID, String> userIdToUsernameMap = reviewService.getUsernamesForReviews(latestFiveReviews);
 
         ModelAndView modelAndView = new ModelAndView("movie");
         modelAndView.addObject("movie", movie);
@@ -117,6 +117,7 @@ public class MovieController {
         modelAndView.addObject("rating", rating);
         modelAndView.addObject("averageRating", averageRating);
         modelAndView.addObject("totalMovieRatingsCount", totalMovieRatingsCount);
+        modelAndView.addObject("totalMovieReviewsCount", totalMovieReviewsCount);
         modelAndView.addObject("userReview", userReview);
         modelAndView.addObject("latestFiveReviews", latestFiveReviews);
         modelAndView.addObject("userIdToUsernameMap", userIdToUsernameMap);

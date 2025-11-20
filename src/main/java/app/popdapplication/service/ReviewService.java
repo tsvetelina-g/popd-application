@@ -1,8 +1,13 @@
 package app.popdapplication.service;
 
+import app.popdapplication.client.RatingDto.Rating;
+import app.popdapplication.client.RatingDto.UserRatingStatsResponse;
 import app.popdapplication.client.ReviewClient;
+import app.popdapplication.client.ReviewDto.MovieReviewStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewRequest;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
+import app.popdapplication.client.ReviewDto.UserReviewsStatsResponse;
+import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +30,13 @@ public class ReviewService {
 
     private final ReviewClient client;
     private final UserService userService;
+    private final MovieService movieService;
 
     @Autowired
-    public ReviewService(ReviewClient client, UserService userService) {
+    public ReviewService(ReviewClient client, UserService userService, MovieService movieService) {
         this.client = client;
         this.userService = userService;
+        this.movieService = movieService;
     }
 
     public void upsertReview(UUID userId, UUID movieId, Integer rating, String title, String content) {
@@ -87,25 +94,31 @@ public class ReviewService {
     }
 
     public Map<UUID, String> getUsernamesForReviews(List<ReviewResponse> reviews) {
-        Map<UUID, String> userIdToUsernameMap = new HashMap<>();
-        
-        if (reviews != null && !reviews.isEmpty()) {
-            for (ReviewResponse review : reviews) {
-                if (review.getUserId() != null && !userIdToUsernameMap.containsKey(review.getUserId())) {
-                    try {
-                        User reviewUser = userService.findById(review.getUserId());
-                        if (reviewUser != null) {
-                            userIdToUsernameMap.put(review.getUserId(), reviewUser.getUsername());
-                        }
-                    } catch (Exception e) {
-                        log.warn("User not found for review with userId {}: {}", review.getUserId(), e.getMessage());
-                        // Continue with other users
-                    }
+
+        Map<UUID, String> result = new HashMap<>();
+
+        if (reviews == null || reviews.isEmpty()) {
+            return result;
+        }
+
+        for (ReviewResponse review : reviews) {
+            UUID userId = review.getUserId();
+
+            if (userId == null || result.containsKey(userId)) {
+                continue; // skip nulls and already processed users
+            }
+
+            try {
+                User user = userService.findById(userId);
+                if (user != null) {
+                    result.put(userId, user.getUsername());
                 }
+            } catch (Exception e) {
+                log.warn("User not found for userId {}: {}", userId, e.getMessage());
             }
         }
-        
-        return userIdToUsernameMap;
+
+        return result;
     }
 
     public Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
@@ -127,4 +140,63 @@ public class ReviewService {
         }
     }
 
+    public Integer getMovieReviewsCount(UUID movieId) {
+        try {
+            MovieReviewStatsResponse movieReviewStats = client.getMovieReviewsCount(movieId).getBody();
+            return movieReviewStats != null ? movieReviewStats.getTotalReviews() : null;
+        } catch (FeignException e) {
+            log.error("Failed to fetch total reviews for movie with id {}: {}", movieId, e.getMessage());
+            return null;
+        }
+    }
+
+    public Integer getTotalMoviesReviewedByUser(UUID userId){
+        try {
+            UserReviewsStatsResponse reviewStats = client.getUserReviewsStats(userId).getBody();
+            return reviewStats != null ? reviewStats.getReviewedMovies() : null;
+        } catch (FeignException e) {
+            log.error("Failed to fetch total reviews for user with id {}: {}", userId, e.getMessage());
+            return null;
+        }
+        //todo: throw custom exceptions if needed
+    }
+
+    public List<ReviewResponse> getLatestReviewsByUserId(UUID userId) {
+        try {
+            return client.getLatestReviewsByUser(userId).getBody();
+        } catch (FeignException.NotFound e) {
+            return null;
+        }catch (FeignException e) {
+            log.error("Failed to fetch latest reviews for user with id {}: {}", userId, e.getMessage());
+            return null;
+        }
+    }
+
+    public Map<UUID, String> getMovieNamesForReviews(List<ReviewResponse> reviews) {
+
+        Map<UUID, String> result = new HashMap<>();
+
+        if (reviews == null || reviews.isEmpty()) {
+            return result;
+        }
+
+        for (ReviewResponse review : reviews) {
+            UUID movieId = review.getMovieId();
+
+            if (movieId == null || result.containsKey(movieId)) {
+                continue; // skip nulls and already processed users
+            }
+
+            try {
+                Movie movie = movieService.findById(movieId);
+                if (movie != null) {
+                    result.put(movieId, movie.getTitle());
+                }
+            } catch (Exception e) {
+                log.warn("Movie not found for movieId {}: {}", movieId, e.getMessage());
+            }
+        }
+
+        return result;
+    }
 }

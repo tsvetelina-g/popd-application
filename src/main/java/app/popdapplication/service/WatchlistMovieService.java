@@ -1,11 +1,12 @@
 package app.popdapplication.service;
 
 import app.popdapplication.model.entity.Movie;
-import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.model.entity.WatchlistMovie;
 import app.popdapplication.repository.WatchlistMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,5 +47,9 @@ public class WatchlistMovieService {
 
     public List<WatchlistMovie> findAllByWatchlist(Watchlist watchlist) {
         return watchlistMovieRepository.findAllByWatchlist(watchlist);
+    }
+
+    public Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, Pageable pageable) {
+        return watchlistMovieRepository.findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }
 }

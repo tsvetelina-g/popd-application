@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +70,9 @@ public class WatchlistService {
         Watchlist watchlist = watchlistRepository.findByUser(user);
 
         return watchlistMovieService.findAllByWatchlist(watchlist).size();
+    }
+
+    public Watchlist findByUser(User user) {
+        return watchlistRepository.findByUser(user);
     }
 }

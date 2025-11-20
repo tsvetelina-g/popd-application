@@ -5,8 +5,11 @@ import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.WatchedMovie;
 import app.popdapplication.repository.WatchedMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +38,7 @@ public class WatchedMovieService {
         WatchedMovie watchedMovie = WatchedMovie.builder()
                 .movie(movie)
                 .user(user)
+                .createdOn(LocalDateTime.now())
                 .build();
 
         watchedMovieRepository.save(watchedMovie);
@@ -49,5 +53,9 @@ public class WatchedMovieService {
 
     public int usersWatchedCount(UUID movieId) {
         return watchedMovieRepository.findAllByMovieId(movieId).size();
+    }
+
+    public Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, Pageable pageable) {
+        return watchedMovieRepository.findAllByUserOrderByCreatedOnDesc(user, pageable);
     }
 }
