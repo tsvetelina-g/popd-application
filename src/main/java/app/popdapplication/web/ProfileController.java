@@ -2,6 +2,7 @@ package app.popdapplication.web;
 
 import app.popdapplication.client.RatingDto.Rating;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
+import app.popdapplication.model.entity.Activity;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.security.UserData;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -35,14 +37,18 @@ public class ProfileController {
     private final WatchlistService watchlistService;
     private final WatchlistMovieService watchlistMovieService;
     private final ReviewService reviewService;
+    private final ActivityService activityService;
+    private final MovieService movieService;
 
-    public ProfileController(UserService userService, WatchedMovieService watchedMovieService, RatingService ratingService, WatchlistService watchlistService, WatchlistMovieService watchlistMovieService, ReviewService reviewService) {
+    public ProfileController(UserService userService, WatchedMovieService watchedMovieService, RatingService ratingService, WatchlistService watchlistService, WatchlistMovieService watchlistMovieService, ReviewService reviewService, ActivityService activityService, MovieService movieService) {
         this.userService = userService;
         this.watchedMovieService = watchedMovieService;
         this.ratingService = ratingService;
         this.watchlistService = watchlistService;
         this.watchlistMovieService = watchlistMovieService;
         this.reviewService = reviewService;
+        this.activityService = activityService;
+        this.movieService = movieService;
     }
 
     @GetMapping
@@ -58,12 +64,16 @@ public class ProfileController {
         int moviesInWatchlistCount = watchlistService.countMoviesInWatchlist(user);
         Integer ratedMoviesCount = ratingService.getTotalMoviesRatedByUser(user.getId());
         Integer reviewedMoviesCount = reviewService.getTotalMoviesReviewedByUser(user.getId());
+        List<Activity> activities = activityService.returnLatestFiveActivities(user.getId());
+        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesForActivities(activities);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("moviesWatched", watchedMoviesCount);
         modelAndView.addObject("ratedMoviesCount", ratedMoviesCount);
         modelAndView.addObject("moviesInWatchlistCount", moviesInWatchlistCount);
         modelAndView.addObject("reviewedMoviesCount", reviewedMoviesCount);
+        modelAndView.addObject("activities", activities);
+        modelAndView.addObject("movieIdToMovieNameMap", movieIdToMovieNameMap);
 
         return modelAndView;
     }
@@ -90,7 +100,11 @@ public class ProfileController {
     }
 
     @PutMapping("/{id}/edit")
-    public ModelAndView updateProfilePage(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, @PathVariable UUID id) {
+    public ModelAndView updateProfilePage(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, @PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
+
+        if (!userData.getUserId().equals(id) && !userData.getRole().name().equals("ADMIN")) {
+            return new ModelAndView("redirect:/profile");
+        }
 
         if (bindingResult.hasErrors()) {
             User user = userService.findById(id);
@@ -107,6 +121,14 @@ public class ProfileController {
 
     @GetMapping("/{userId}/watchlist")
     public ModelAndView getUserWatchlist(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+        // Validate pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
 
         ModelAndView modelAndView = new ModelAndView("user-watchlist");
 
@@ -125,6 +147,14 @@ public class ProfileController {
 
     @GetMapping("/{userId}/watched")
     public ModelAndView getUserWatchedMovies(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+        // Validate pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
 
         ModelAndView modelAndView = new ModelAndView("user-watched");
 
@@ -146,7 +176,8 @@ public class ProfileController {
 
         User user = userService.findById(userId);
         List<Rating> ratings = ratingService.getLatestRatingsByUserId(userId);
-        Map<UUID, String> movieIdToMovieNameMap = ratingService.getMovieNamesForRatings(ratings);
+        Set<UUID> movieIds = ratingService.extractMovieIdsFromRatings(ratings);
+        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesByIds(movieIds);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("ratings", ratings);
@@ -162,7 +193,8 @@ public class ProfileController {
 
         User user = userService.findById(userId);
         List<ReviewResponse> reviews = reviewService.getLatestReviewsByUserId(userId);
-        Map<UUID, String> movieIdToMovieNameMap = reviewService.getMovieNamesForReviews(reviews);
+        Set<UUID> movieIds = reviewService.extractMovieIdsFromReviews(reviews);
+        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesByIds(movieIds);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("reviews", reviews);

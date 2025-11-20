@@ -1,6 +1,5 @@
 package app.popdapplication.web;
 
-import app.popdapplication.repository.MovieRepository;
 import app.popdapplication.service.UserService;
 import app.popdapplication.web.dto.LoginRequest;
 import app.popdapplication.web.dto.RegisterRequest;
@@ -16,11 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class IndexController {
 
-    private final MovieRepository movieRepository;
     private final UserService userService;
 
-    public IndexController(MovieRepository movieRepository, UserService userService) {
-        this.movieRepository = movieRepository;
+    public IndexController(UserService userService) {
         this.userService = userService;
     }
 

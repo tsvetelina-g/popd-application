@@ -1,10 +1,15 @@
 package app.popdapplication.service;
 
+import app.popdapplication.event.ActivityDtoEvent;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.WatchedMovie;
+import app.popdapplication.model.enums.ActivityType;
 import app.popdapplication.repository.WatchedMovieRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,14 +18,17 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class WatchedMovieService {
 
     private final WatchedMovieRepository watchedMovieRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public WatchedMovieService(WatchedMovieRepository watchedMovieRepository) {
+    public WatchedMovieService(WatchedMovieRepository watchedMovieRepository, ApplicationEventPublisher eventPublisher) {
         this.watchedMovieRepository = watchedMovieRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public int countWatchedMovies(User user) {
@@ -33,6 +41,7 @@ public class WatchedMovieService {
         return watchedMovieOpt.isPresent();
     }
 
+    @Transactional
     public void addToWatched(Movie movie, User user) {
 
         WatchedMovie watchedMovie = WatchedMovie.builder()
@@ -42,13 +51,39 @@ public class WatchedMovieService {
                 .build();
 
         watchedMovieRepository.save(watchedMovie);
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(user.getId())
+                .movieId(movie.getId())
+                .type(ActivityType.WATCHED)
+                .removed(false)
+                .createdOn(LocalDateTime.now())
+                .rating(null)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
+    @Transactional
     public void removeFromWatched(Movie movie, User user) {
 
         Optional<WatchedMovie> watchedMovie = watchedMovieRepository.findByUserAndMovie(user, movie);
 
+        if (watchedMovie.isEmpty()) {
+            throw new RuntimeException("Movie not found in watched list");
+        }
         watchedMovieRepository.delete(watchedMovie.get());
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(user.getId())
+                .movieId(movie.getId())
+                .type(ActivityType.WATCHED)
+                .removed(true)
+                .createdOn(LocalDateTime.now())
+                .rating(null)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
     public int usersWatchedCount(UUID movieId) {

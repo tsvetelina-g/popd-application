@@ -170,11 +170,18 @@
   background: var(--card);
   border: 1px solid var(--border);
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.page-btn:hover {
+.page-btn:hover:not(.disabled) {
   background: var(--bg);
   border-color: var(--accent);
+}
+
+.page-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .page-info {

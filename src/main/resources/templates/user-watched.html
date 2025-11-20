@@ -105,13 +105,13 @@
 
     <div class="pagination" th:if="${watchedMovies.totalPages > 1}" th:with="baseUrl=${'/profile/' + user.id + '/watched'}">
         <a class="page-btn"
-           th:href="@{${baseUrl}(page=0, size=${watchedMovies.size})}"
+           th:href="${watchedMovies.first} ? '#' : @{${baseUrl}(page=0, size=${watchedMovies.size})}"
            th:classappend="${watchedMovies.first} ? 'disabled' : ''"
            th:ariaDisabled="${watchedMovies.first}">
             <i class="fa-solid fa-angles-left"></i>
         </a>
         <a class="page-btn"
-           th:href="@{${baseUrl}(page=${watchedMovies.number - 1}, size=${watchedMovies.size})}"
+           th:href="${watchedMovies.first} ? '#' : @{${baseUrl}(page=${watchedMovies.number - 1}, size=${watchedMovies.size})}"
            th:classappend="${watchedMovies.first} ? 'disabled' : ''"
            th:ariaDisabled="${watchedMovies.first}">
             <i class="fa-solid fa-angle-left"></i>
@@ -119,13 +119,13 @@
         <span class="page-info"
               th:text="${'Page ' + (watchedMovies.number + 1) + ' of ' + (watchedMovies.totalPages == 0 ? 1 : watchedMovies.totalPages)}">Page</span>
         <a class="page-btn"
-           th:href="@{${baseUrl}(page=${watchedMovies.number + 1}, size=${watchedMovies.size})}"
+           th:href="${watchedMovies.last} ? '#' : @{${baseUrl}(page=${watchedMovies.number + 1}, size=${watchedMovies.size})}"
            th:classappend="${watchedMovies.last} ? 'disabled' : ''"
            th:ariaDisabled="${watchedMovies.last}">
             <i class="fa-solid fa-angle-right"></i>
         </a>
         <a class="page-btn"
-           th:href="@{${baseUrl}(page=${watchedMovies.totalPages - 1}, size=${watchedMovies.size})}"
+           th:href="${watchedMovies.last} ? '#' : @{${baseUrl}(page=${watchedMovies.totalPages - 1}, size=${watchedMovies.size})}"
            th:classappend="${watchedMovies.last} ? 'disabled' : ''"
            th:ariaDisabled="${watchedMovies.last}">
             <i class="fa-solid fa-angles-right"></i>

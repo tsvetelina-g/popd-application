@@ -6,6 +6,8 @@ import app.popdapplication.model.entity.MovieCredit;
 import app.popdapplication.model.enums.ArtistRole;
 import app.popdapplication.repository.MovieCreditRepository;
 import app.popdapplication.web.dto.AddCreditRequest;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MovieCreditService {
 
@@ -30,6 +33,7 @@ public class MovieCreditService {
         this.artistService = artistService;
     }
 
+    @Transactional
     public void saveCredit(AddCreditRequest addCreditRequest, UUID movieId) {
 
         Movie movie = movieService.findById(movieId);

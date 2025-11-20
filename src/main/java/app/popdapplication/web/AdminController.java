@@ -1,22 +1,14 @@
 package app.popdapplication.web;
 
-import app.popdapplication.model.entity.Genre;
-import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
-import app.popdapplication.service.GenreService;
-import app.popdapplication.service.MovieService;
 import app.popdapplication.service.UserService;
-import app.popdapplication.web.dto.AddMovieRequest;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -27,7 +19,6 @@ public class AdminController {
 
     public AdminController(UserService userService) {
         this.userService = userService;
-
     }
 
     @GetMapping
@@ -41,9 +32,18 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView list(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
+        // Validate pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
+
         ModelAndView modelAndView = new ModelAndView("admin-users");
 
         Page<User> users = userService.findAll(PageRequest.of(page, size));
+        
         modelAndView.addObject("users", users);
         modelAndView.addObject("page", page);
         modelAndView.addObject("size", size);

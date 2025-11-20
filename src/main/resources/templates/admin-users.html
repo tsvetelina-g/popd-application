@@ -145,26 +145,30 @@
             </table>
         </div>
 
-        <div class="pagination">
+        <div class="pagination" th:if="${users.totalPages > 1}">
             <a class="page-btn"
-               th:href="@{/admin/users(page=0, size=${users.size})}"
+               th:href="${users.first} ? '#' : @{/admin/users(page=0, size=${users.size})}"
+               th:classappend="${users.first} ? 'disabled' : ''"
                th:ariaDisabled="${users.first}">
                 <i class="fa-solid fa-angles-left"></i>
             </a>
             <a class="page-btn"
-               th:href="@{/admin/users(page=${users.number - 1}, size=${users.size})}"
+               th:href="${users.first} ? '#' : @{/admin/users(page=${users.number - 1}, size=${users.size})}"
+               th:classappend="${users.first} ? 'disabled' : ''"
                th:ariaDisabled="${users.first}">
                 <i class="fa-solid fa-angle-left"></i>
             </a>
             <span class="page-info"
                   th:text="${'Page ' + (users.number + 1) + ' of ' + (users.totalPages == 0 ? 1 : users.totalPages)}">Page</span>
             <a class="page-btn"
-               th:href="@{/admin/users(page=${users.number + 1}, size=${users.size})}"
+               th:href="${users.last} ? '#' : @{/admin/users(page=${users.number + 1}, size=${users.size})}"
+               th:classappend="${users.last} ? 'disabled' : ''"
                th:ariaDisabled="${users.last}">
                 <i class="fa-solid fa-angle-right"></i>
             </a>
             <a class="page-btn"
-               th:href="@{/admin/users(page=${users.totalPages - 1}, size=${users.size})}"
+               th:href="${users.last} ? '#' : @{/admin/users(page=${users.totalPages - 1}, size=${users.size})}"
+               th:classappend="${users.last} ? 'disabled' : ''"
                th:ariaDisabled="${users.last}">
                 <i class="fa-solid fa-angles-right"></i>
             </a>

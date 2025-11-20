@@ -4,12 +4,14 @@ import app.popdapplication.model.entity.Artist;
 import app.popdapplication.repository.ArtistRepository;
 import app.popdapplication.web.dto.AddArtistRequest;
 import app.popdapplication.web.dto.EditArtistRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class ArtistService {
 

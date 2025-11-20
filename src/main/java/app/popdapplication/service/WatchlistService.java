@@ -6,12 +6,15 @@ import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.model.entity.WatchlistMovie;
 import app.popdapplication.model.enums.WatchlistType;
 import app.popdapplication.repository.WatchlistRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class WatchlistService {
 
@@ -46,6 +49,7 @@ public class WatchlistService {
         return watchlistMovieOpt.isPresent();
     }
 
+    @Transactional
     public void addToWatchlist(Movie movie, User user) {
         Watchlist watchlist = watchlistRepository.findByUser(user);
 
@@ -56,6 +60,7 @@ public class WatchlistService {
         watchlistRepository.save(watchlist);
     }
 
+    @Transactional
     public void removeFromWatchlist(Movie movie, User user) {
         Watchlist watchlist = watchlistRepository.findByUser(user);
 

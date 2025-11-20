@@ -6,6 +6,7 @@ import app.popdapplication.security.UserData;
 import app.popdapplication.service.MovieService;
 import app.popdapplication.service.RatingService;
 import app.popdapplication.service.ReviewService;
+import app.popdapplication.service.UserService;
 import app.popdapplication.web.dto.EditReviewRequest;
 import app.popdapplication.web.dto.dtoMappers.DtoMapper;
 import jakarta.validation.Valid;
@@ -17,8 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class ReviewController {
@@ -26,11 +26,13 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final RatingService ratingService;
     private final MovieService movieService;
+    private final UserService userService;
 
-    public ReviewController(ReviewService reviewService, RatingService ratingService, MovieService movieService) {
+    public ReviewController(ReviewService reviewService, RatingService ratingService, MovieService movieService, UserService userService) {
         this.reviewService = reviewService;
         this.ratingService = ratingService;
         this.movieService = movieService;
+        this.userService = userService;
     }
 
     @PostMapping("/review/{movieId}")
@@ -84,6 +86,14 @@ public class ReviewController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
+        // Validate pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 5;
+        }
+
         ModelAndView modelAndView = new ModelAndView("reviews");
 
         // Get movie info (you'll need to inject MovieService)
@@ -93,7 +103,8 @@ public class ReviewController {
         Page<ReviewResponse> reviews = reviewService.getReviewsForMovie(movieId, PageRequest.of(page, size));
 
         // Get usernames for reviews
-        Map<UUID, String> userIdToUsernameMap = reviewService.getUsernamesForReviews(reviews.getContent());
+        Set<UUID> userIds = reviewService.extractUserIdsFromReviews(reviews.getContent());
+        Map<UUID, String> userIdToUsernameMap = userService.getUsernamesByIds(userIds);
 
         modelAndView.addObject("movie", movie);
         modelAndView.addObject("reviews", reviews);

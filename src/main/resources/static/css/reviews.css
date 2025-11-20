@@ -64,6 +64,7 @@
     border-color: var(--accent);
 }
 
+.page-btn.disabled,
 .page-btn[aria-disabled="true"] {
     opacity: 0.5;
     cursor: not-allowed;

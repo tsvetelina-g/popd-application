@@ -1,42 +1,37 @@
 package app.popdapplication.service;
 
-import app.popdapplication.client.RatingDto.Rating;
-import app.popdapplication.client.RatingDto.UserRatingStatsResponse;
 import app.popdapplication.client.ReviewClient;
 import app.popdapplication.client.ReviewDto.MovieReviewStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewRequest;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
 import app.popdapplication.client.ReviewDto.UserReviewsStatsResponse;
-import app.popdapplication.model.entity.Movie;
-import app.popdapplication.model.entity.User;
+import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.model.enums.ActivityType;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class ReviewService {
 
     private final ReviewClient client;
-    private final UserService userService;
-    private final MovieService movieService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public ReviewService(ReviewClient client, UserService userService, MovieService movieService) {
+    public ReviewService(ReviewClient client, ApplicationEventPublisher eventPublisher) {
         this.client = client;
-        this.userService = userService;
-        this.movieService = movieService;
+        this.eventPublisher = eventPublisher;
     }
 
     public void upsertReview(UUID userId, UUID movieId, Integer rating, String title, String content) {
@@ -55,6 +50,17 @@ public class ReviewService {
             log.error("Failed to upsert review for user {} and movie {}: {}", userId, movieId, e.getMessage());
             //todo: throw custom exception if needed
         }
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(userId)
+                .movieId(movieId)
+                .type(ActivityType.REVIEWED)
+                .removed(false)
+                .createdOn(LocalDateTime.now())
+                .rating(null)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
     public ReviewResponse getReviewByUserAndMovie(UUID userId, UUID movieId) {
@@ -79,6 +85,17 @@ public class ReviewService {
         } catch (FeignException e) {
             log.error("Failed to delete review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
         }
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(userId)
+                .movieId(movieId)
+                .type(ActivityType.REVIEWED)
+                .removed(true)
+                .createdOn(LocalDateTime.now())
+                .rating(null)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
     public List<ReviewResponse> getLatestFiveReviewsForAMovie(UUID movieId) {
@@ -91,34 +108,6 @@ public class ReviewService {
             return null;
             //todo: or throw custom exception if needed
         }
-    }
-
-    public Map<UUID, String> getUsernamesForReviews(List<ReviewResponse> reviews) {
-
-        Map<UUID, String> result = new HashMap<>();
-
-        if (reviews == null || reviews.isEmpty()) {
-            return result;
-        }
-
-        for (ReviewResponse review : reviews) {
-            UUID userId = review.getUserId();
-
-            if (userId == null || result.containsKey(userId)) {
-                continue; // skip nulls and already processed users
-            }
-
-            try {
-                User user = userService.findById(userId);
-                if (user != null) {
-                    result.put(userId, user.getUsername());
-                }
-            } catch (Exception e) {
-                log.warn("User not found for userId {}: {}", userId, e.getMessage());
-            }
-        }
-
-        return result;
     }
 
     public Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
@@ -172,31 +161,23 @@ public class ReviewService {
         }
     }
 
-    public Map<UUID, String> getMovieNamesForReviews(List<ReviewResponse> reviews) {
-
-        Map<UUID, String> result = new HashMap<>();
-
+    public Set<UUID> extractUserIdsFromReviews(List<ReviewResponse> reviews) {
         if (reviews == null || reviews.isEmpty()) {
-            return result;
+            return Set.of();
         }
+        return reviews.stream()
+                .map(ReviewResponse::getUserId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
 
-        for (ReviewResponse review : reviews) {
-            UUID movieId = review.getMovieId();
-
-            if (movieId == null || result.containsKey(movieId)) {
-                continue; // skip nulls and already processed users
-            }
-
-            try {
-                Movie movie = movieService.findById(movieId);
-                if (movie != null) {
-                    result.put(movieId, movie.getTitle());
-                }
-            } catch (Exception e) {
-                log.warn("Movie not found for movieId {}: {}", movieId, e.getMessage());
-            }
+    public Set<UUID> extractMovieIdsFromReviews(List<ReviewResponse> reviews) {
+        if (reviews == null || reviews.isEmpty()) {
+            return Set.of();
         }
-
-        return result;
+        return reviews.stream()
+                .map(ReviewResponse::getMovieId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 }

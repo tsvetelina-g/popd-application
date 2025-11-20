@@ -6,17 +6,17 @@ import app.popdapplication.client.RatingDto.Rating;
 import app.popdapplication.client.RatingDto.RatingRequest;
 import app.popdapplication.client.RatingDto.UserRatingStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
-import app.popdapplication.model.entity.Movie;
-import app.popdapplication.model.entity.User;
+import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.model.enums.ActivityType;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,15 +24,13 @@ public class RatingService {
 
     private final RatingClient client;
     private final ReviewService reviewService;
-    private final UserService userService;
-    private final MovieService movieService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public RatingService(RatingClient client, ReviewService reviewService, UserService userService, MovieService movieService) {
+    public RatingService(RatingClient client, ReviewService reviewService, ApplicationEventPublisher eventPublisher) {
         this.client = client;
         this.reviewService = reviewService;
-        this.userService = userService;
-        this.movieService = movieService;
+        this.eventPublisher = eventPublisher;
     }
 
     public void upsertRating(UUID userId, UUID movieId, int value) {
@@ -55,6 +53,17 @@ public class RatingService {
             log.error("Failed to upsert rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             //todo: throw custom exception if needed
         }
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(userId)
+                .movieId(movieId)
+                .type(ActivityType.RATED)
+                .removed(false)
+                .createdOn(LocalDateTime.now())
+                .rating(value)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
     public Integer getRatingByUserAndMovie(UUID userId, UUID movieId) {
@@ -85,6 +94,17 @@ public class RatingService {
             log.error("Failed to delete rating for user {} and movie {}: {}", userId, movieId, e.getMessage());
         }
         //todo: throw custom exceptions if needed
+
+        ActivityDtoEvent event = ActivityDtoEvent.builder()
+                .userId(userId)
+                .movieId(movieId)
+                .type(ActivityType.RATED)
+                .removed(true)
+                .createdOn(LocalDateTime.now())
+                .rating(null)
+                .build();
+
+        eventPublisher.publishEvent(event);
     }
 
     public Double getAverageRatingForAMovie(UUID movieId) {
@@ -131,32 +151,14 @@ public class RatingService {
         }
     }
 
-    public Map<UUID, String> getMovieNamesForRatings(List<Rating> ratings) {
-
-        Map<UUID, String> result = new HashMap<>();
-
+    public Set<UUID> extractMovieIdsFromRatings(List<Rating> ratings) {
         if (ratings == null || ratings.isEmpty()) {
-            return result;
+            return Set.of();
         }
-
-        for (Rating rating : ratings) {
-            UUID movieId = rating.getMovieId();
-
-            if (movieId == null || result.containsKey(movieId)) {
-                continue; // skip nulls and already processed users
-            }
-
-            try {
-                Movie movie = movieService.findById(movieId);
-                if (movie != null) {
-                    result.put(movieId, movie.getTitle());
-                }
-            } catch (Exception e) {
-                log.warn("Movie not found for movieId {}: {}", movieId, e.getMessage());
-            }
-        }
-
-        return result;
+        return ratings.stream()
+                .map(Rating::getMovieId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
 }

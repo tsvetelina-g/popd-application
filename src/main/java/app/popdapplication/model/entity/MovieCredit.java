@@ -12,6 +12,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"movie_id", "artist_id", "roleType"})
+})
 public class MovieCredit {
 
     @Id

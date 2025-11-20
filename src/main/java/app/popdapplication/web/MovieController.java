@@ -95,7 +95,8 @@ public class MovieController {
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
         Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
                 .collect(Collectors.groupingBy(MovieCredit::getRoleType));
-        Map<UUID, String> userIdToUsernameMap = reviewService.getUsernamesForReviews(latestFiveReviews);
+        Set<UUID> userIds = reviewService.extractUserIdsFromReviews(latestFiveReviews);
+        Map<UUID, String> userIdToUsernameMap = userService.getUsernamesByIds(userIds);
 
         if (userData != null) {
             user = userService.findById(userData.getUserId());

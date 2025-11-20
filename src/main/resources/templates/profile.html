@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -136,29 +136,82 @@
 
         <div class="recent-activity">
             <h3 class="activity-title">Recent Activity</h3>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
-                         alt="Popcorn" class="activity-icon popcorn-icon">
-                    <div class="activity-content">
-                        <span class="activity-text">Rated "The Dark Knight" 5 popcorns</span>
-                        <span class="activity-date">2 hours ago</span>
-                    </div>
+            <div class="activity-list" th:if="${activities != null && !activities.isEmpty()}">
+                <div class="activity-item" th:each="activity : ${activities}">
+                    <!-- RATED Activity -->
+                    <th:block th:if="${activity.type.name() == 'RATED'}">
+                        <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
+                             alt="Popcorn" 
+                             th:class="${activity.removed ? 'activity-icon popcorn-icon icon-removed' : 'activity-icon popcorn-icon icon-normal'}">
+                        <div class="activity-content">
+                            <span class="activity-text" th:if="${!activity.removed}">
+                                Rated <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                <span th:if="${activity.rating != null}" th:text="${' ' + activity.rating + ' popcorns'}"> 5 popcorns</span>
+                            </span>
+                            <span class="activity-text" th:if="${activity.removed}">
+                                Removed rating for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                            </span>
+                            <span class="activity-date" th:if="${activity.createdOn != null}"
+                                  th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                                January 15, 2024 at 14:30
+                            </span>
+                        </div>
+                    </th:block>
+                    
+                    <!-- REVIEWED Activity -->
+                    <th:block th:if="${activity.type.name() == 'REVIEWED'}">
+                        <i th:class="${activity.removed ? 'fas fa-comment activity-icon icon-removed' : 'fas fa-comment activity-icon icon-normal'}"></i>
+                        <div class="activity-content">
+                            <span class="activity-text" th:if="${!activity.removed}">
+                                Wrote a review for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                            </span>
+                            <span class="activity-text" th:if="${activity.removed}">
+                                Removed review for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                            </span>
+                            <span class="activity-date" th:if="${activity.createdOn != null}"
+                                  th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                                January 15, 2024 at 14:30
+                            </span>
+                        </div>
+                    </th:block>
+                    
+                    <!-- ADDED_TO_WATCHLIST Activity -->
+                    <th:block th:if="${activity.type.name() == 'ADDED_TO_WATCHLIST'}">
+                        <i th:class="${activity.removed ? 'fas fa-film activity-icon icon-removed' : 'fas fa-film activity-icon icon-normal'}"></i>
+                        <div class="activity-content">
+                            <span class="activity-text" th:if="${!activity.removed}">
+                                Added <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> to watchlist
+                            </span>
+                            <span class="activity-text" th:if="${activity.removed}">
+                                Removed <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watchlist
+                            </span>
+                            <span class="activity-date" th:if="${activity.createdOn != null}"
+                                  th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                                January 15, 2024 at 14:30
+                            </span>
+                        </div>
+                    </th:block>
+                    
+                    <!-- WATCHED Activity -->
+                    <th:block th:if="${activity.type.name() == 'WATCHED'}">
+                        <i th:class="${activity.removed ? 'fas fa-eye activity-icon icon-removed' : 'fas fa-eye activity-icon icon-normal'}"></i>
+                        <div class="activity-content">
+                            <span class="activity-text" th:if="${!activity.removed}">
+                                Watched <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                            </span>
+                            <span class="activity-text" th:if="${activity.removed}">
+                                Removed <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watched
+                            </span>
+                            <span class="activity-date" th:if="${activity.createdOn != null}"
+                                  th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
+                                January 15, 2024 at 14:30
+                            </span>
+                        </div>
+                    </th:block>
                 </div>
-                <div class="activity-item">
-                    <i class="fas fa-comment activity-icon"></i>
-                    <div class="activity-content">
-                        <span class="activity-text">Wrote a review for "Inception"</span>
-                        <span class="activity-date">1 day ago</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <i class="fas fa-film activity-icon"></i>
-                    <div class="activity-content">
-                        <span class="activity-text">Added "Interstellar" to watchlist</span>
-                        <span class="activity-date">3 days ago</span>
-                    </div>
-                </div>
+            </div>
+            <div class="activity-list" th:if="${activities == null || activities.isEmpty()}">
+                <p style="text-align: center; color: var(--muted); padding: 20px;">No recent activity.</p>
             </div>
         </div>
 
