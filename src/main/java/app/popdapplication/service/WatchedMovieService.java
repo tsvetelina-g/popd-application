@@ -1,6 +1,7 @@
 package app.popdapplication.service;
 
 import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.WatchedMovie;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +53,7 @@ public class WatchedMovieService {
                 .build();
 
         watchedMovieRepository.save(watchedMovie);
+        log.info("Movie marked as watched: movie id {}, user id {}", movie.getId(), user.getId());
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(user.getId())
@@ -70,9 +73,10 @@ public class WatchedMovieService {
         Optional<WatchedMovie> watchedMovie = watchedMovieRepository.findByUserAndMovie(user, movie);
 
         if (watchedMovie.isEmpty()) {
-            throw new RuntimeException("Movie not found in watched list");
+            throw new NotFoundException("Movie not found in watched list");
         }
         watchedMovieRepository.delete(watchedMovie.get());
+        log.info("Movie removed from watched list: movie id {}, user id {}", movie.getId(), user.getId());
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(user.getId())
@@ -88,6 +92,19 @@ public class WatchedMovieService {
 
     public int usersWatchedCount(UUID movieId) {
         return watchedMovieRepository.findAllByMovieId(movieId).size();
+    }
+
+    public Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, int page, int size) {
+        // Validate and normalize pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
+        
+        Pageable pageable = PageRequest.of(page, size);
+        return findAllByUserOrderByCreatedOnDesc(user, pageable);
     }
 
     public Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, Pageable pageable) {

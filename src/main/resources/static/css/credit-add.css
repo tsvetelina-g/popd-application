@@ -5,6 +5,7 @@
   padding: 60px 0;
   min-height: 70vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -291,4 +292,16 @@
     text-align: left;
     margin-top: 2px;
   }
+}
+
+/* Alert Warning */
+.alert-warning {
+  color: var(--text);
+  background-color: var(--accent);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 10px;
 }

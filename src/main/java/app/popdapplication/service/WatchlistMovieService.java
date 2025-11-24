@@ -1,6 +1,8 @@
 package app.popdapplication.service;
 
 import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.exception.AlreadyExistsException;
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.Watchlist;
 import app.popdapplication.model.entity.WatchlistMovie;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +42,7 @@ public class WatchlistMovieService {
     public void saveToWatchlist(Watchlist watchlist, Movie movie) {
 
         if (findByWatchlistAndMovie(watchlist, movie).isPresent()) {
-            throw new RuntimeException("Movie already in watchlist");
+            throw new AlreadyExistsException("Movie already in watchlist");
         }
 
         WatchlistMovie watchlistMovie = WatchlistMovie.builder()
@@ -49,6 +52,7 @@ public class WatchlistMovieService {
                 .build();
 
         watchlistMovieRepository.save(watchlistMovie);
+        log.info("Movie added to watchlist: movie id {}, user id {}", movie.getId(), watchlist.getUser().getId());
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(watchlist.getUser().getId())
@@ -69,8 +73,9 @@ public class WatchlistMovieService {
 
         if (watchlistMovie.isPresent()){
             watchlistMovieRepository.delete(watchlistMovie.get());
+            log.info("Movie removed from watchlist: movie id {}, user id {}", movie.getId(), watchlist.getUser().getId());
         } else {
-            throw new RuntimeException("Movie not found in watchlist");
+            throw new NotFoundException("Movie not found in watchlist");
         }
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
@@ -87,6 +92,19 @@ public class WatchlistMovieService {
 
     public List<WatchlistMovie> findAllByWatchlist(Watchlist watchlist) {
         return watchlistMovieRepository.findAllByWatchlist(watchlist);
+    }
+
+    public Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, int page, int size) {
+        // Validate and normalize pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
+        
+        Pageable pageable = PageRequest.of(page, size);
+        return findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }
 
     public Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, Pageable pageable) {

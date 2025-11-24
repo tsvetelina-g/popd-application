@@ -1,5 +1,7 @@
 package app.popdapplication.service;
 
+import app.popdapplication.exception.AlreadyExistsException;
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Artist;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.MovieCredit;
@@ -40,9 +42,9 @@ public class MovieCreditService {
         Artist artist = artistService.findByName(addCreditRequest.getArtistName());
         ArtistRole artistRole = ArtistRole.valueOf(addCreditRequest.getRole());
 
-        // Check if credit already exists
         if (movieCreditRepository.findByMovieAndArtistAndRoleType(movie, artist, artistRole).isPresent()) {
-            throw new RuntimeException("Credit already exists: " + artist.getName() + " as " + artistRole.getDisplayName() + " for movie '" + movie.getTitle() + "'");
+            throw new AlreadyExistsException("Credit already exists: %s as %s for movie '%s'".formatted(
+                    artist.getName(), artistRole.getDisplayName(), movie.getTitle()));
         }
 
         MovieCredit movieCredit = MovieCredit.builder()
@@ -52,6 +54,8 @@ public class MovieCreditService {
                 .build();
 
         movieCreditRepository.save(movieCredit);
+        log.info("Credit added successfully: {} as {} for movie '{}' (id: {})", 
+                artist.getName(), artistRole.getDisplayName(), movie.getTitle(), movieId);
     }
 
     public List<MovieCredit> getCreditsByMovie(Movie movie) {
@@ -59,11 +63,14 @@ public class MovieCreditService {
     }
 
     public MovieCredit findCreditById(UUID creditId) {
-        return movieCreditRepository.findById(creditId).orElseThrow(() -> new RuntimeException("Credit with id [%s] does not exist".formatted(creditId)));
+        return movieCreditRepository.findById(creditId).orElseThrow(() -> new NotFoundException("Credit with id [%s] not found".formatted(creditId)));
     }
 
     public void deleteCredit(MovieCredit movieCredit) {
         movieCreditRepository.delete(movieCredit);
+        log.info("Credit deleted successfully: {} as {} for movie '{}' (id: {})", 
+                movieCredit.getArtist().getName(), movieCredit.getRoleType().getDisplayName(), 
+                movieCredit.getMovie().getTitle(), movieCredit.getMovie().getId());
     }
 
     public int findAllCreditsByArtist(Artist artist) {

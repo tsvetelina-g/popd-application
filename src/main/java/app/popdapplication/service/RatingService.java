@@ -7,6 +7,7 @@ import app.popdapplication.client.RatingDto.RatingRequest;
 import app.popdapplication.client.RatingDto.UserRatingStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
 import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.exception.RatingMicroserviceUnavailableException;
 import app.popdapplication.model.enums.ActivityType;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +52,10 @@ public class RatingService {
 
         } catch (FeignException e) {
             log.error("Failed to upsert rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
-            //todo: throw custom exception if needed
+            throw new RatingMicroserviceUnavailableException("Unable to save rating. The rating service is currently unavailable. Please try again later.");
         }
+
+        log.info("Rating upserted successfully: user id {}, movie id {}, value {}", userId, movieId, value);
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(userId)
@@ -73,9 +76,8 @@ public class RatingService {
         } catch (FeignException.NotFound e) {
             return null;
         } catch (FeignException e) {
-            log.error("Failed to fetch rating for user {} and movie {}: {}", userId, movieId, e.getMessage());
+            log.error("Failed to fetch rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             return null;
-            //todo: or throw custom exception if needed
         }
     }
 
@@ -89,11 +91,13 @@ public class RatingService {
                 reviewService.upsertReview(userId, movieId, null, reviewResponse.getTitle(), reviewResponse.getContent());
             }
         } catch (FeignException.NotFound e) {
-            log.warn("Rating not found for deletion: user {}, movie {}", userId, movieId);
+            log.warn("Rating not found for deletion: user with id {}, movie with id {}", userId, movieId);
         } catch (FeignException e) {
-            log.error("Failed to delete rating for user {} and movie {}: {}", userId, movieId, e.getMessage());
+            log.error("Failed to delete rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
+            throw new RatingMicroserviceUnavailableException("Unable to delete rating. The rating service is currently unavailable. Please try again later.");
         }
-        //todo: throw custom exceptions if needed
+
+        log.info("Rating deleted successfully: user id {}, movie id {}", userId, movieId);
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(userId)
@@ -111,11 +115,13 @@ public class RatingService {
         try {
             MovieRatingStatsResponse movieRatingStats = client.getMovieRatingStats(movieId).getBody();
             return movieRatingStats != null ? movieRatingStats.getAverageRating() : null;
-        } catch (FeignException e) {
-            log.error("Failed to fetch average rating for movie {}: {}", movieId, e.getMessage());
+        }  catch (FeignException.NotFound e) {
+            log.warn("Average rating not found for movie id: {}", movieId);
+            return null;
+        }catch (FeignException e) {
+            log.error("Failed to fetch average rating for movie with id {}: {}", movieId, e.getMessage());
             return null;
         }
-        //todo: throw custom exceptions if needed
     }
 
     public Integer getTotalRatingsCountForAMovie(UUID movieId) {
@@ -123,10 +129,9 @@ public class RatingService {
             MovieRatingStatsResponse movieRatingStats = client.getMovieRatingStats(movieId).getBody();
             return movieRatingStats != null ? movieRatingStats.getTotalRatings() : null;
         } catch (FeignException e) {
-            log.error("Failed to fetch total ratings for movie {}: {}", movieId, e.getMessage());
+            log.error("Failed to fetch total ratings for movie with id {}: {}", movieId, e.getMessage());
             return null;
         }
-        //todo: throw custom exceptions if needed
     }
 
     public Integer getTotalMoviesRatedByUser(UUID userId) {
@@ -137,7 +142,6 @@ public class RatingService {
             log.error("Failed to fetch total ratings for user with id {}: {}", userId, e.getMessage());
             return null;
         }
-        //todo: throw custom exceptions if needed
     }
 
     public List<Rating> getLatestRatingsByUserId(UUID userId) {

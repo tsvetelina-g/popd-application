@@ -195,6 +195,10 @@
 
             <!-- Rating Section -->
             <div class="movie-rating-section">
+                <div th:if="${ratingErrorMessage}" class="alert-warning" >
+                    <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                    <span th:text="${ratingErrorMessage}"></span>
+                </div>
                 <h3 class="section-title-rating" th:text="${rating != null} ? 'Your Rating' : 'Rate This Movie'">Rate This Movie</h3>
 
                 <div sec:authorize="isAnonymous()" class="guest-actions-wrapper">
@@ -310,6 +314,10 @@
         <!--        <div class="movie-container">-->
         <!-- Reviews/Comment Section -->
         <div class="reviews-section">
+            <div th:if="${reviewErrorMessage}" class="alert-warning" style="margin-bottom: 20px;">
+                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                <span th:text="${reviewErrorMessage}"></span>
+            </div>
             <div class="reviews-header">
                 <h3 class="section-title">User Reviews</h3>
                 <a th:href="@{'/reviews/' + ${movie.id}}" class="action-button view-all-reviews-button">
@@ -599,7 +607,38 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error('Request failed');
+                        const errorText = await response.text();
+                        const errorDiv = document.createElement('div');
+                        errorDiv.classList.add('alert-warning');
+                        errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i> ${errorText}`;
+                        
+                        // Determine which section to show the error in based on form type
+                        let targetSection = null;
+                        if (form.classList.contains('rating-form') || form.classList.contains('delete-rating-form')) {
+                            targetSection = document.querySelector('.movie-rating-section');
+                        } else if (form.classList.contains('review-form') || form.classList.contains('delete-review-form')) {
+                            targetSection = document.querySelector('.reviews-section');
+                        }
+                        
+                        if (targetSection) {
+                            // Remove any existing error messages first
+                            const existingError = targetSection.querySelector('.alert-warning');
+                            if (existingError) {
+                                existingError.remove();
+                            }
+                            // For reviews section, insert after the opening div but before reviews-header
+                            if (targetSection.classList.contains('reviews-section')) {
+                                const reviewsHeader = targetSection.querySelector('.reviews-header');
+                                if (reviewsHeader) {
+                                    targetSection.insertBefore(errorDiv, reviewsHeader);
+                                } else {
+                                    targetSection.prepend(errorDiv);
+                                }
+                            } else {
+                                targetSection.prepend(errorDiv);
+                            }
+                        }
+                        return;
                     }
 
                     if (form.classList.contains('delete-form') && form.closest('.credit-item')) {

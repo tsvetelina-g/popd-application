@@ -152,8 +152,10 @@ public class MovieController {
 
     @PostMapping
     @RequestMapping("/{movieId}/watchlist")
-    public ModelAndView addToWatchlist(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView addToWatchlist(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData, jakarta.servlet.http.HttpServletRequest request) {
 
+        request.setAttribute("movieId", movieId);
+        
         Movie movie = movieService.findById(movieId);
         User user = userService.findById(userData.getUserId());
 

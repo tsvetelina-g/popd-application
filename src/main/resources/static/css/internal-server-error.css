@@ -1,0 +1,322 @@
+/* Internal Server Error Page Styles */
+
+.internal-server-error-section {
+    padding: 60px 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.internal-server-error-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 60px 40px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.popcorn-icon-decorative {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: popOut 2s ease-out infinite;
+    transform-origin: center center;
+}
+
+/* Position popcorns to follow radial explosion trajectories from 500 center */
+.popcorn-1 {
+    top: 28%;
+    left: 30%;
+    animation-delay: 0s;
+    --pop-x: -45px;
+    --pop-y: -50px;
+}
+
+.popcorn-2 {
+    top: 30%;
+    right: 40%;
+    animation-delay: 0.2s;
+    --pop-x: 35px;
+    --pop-y: -55px;
+}
+
+.popcorn-3 {
+    top: 30%;
+    right: 25%;
+    animation-delay: 0.4s;
+    --pop-x: 55px;
+    --pop-y: -50px;
+}
+
+.popcorn-4 {
+    top: 33%;
+    left: 23%;
+    animation-delay: 0.6s;
+    --pop-x: -60px;
+    --pop-y: -15px;
+}
+
+.popcorn-5 {
+    top: 32%;
+    right: 23%;
+    animation-delay: 0.8s;
+    --pop-x: 60px;
+    --pop-y: -15px;
+}
+
+.popcorn-6 {
+    top: 41%;
+    left: 20%;
+    animation-delay: 1s;
+    --pop-x: -55px;
+    --pop-y: 20px;
+}
+
+.popcorn-7 {
+    top: 43%;
+    right: 24%;
+    animation-delay: 1.2s;
+    --pop-x: 55px;
+    --pop-y: 20px;
+}
+
+.popcorn-8 {
+    top: 50%;
+    left: 24%;
+    animation-delay: 1.4s;
+    --pop-x: -50px;
+    --pop-y: 15px;
+}
+
+.popcorn-9 {
+    top: 50%;
+    right: 26%;
+    animation-delay: 1.6s;
+    --pop-x: 50px;
+    --pop-y: 30px;
+}
+
+.popcorn-10 {
+    top: 30%;
+    left: 42%;
+    animation-delay: 1.8s;
+    --pop-x: -20px;
+    --pop-y: -40px;
+}
+
+@keyframes popOut {
+    0% {
+        transform: translate(0, 0) scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        transform: translate(0, 0) scale(1.2) rotate(10deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(var(--pop-x, 0), var(--pop-y, 0)) scale(1) rotate(5deg);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(var(--pop-x, 0), var(--pop-y, 0)) scale(1) rotate(0deg);
+        opacity: 0.7;
+    }
+}
+
+.error-icon {
+    font-size: 80px;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.error-code {
+    font-size: 120px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+    line-height: 1;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.error-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.error-message {
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.home-button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.home-button:hover {
+    background: #6b0207;
+    transform: translateY(-1px);
+}
+
+.home-button:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .internal-server-error-container {
+        margin: 20px;
+        padding: 40px 30px;
+    }
+    
+    .popcorn-icon-decorative {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .error-code {
+        font-size: 100px;
+    }
+    
+    .error-title {
+        font-size: 28px;
+    }
+    
+    .error-icon {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .internal-server-error-container {
+        margin: 15px;
+        padding: 30px 20px;
+    }
+    
+    .popcorn-icon-decorative {
+        width: 22px;
+        height: 22px;
+    }
+    
+    /* Mobile - Radial trajectories */
+    .popcorn-1 {
+        top: 28%;
+        left: 30%;
+        --pop-x: -30px;
+        --pop-y: -35px;
+    }
+    
+    .popcorn-2 {
+        top: 30%;
+        left: 50%;
+        --pop-x: 0px;
+        --pop-y: -38px;
+    }
+    
+    .popcorn-3 {
+        top: 28%;
+        right: 30%;
+        --pop-x: 30px;
+        --pop-y: -35px;
+    }
+    
+    .popcorn-4 {
+        top: 38%;
+        left: 25%;
+        --pop-x: -40px;
+        --pop-y: -10px;
+    }
+    
+    .popcorn-5 {
+        top: 38%;
+        right: 25%;
+        --pop-x: 40px;
+        --pop-y: -10px;
+    }
+    
+    .popcorn-6 {
+        top: 42%;
+        left: 20%;
+        --pop-x: -38px;
+        --pop-y: 8px;
+    }
+    
+    .popcorn-7 {
+        top: 42%;
+        right: 20%;
+        --pop-x: 38px;
+        --pop-y: 8px;
+    }
+    
+    .popcorn-8 {
+        top: 46%;
+        left: 30%;
+        --pop-x: -35px;
+        --pop-y: 32px;
+    }
+    
+    .popcorn-9 {
+        top: 46%;
+        right: 30%;
+        --pop-x: 35px;
+        --pop-y: 32px;
+    }
+    
+    .popcorn-10 {
+        top: 34%;
+        left: 40%;
+        --pop-x: -15px;
+        --pop-y: -28px;
+    }
+    
+    .error-code {
+        font-size: 80px;
+    }
+    
+    .error-title {
+        font-size: 24px;
+    }
+    
+    .error-icon {
+        font-size: 50px;
+    }
+    
+    .error-message {
+        font-size: 14px;
+    }
+    
+    .home-button {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+}
+

@@ -1,6 +1,6 @@
 package app.popdapplication.service;
 
-import app.popdapplication.model.entity.Activity;
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Genre;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.repository.MovieRepository;
@@ -9,8 +9,10 @@ import app.popdapplication.web.dto.EditMovieRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -41,11 +43,12 @@ public class MovieService {
                 .build();
 
         movieRepository.save(movie);
+        log.info("Movie added successfully with id: {} and title: {}", movie.getId(), movie.getTitle());
         return movie;
     }
 
     public Movie findById(UUID id) {
-        return movieRepository.findById(id).orElseThrow(() -> new RuntimeException("Movie with [%s] id not found".formatted(id)));
+        return movieRepository.findById(id).orElseThrow(() -> new NotFoundException("Movie with id [%s] not found".formatted(id)));
     }
 
     @Transactional
@@ -62,6 +65,7 @@ public class MovieService {
         movie.setGenres(genres);
 
         movieRepository.save(movie);
+        log.info("Movie info updated for movie with id: {}", movieId);
     }
 
     public List<Movie> searchByTitle(String query) {
@@ -77,33 +81,6 @@ public class MovieService {
 
         for (UUID movieId : movieIds) {
             if (movieId == null || result.containsKey(movieId)) {
-                continue; // skip nulls and already processed movies
-            }
-
-            try {
-                Movie movie = findById(movieId);
-                if (movie != null) {
-                    result.put(movieId, movie.getTitle());
-                }
-            } catch (Exception e) {
-                // Movie not found, skip
-            }
-        }
-
-        return result;
-    }
-
-    public Map<UUID, String> getMovieNamesForActivities(List<Activity> activities) {
-        Map<UUID, String> result = new HashMap<>();
-
-        if (activities == null || activities.isEmpty()) {
-            return result;
-        }
-
-        for (Activity activity : activities) {
-            UUID movieId = activity.getMovieId();
-
-            if (movieId == null || result.containsKey(movieId)) {
                 continue;
             }
 
@@ -113,11 +90,39 @@ public class MovieService {
                     result.put(movieId, movie.getTitle());
                 }
             } catch (Exception e) {
-                // Log warning if needed
+                log.warn("Could not fetch movie with id {}: {}", movieId, e.getMessage());
             }
         }
 
         return result;
     }
 
+    public List<Movie> findTop10ByClosestReleaseDate() {
+        LocalDate today = LocalDate.now();
+        return movieRepository.findTop10ByClosestReleaseDate(today, PageRequest.of(0, 10));
+    }
+
+    public List<Movie> getTopMovies(List<UUID> movieIds) {
+
+        if (movieIds == null || movieIds.isEmpty()) {
+            return findTop10ByClosestReleaseDate();
+        }
+
+        List<Movie> movies = movieRepository.findAllById(movieIds);
+
+        if (movies.size() < 10) {
+            List<Movie> fallbackMovies = findTop10ByClosestReleaseDate();
+
+            for (Movie m : fallbackMovies) {
+                if (movies.size() == 10) {
+                    break;
+                }
+                if (!movies.contains(m)) {
+                    movies.add(m);
+                }
+            }
+
+        }
+        return movies;
+    }
 }

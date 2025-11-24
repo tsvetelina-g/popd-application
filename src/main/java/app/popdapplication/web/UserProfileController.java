@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller
@@ -46,7 +47,8 @@ public class UserProfileController {
         Integer ratedMoviesCount = ratingService.getTotalMoviesRatedByUser(user.getId());
         Integer reviewedMoviesCount = reviewService.getTotalMoviesReviewedByUser(user.getId());
         List<Activity> activities = activityService.returnLatestFiveActivities(user.getId());
-        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesForActivities(activities);
+        Set<UUID> activityIds = activityService.getMovieIdsFromActivities(activities);
+        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesByIds(activityIds);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("moviesWatched", watchedMoviesCount);

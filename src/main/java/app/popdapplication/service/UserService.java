@@ -1,5 +1,7 @@
 package app.popdapplication.service;
 
+import app.popdapplication.exception.NotFoundException;
+import app.popdapplication.exception.AlreadyExistsException;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.enums.UserRole;
 import app.popdapplication.repository.UserRepository;
@@ -47,7 +49,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Username not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User with username [%s] not found".formatted(username)));
 
         return new UserData(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isActive());
     }
@@ -55,10 +57,16 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void register(RegisterRequest registerRequest) {
 
-        Optional<User> optionalUser = userRepository.findByUsername(registerRequest.getUsername());
+        if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+            throw new AlreadyExistsException(
+                    "User with username [%s] already exists".formatted(registerRequest.getUsername())
+            );
+        }
 
-        if (optionalUser.isPresent()) {
-            throw new RuntimeException("User with [%s] username already exists".formatted(registerRequest.getUsername()));
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new AlreadyExistsException(
+                    "User with email [%s] already exists".formatted(registerRequest.getEmail())
+            );
         }
 
         User user = User.builder()
@@ -74,10 +82,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         watchlistService.createDefaultWatchlist(user);
+        log.info("User registered successfully with username: {}", registerRequest.getUsername());
     }
 
     public User findById(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User with [%s] id not found".formatted(userId)));
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id [%s] not found".formatted(userId)));
     }
 
     @Transactional
@@ -92,6 +101,20 @@ public class UserService implements UserDetailsService {
         user.setProfilePicture(editProfileRequest.getProfilePictureUrl());
 
         userRepository.save(user);
+        log.info("Profile updated for user with id: {}", id);
+    }
+
+    public Page<User> findAll(int page, int size) {
+        // Validate and normalize pagination parameters
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 10;
+        }
+        
+        PageRequest pageable = PageRequest.of(page, size);
+        return findAll(pageable);
     }
 
     public Page<User> findAll(PageRequest pageable) {
@@ -103,7 +126,7 @@ public class UserService implements UserDetailsService {
         Optional<User> userOpt = userRepository.findById(userId);
 
         if (userOpt.isEmpty()){
-            throw new RuntimeException("User with userId [%s] not found".formatted(userId));
+            throw new NotFoundException("User with id [%s] not found".formatted(userId));
         }
 
         User user = userOpt.get();
@@ -115,6 +138,9 @@ public class UserService implements UserDetailsService {
 
         if (!user.isActive()) {
             forceLogoutUser(user.getUsername());
+            log.info("User status switched to inactive and forced logout for user with id: {}", userId);
+        } else {
+            log.info("User status switched to active for user with id: {}", userId);
         }
     }
 
@@ -135,15 +161,17 @@ public class UserService implements UserDetailsService {
         Optional<User> userOpt = userRepository.findById(userId);
 
         if (userOpt.isEmpty()){
-            throw new RuntimeException("User with userId [%s] not found".formatted(userId));
+            throw new NotFoundException("User with id [%s] not found".formatted(userId));
         }
 
         User user = userOpt.get();
 
         if (user.getRole() == UserRole.USER) {
             user.setRole(UserRole.ADMIN);
+            log.info("User role switched to ADMIN for user with id: {}", userId);
         } else {
             user.setRole(UserRole.USER);
+            log.info("User role switched to USER for user with id: {}", userId);
         }
 
         user.setUpdatedOn(LocalDateTime.now());
@@ -163,7 +191,7 @@ public class UserService implements UserDetailsService {
 
         for (UUID userId : userIds) {
             if (userId == null || result.containsKey(userId)) {
-                continue; // skip nulls and already processed users
+                continue;
             }
 
             try {

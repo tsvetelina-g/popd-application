@@ -59,7 +59,6 @@ public class CreditController {
                 .limit(50)
                 .collect(Collectors.toList());
 
-        //todo: да изнеса стрийма в ютилити клас
         return ResponseEntity.ok(artistNames);
     }
 
@@ -68,8 +67,11 @@ public class CreditController {
     public ModelAndView addCredit(
             @PathVariable UUID movieId,
             @Valid AddCreditRequest addCreditRequest,
-            BindingResult bindingResult) {
+            BindingResult bindingResult,
+            jakarta.servlet.http.HttpServletRequest request) {
 
+        request.setAttribute("movieId", movieId);
+        
         Movie movie = movieService.findById(movieId);
 
         if (bindingResult.hasErrors()) {

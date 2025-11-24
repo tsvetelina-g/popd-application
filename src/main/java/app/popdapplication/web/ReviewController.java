@@ -11,14 +11,16 @@ import app.popdapplication.web.dto.EditReviewRequest;
 import app.popdapplication.web.dto.dtoMappers.DtoMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
+import app.popdapplication.exception.ReviewMicroserviceUnavailableException;
 
 @Controller
 public class ReviewController {
@@ -39,7 +41,10 @@ public class ReviewController {
     public ModelAndView upsertReview(@PathVariable UUID movieId,
                                      @RequestParam String title,
                                      @RequestParam String content,
-                                     @AuthenticationPrincipal UserData userData) {
+                                     @AuthenticationPrincipal UserData userData,
+                                     HttpServletRequest request) {
+
+        request.setAttribute("movieId", movieId);
 
         Integer rating = ratingService.getRatingByUserAndMovie(userData.getUserId(), movieId);
 
@@ -48,7 +53,9 @@ public class ReviewController {
     }
 
     @DeleteMapping("/review/{movieId}")
-    public ModelAndView deleteReview(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView deleteReview(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
+
+        request.setAttribute("movieId", movieId);
 
         reviewService.deleteReview(userData.getUserId(), movieId);
         return new ModelAndView("redirect:/movie/" + movieId);
@@ -68,11 +75,13 @@ public class ReviewController {
     }
 
     @PutMapping("/review/{movieId}/edit")
-    public ModelAndView updateReview(@Valid EditReviewRequest editReviewRequest, BindingResult bindingResult, @PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView updateReview(@Valid EditReviewRequest editReviewRequest, BindingResult bindingResult, @PathVariable UUID movieId, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return new ModelAndView("review-edit");
         }
+
+        request.setAttribute("movieId", movieId);
 
         Integer rating = ratingService.getRatingByUserAndMovie(userData.getUserId(), movieId);
         reviewService.upsertReview(userData.getUserId(), movieId, rating, editReviewRequest.getTitle(), editReviewRequest.getContent());
@@ -84,32 +93,28 @@ public class ReviewController {
     public ModelAndView getAllReviewsForMovie(
             @PathVariable UUID movieId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "5") int size,
+            RedirectAttributes redirectAttributes) {
 
-        // Validate pagination parameters
-        if (page < 0) {
-            page = 0;
+        try {
+            ModelAndView modelAndView = new ModelAndView("reviews");
+
+            Movie movie = movieService.findById(movieId);
+
+            // Service handles pagination validation
+            Page<ReviewResponse> reviews = reviewService.getReviewsForMovie(movieId, page, size);
+
+            Set<UUID> userIds = reviewService.extractUserIdsFromReviews(reviews.getContent());
+            Map<UUID, String> userIdToUsernameMap = userService.getUsernamesByIds(userIds);
+
+            modelAndView.addObject("movie", movie);
+            modelAndView.addObject("reviews", reviews);
+            modelAndView.addObject("userIdToUsernameMap", userIdToUsernameMap);
+
+            return modelAndView;
+        } catch (ReviewMicroserviceUnavailableException e) {
+            redirectAttributes.addFlashAttribute("reviewErrorMessage", e.getMessage());
+            return new ModelAndView("redirect:/movie/" + movieId);
         }
-        if (size < 1 || size > 50) {
-            size = 5;
-        }
-
-        ModelAndView modelAndView = new ModelAndView("reviews");
-
-        // Get movie info (you'll need to inject MovieService)
-        Movie movie = movieService.findById(movieId);
-
-        // Get paginated reviews
-        Page<ReviewResponse> reviews = reviewService.getReviewsForMovie(movieId, PageRequest.of(page, size));
-
-        // Get usernames for reviews
-        Set<UUID> userIds = reviewService.extractUserIdsFromReviews(reviews.getContent());
-        Map<UUID, String> userIdToUsernameMap = userService.getUsernamesByIds(userIds);
-
-        modelAndView.addObject("movie", movie);
-        modelAndView.addObject("reviews", reviews);
-        modelAndView.addObject("userIdToUsernameMap", userIdToUsernameMap);
-
-        return modelAndView;
     }
 }

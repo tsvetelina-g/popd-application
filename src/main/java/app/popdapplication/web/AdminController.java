@@ -3,7 +3,6 @@ package app.popdapplication.web;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.service.UserService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,17 +31,10 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView list(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-        // Validate pagination parameters
-        if (page < 0) {
-            page = 0;
-        }
-        if (size < 1 || size > 50) {
-            size = 10;
-        }
-
         ModelAndView modelAndView = new ModelAndView("admin-users");
 
-        Page<User> users = userService.findAll(PageRequest.of(page, size));
+        // Service handles pagination validation
+        Page<User> users = userService.findAll(page, size);
         
         modelAndView.addObject("users", users);
         modelAndView.addObject("page", page);

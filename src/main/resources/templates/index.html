@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movies/add">Add Movie</a>
+                            <a href="/movie/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -74,79 +74,22 @@
     <section class="movies-section">
         <h2 class="section-title">Hot Movies</h2>
         <div class="movies-grid">
-            <div class="movie-card">
-                <a href="/movies/1">
-                    <img src="https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" alt="Dune: Part Two">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV001</span>
-                    </div>
+            <div class="movie-card" th:each="movie : ${movies}">
+                <a th:href="@{'/movie/' + ${movie.id}}">
+                    <img th:src="${movie.posterUrl != null ? movie.posterUrl : '/images/default-poster.jpg'}" 
+                         th:alt="${movie.title}">
                     <div class="movie-info">
-                        <div class="movie-title">Dune: Part Two</div>
-                        <div class="movie-description">Epic sci-fi adventure continues...</div>
+                        <div class="movie-title" th:text="${movie.title}">Movie Title</div>
+                        <div class="movie-description" th:if="${movie.description != null and #strings.length(movie.description) > 100}" 
+                             th:text="${#strings.substring(movie.description, 0, 100) + '...'}">Movie description...</div>
+                        <div class="movie-description" th:if="${movie.description != null and #strings.length(movie.description) <= 100}" 
+                             th:text="${movie.description}">Movie description...</div>
+                        <div class="movie-description" th:if="${movie.description == null}">No description available</div>
                     </div>
                 </a>
             </div>
-            <div class="movie-card">
-                <a href="/movies/2">
-                    <img src="https://image.tmdb.org/t/p/w500/1XjjOPImTYcukH9h0IOWD2pwUaA.jpg" alt="Oppenheimer">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV002</span>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Oppenheimer</div>
-                        <div class="movie-description">Historical drama masterpiece...</div>
-                    </div>
-                </a>
-            </div>
-            <div class="movie-card">
-                <a href="/movies/3">
-                    <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Barbie">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV003</span>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Barbie</div>
-                        <div class="movie-description">Comedy adventure sensation...</div>
-                    </div>
-                </a>
-            </div>
-            <div class="movie-card">
-                <a href="/movies/4">
-                    <img src="https://image.tmdb.org/t/p/w500/4Y1WNkd88JXmGfhtWR7dmDAo1T2.jpg"
-                         alt="Spider-Man: Across the Spider-Verse">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV004</span>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Spider-Man: Across the Spider-Verse</div>
-                        <div class="movie-description">Animated superhero epic...</div>
-                    </div>
-                </a>
-            </div>
-            <div class="movie-card">
-                <a href="/movies/5">
-                    <img src="https://image.tmdb.org/t/p/w500/5a4JdoF1llv3GC4LEnXq4IlzPR4.jpg"
-                         alt="Guardians of the Galaxy Vol. 3">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV005</span>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Guardians of the Galaxy Vol. 3</div>
-                        <div class="movie-description">Marvel space adventure...</div>
-                    </div>
-                </a>
-            </div>
-            <div class="movie-card">
-                <a href="/movies/6">
-                    <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Fast X">
-                    <div class="movie-overlay">
-                        <span class="movie-code">MOV006</span>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">Fast X</div>
-                        <div class="movie-description">High-speed action thriller...</div>
-                    </div>
-                </a>
+            <div class="no-results-card" th:if="${movies == null || movies.isEmpty()}">
+                <p>No movies available at the moment.</p>
             </div>
         </div>
     </section>

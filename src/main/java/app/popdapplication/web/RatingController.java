@@ -2,6 +2,7 @@ package app.popdapplication.web;
 
 import app.popdapplication.security.UserData;
 import app.popdapplication.service.RatingService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,9 @@ public class RatingController {
     }
 
     @PostMapping("/{movieId}/add")
-    public ModelAndView addReview(@PathVariable UUID movieId, @RequestParam int value, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView addRating(@PathVariable UUID movieId, @RequestParam int value, @AuthenticationPrincipal UserData userData,  HttpServletRequest request) {
+
+        request.setAttribute("movieId", movieId);
 
         ratingService.upsertRating(userData.getUserId(), movieId, value);
 
@@ -29,7 +32,7 @@ public class RatingController {
 
 
     @DeleteMapping("/{movieId}/delete")
-    public ModelAndView deleteReview(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView deleteRating(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
 
         ratingService.deleteRating(userData.getUserId(), movieId);
 

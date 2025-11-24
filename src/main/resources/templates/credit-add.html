@@ -73,6 +73,7 @@
 
 <main class="container">
     <section class="register-section">
+        <p class="alert-warning" th:if="${errorMessage}" th:text="${errorMessage}"></p>
         <div class="register-container">
             <h2 class="register-title">Add Credit</h2>
             <p class="register-subtitle">Add a credit for this movie</p>

@@ -6,6 +6,7 @@ import app.popdapplication.client.ReviewDto.ReviewRequest;
 import app.popdapplication.client.ReviewDto.ReviewResponse;
 import app.popdapplication.client.ReviewDto.UserReviewsStatsResponse;
 import app.popdapplication.event.ActivityDtoEvent;
+import app.popdapplication.exception.ReviewMicroserviceUnavailableException;
 import app.popdapplication.model.enums.ActivityType;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -47,9 +49,11 @@ public class ReviewService {
 
             client.upsertReview(reviewRequest);
         } catch (FeignException e) {
-            log.error("Failed to upsert review for user {} and movie {}: {}", userId, movieId, e.getMessage());
-            //todo: throw custom exception if needed
+            log.error("Failed to upsert review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
+            throw new ReviewMicroserviceUnavailableException("Unable to save review. The review service is currently unavailable. Please try again later.");
         }
+
+        log.info("Review upserted successfully: user id {}, movie id {}", userId, movieId);
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(userId)
@@ -72,7 +76,6 @@ public class ReviewService {
         } catch (FeignException e) {
             log.error("Failed to fetch review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             return null;
-            //todo: or throw custom exception if needed
         }
 
     }
@@ -81,10 +84,13 @@ public class ReviewService {
         try {
             client.deleteReview(userId, movieId);
         } catch (FeignException.NotFound e) {
-            log.warn("Review not found for deletion: user {}, movie {}", userId, movieId);
+            log.warn("Review not found for deletion: user with id {}, movie with id {}", userId, movieId);
         } catch (FeignException e) {
             log.error("Failed to delete review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
+            throw new ReviewMicroserviceUnavailableException("Unable to delete review. The review service is currently unavailable. Please try again later.");
         }
+
+        log.info("Review deleted successfully: user id {}, movie id {}", userId, movieId);
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(userId)
@@ -104,10 +110,21 @@ public class ReviewService {
         } catch (FeignException.NotFound e) {
             return null;
         } catch (FeignException e) {
-            log.error("Failed to fetch reviews movie with id {}: {}", movieId, e.getMessage());
+            log.error("Failed to fetch reviews for movie with id {}: {}", movieId, e.getMessage());
             return null;
-            //todo: or throw custom exception if needed
         }
+    }
+
+    public Page<ReviewResponse> getReviewsForMovie(UUID movieId, int page, int size) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 50) {
+            size = 5;
+        }
+        
+        Pageable pageable = PageRequest.of(page, size);
+        return getReviewsForMovie(movieId, pageable);
     }
 
     public Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
@@ -125,7 +142,7 @@ public class ReviewService {
             return new PageImpl<>(List.of(), pageable, 0);
         } catch (FeignException e) {
             log.error("Failed to fetch reviews for movie with id {}: {}", movieId, e.getMessage());
-            return new PageImpl<>(List.of(), pageable, 0);
+            throw new ReviewMicroserviceUnavailableException("Unable to fetch reviews. The review service is currently unavailable. Please try again later.");
         }
     }
 
@@ -147,7 +164,6 @@ public class ReviewService {
             log.error("Failed to fetch total reviews for user with id {}: {}", userId, e.getMessage());
             return null;
         }
-        //todo: throw custom exceptions if needed
     }
 
     public List<ReviewResponse> getLatestReviewsByUserId(UUID userId) {

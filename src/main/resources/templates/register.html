@@ -58,11 +58,11 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                              <a href="/movie/add">Add Movie</a>
-                              <a href="/artist/add">Add Artist</a>
-                              <a href="/admin/users">Manage Users</a>
-                              <a href="/admin">Admin Panel</a>
-                          </div>
+                            <a href="/movie/add">Add Movie</a>
+                            <a href="/artist/add">Add Artist</a>
+                            <a href="/admin/users">Manage Users</a>
+                            <a href="/admin">Admin Panel</a>
+                        </div>
                     </div>
                     <a href="/movies" class="nav-button">Movies</a>
                 </nav>
@@ -73,6 +73,7 @@
 
 <main class="container">
     <section class="register-section">
+        <p class="alert-warning" th:if="${errorMessage}" th:text="${errorMessage}"></p>
         <div class="register-container">
             <h2 class="register-title">Create Your Account</h2>
             <p class="register-subtitle">Join popd and start discovering amazing movies</p>

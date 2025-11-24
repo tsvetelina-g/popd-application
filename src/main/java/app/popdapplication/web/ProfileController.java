@@ -11,7 +11,6 @@ import app.popdapplication.web.dto.dtoMappers.DtoMapper;
 import app.popdapplication.web.dto.EditProfileRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -65,7 +64,8 @@ public class ProfileController {
         Integer ratedMoviesCount = ratingService.getTotalMoviesRatedByUser(user.getId());
         Integer reviewedMoviesCount = reviewService.getTotalMoviesReviewedByUser(user.getId());
         List<Activity> activities = activityService.returnLatestFiveActivities(user.getId());
-        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesForActivities(activities);
+        Set<UUID> activityIds = activityService.getMovieIdsFromActivities(activities);
+        Map<UUID, String> movieIdToMovieNameMap = movieService.getMovieNamesByIds(activityIds);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("moviesWatched", watchedMoviesCount);
@@ -122,19 +122,12 @@ public class ProfileController {
     @GetMapping("/{userId}/watchlist")
     public ModelAndView getUserWatchlist(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-        // Validate pagination parameters
-        if (page < 0) {
-            page = 0;
-        }
-        if (size < 1 || size > 50) {
-            size = 10;
-        }
-
         ModelAndView modelAndView = new ModelAndView("user-watchlist");
 
         User user = userService.findById(userId);
         Watchlist watchlist = watchlistService.findByUser(user);
-        Page<app.popdapplication.model.entity.WatchlistMovie> watchlistMovies = watchlistMovieService.findAllByWatchlistOrderByAddedOnDesc(watchlist, PageRequest.of(page, size));
+        // Service handles pagination validation
+        Page<app.popdapplication.model.entity.WatchlistMovie> watchlistMovies = watchlistMovieService.findAllByWatchlistOrderByAddedOnDesc(watchlist, page, size);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("watchlist", watchlist);
@@ -148,18 +141,11 @@ public class ProfileController {
     @GetMapping("/{userId}/watched")
     public ModelAndView getUserWatchedMovies(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-        // Validate pagination parameters
-        if (page < 0) {
-            page = 0;
-        }
-        if (size < 1 || size > 50) {
-            size = 10;
-        }
-
         ModelAndView modelAndView = new ModelAndView("user-watched");
 
         User user = userService.findById(userId);
-        Page<app.popdapplication.model.entity.WatchedMovie> watchedMovies = watchedMovieService.findAllByUserOrderByCreatedOnDesc(user, PageRequest.of(page, size));
+        // Service handles pagination validation
+        Page<app.popdapplication.model.entity.WatchedMovie> watchedMovies = watchedMovieService.findAllByUserOrderByCreatedOnDesc(user, page, size);
 
         modelAndView.addObject("user", user);
         modelAndView.addObject("watchedMovies", watchedMovies);
