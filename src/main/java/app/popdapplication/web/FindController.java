@@ -30,7 +30,6 @@ public class FindController {
 
     @GetMapping
     public ModelAndView getFindPage(@RequestParam("query") String query) {
-
         if (query == null || query.trim().isEmpty()) {
             ModelAndView modelAndView = new ModelAndView("find");
             modelAndView.addObject("movies", List.of());

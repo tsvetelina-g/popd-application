@@ -28,7 +28,6 @@ public class WatchlistService {
     }
 
     public void createDefaultWatchlist(User user) {
-
         Watchlist watchlist = Watchlist.builder()
                 .user(user)
                 .name("Default")
@@ -41,11 +40,8 @@ public class WatchlistService {
     }
 
     public boolean movieIsInWatchlist(Movie movie, User user) {
-
         Watchlist watchlist = watchlistRepository.findByUser(user);
-
         Optional<WatchlistMovie> watchlistMovieOpt = watchlistMovieService.findByWatchlistAndMovie(watchlist, movie);
-
         return watchlistMovieOpt.isPresent();
     }
 

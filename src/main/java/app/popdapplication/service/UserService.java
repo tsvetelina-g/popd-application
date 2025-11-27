@@ -48,15 +48,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User with username [%s] not found".formatted(username)));
-
         return new UserData(user.getId(), user.getUsername(), user.getPassword(), user.getRole(), user.isActive());
     }
 
     @Transactional
     public void register(RegisterRequest registerRequest) {
-
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
             throw new AlreadyExistsException(
                     "User with username [%s] already exists".formatted(registerRequest.getUsername())
@@ -91,7 +88,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void updateProfile(UUID id, EditProfileRequest editProfileRequest) {
-
         User user = findById(id);
 
         user.setUsername(editProfileRequest.getUsername());
@@ -157,7 +153,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void switchRole(UUID userId) {
-
         Optional<User> userOpt = userRepository.findById(userId);
 
         if (userOpt.isEmpty()){

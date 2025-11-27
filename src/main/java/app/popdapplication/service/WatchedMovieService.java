@@ -45,7 +45,6 @@ public class WatchedMovieService {
 
     @Transactional
     public void addToWatched(Movie movie, User user) {
-
         WatchedMovie watchedMovie = WatchedMovie.builder()
                 .movie(movie)
                 .user(user)
@@ -69,7 +68,6 @@ public class WatchedMovieService {
 
     @Transactional
     public void removeFromWatched(Movie movie, User user) {
-
         Optional<WatchedMovie> watchedMovie = watchedMovieRepository.findByUserAndMovie(user, movie);
 
         if (watchedMovie.isEmpty()) {

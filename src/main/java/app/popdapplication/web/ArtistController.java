@@ -32,7 +32,6 @@ public class ArtistController {
 
     @GetMapping("/add")
     public ModelAndView getAddArtistPage() {
-
         ModelAndView modelAndView = new ModelAndView("artist-add");
 
         modelAndView.addObject("addArtistRequest", new AddArtistRequest());
@@ -42,7 +41,6 @@ public class ArtistController {
 
     @PostMapping("/add")
     public ModelAndView addArtist(@Valid AddArtistRequest addArtistRequest, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return new ModelAndView("artist-add");
         }
@@ -53,8 +51,7 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}")
-    public ModelAndView getArtistPage(@PathVariable UUID artistId){
-
+    public ModelAndView getArtistPage(@PathVariable UUID artistId) {
         ModelAndView modelAndView = new ModelAndView("artist");
         Artist artist = artistService.findById(artistId);
         int movieCreditsCount = movieCreditService.findAllCreditsByArtist(artist);
@@ -69,7 +66,6 @@ public class ArtistController {
 
     @GetMapping("/{artistId}/edit")
     public ModelAndView getEditArtistPage(@PathVariable UUID artistId) {
-
         ModelAndView modelAndView = new ModelAndView("artist-edit");
         Artist artist = artistService.findById(artistId);
         EditArtistRequest editArtistRequest = DtoMapper.fromArtist(artist);
@@ -82,10 +78,8 @@ public class ArtistController {
 
     @PutMapping("/{artistId}/edit")
     public ModelAndView editArtist(@Valid EditArtistRequest editArtistRequest, BindingResult bindingResult, @PathVariable UUID artistId) {
-
         Artist artist = artistService.findById(artistId);
-
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("artist-edit");
             modelAndView.addObject("artist", artist);
             return modelAndView;
@@ -95,5 +89,4 @@ public class ArtistController {
 
         return new ModelAndView("redirect:/artist/" + artistId);
     }
-
 }

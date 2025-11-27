@@ -45,11 +45,9 @@ public class MovieController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping
-    @RequestMapping("/add")
+    @GetMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAddMoviePage() {
-
         List<Genre> genres = genreService.findAll();
 
         ModelAndView modelAndView = new ModelAndView("movies-add");
@@ -62,7 +60,6 @@ public class MovieController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addMovie(@Valid AddMovieRequest addMovieRequest, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("movies-add");
             List<Genre> genres = genreService.findAll();
@@ -74,10 +71,8 @@ public class MovieController {
         return new ModelAndView("redirect:/movie/" + movie.getId());
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ModelAndView getMoviePage(@PathVariable("id") UUID movieId, @AuthenticationPrincipal UserData userData) {
-
         Movie movie = movieService.findById(movieId);
 
         boolean movieIsWatched = false;
@@ -124,10 +119,8 @@ public class MovieController {
         return modelAndView;
     }
 
-    @PostMapping
-    @RequestMapping("/{movieId}/watched")
+    @PostMapping("/{movieId}/watched")
     public ModelAndView addToWatched(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
-
         Movie movie = movieService.findById(movieId);
         User user = userService.findById(userData.getUserId());
 
@@ -136,10 +129,8 @@ public class MovieController {
         return new ModelAndView("redirect:/movie/" + movieId);
     }
 
-    @DeleteMapping
-    @RequestMapping("/{movieId}/delete-watched")
+    @DeleteMapping("/{movieId}/delete-watched")
     public ModelAndView removeFromWatched(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
-
         Movie movie = movieService.findById(movieId);
         User user = userService.findById(userData.getUserId());
 
@@ -148,10 +139,8 @@ public class MovieController {
         return new ModelAndView("redirect:/movie/" + movieId);
     }
 
-    @PostMapping
-    @RequestMapping("/{movieId}/watchlist")
+    @PostMapping("/{movieId}/watchlist")
     public ModelAndView addToWatchlist(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData, jakarta.servlet.http.HttpServletRequest request) {
-
         request.setAttribute("movieId", movieId);
         
         Movie movie = movieService.findById(movieId);
@@ -162,10 +151,8 @@ public class MovieController {
         return new ModelAndView("redirect:/movie/" + movieId);
     }
 
-    @DeleteMapping
-    @RequestMapping("/{movieId}/delete-from-watchlist")
+    @DeleteMapping("/{movieId}/delete-from-watchlist")
     public ModelAndView removeFromWatchlist(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
-
         Movie movie = movieService.findById(movieId);
         User user = userService.findById(userData.getUserId());
 
@@ -177,7 +164,6 @@ public class MovieController {
     @GetMapping("/{movieId}/edit")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getEditMoviePage(@PathVariable UUID movieId) {
-
         ModelAndView modelAndView = new ModelAndView("movies-edit");
         Movie movie = movieService.findById(movieId);
         EditMovieRequest editMovieRequest = DtoMapper.fromMovie(movie);
@@ -193,11 +179,9 @@ public class MovieController {
     @PutMapping("/{movieId}/edit")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView editMovieInfo(@Valid EditMovieRequest editMovieRequest, BindingResult bindingResult, @PathVariable UUID movieId) {
-
         Movie movie = movieService.findById(movieId);
         List<Genre> genres = genreService.findAll();
-
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("movies-edit");
             modelAndView.addObject("genres", genres);
             modelAndView.addObject("movie", movie);

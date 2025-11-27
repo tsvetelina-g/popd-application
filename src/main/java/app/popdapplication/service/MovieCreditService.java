@@ -37,7 +37,6 @@ public class MovieCreditService {
 
     @Transactional
     public void saveCredit(AddCreditRequest addCreditRequest, UUID movieId) {
-
         Movie movie = movieService.findById(movieId);
         Artist artist = artistService.findByName(addCreditRequest.getArtistName());
         ArtistRole artistRole = ArtistRole.valueOf(addCreditRequest.getRole());

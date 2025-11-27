@@ -28,7 +28,6 @@ public class ActivityService {
 
     @EventListener
     public void saveActivity(ActivityDtoEvent activityDtoEvent) {
-
         Activity activity = Activity.builder()
                 .userId(activityDtoEvent.getUserId())
                 .movieId(activityDtoEvent.getMovieId())
@@ -42,7 +41,6 @@ public class ActivityService {
     }
 
     public List<Activity> returnLatestFiveActivities(UUID userId) {
-
         List<Activity> activities = activityRepository.findAllByUserIdOrderByCreatedOnDesc(userId).stream().limit(5).toList();
 
         if (activities.isEmpty()) {

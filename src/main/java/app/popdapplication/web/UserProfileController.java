@@ -38,7 +38,6 @@ public class UserProfileController {
 
     @GetMapping("/{userId}")
     public ModelAndView getUserProfile(@PathVariable UUID userId) {
-
         ModelAndView modelAndView = new ModelAndView("user-profile");
 
         User user = userService.findById(userId);
@@ -61,4 +60,3 @@ public class UserProfileController {
         return modelAndView;
     }
 }
-

@@ -36,7 +36,6 @@ public class CreditController {
     @GetMapping("/{movieId}/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAddCreditPage(@PathVariable UUID movieId) {
-
         Movie movie = movieService.findById(movieId);
 
         ModelAndView modelAndView = new ModelAndView("credit-add");
@@ -61,7 +60,6 @@ public class CreditController {
             @Valid AddCreditRequest addCreditRequest,
             BindingResult bindingResult,
             jakarta.servlet.http.HttpServletRequest request) {
-
         request.setAttribute("movieId", movieId);
         
         Movie movie = movieService.findById(movieId);
@@ -79,8 +77,7 @@ public class CreditController {
     }
 
     @GetMapping("/{movieId}/edit")
-    public ModelAndView getEditCreditsPage(@PathVariable UUID movieId){
-
+    public ModelAndView getEditCreditsPage(@PathVariable UUID movieId) {
         Movie movie = movieService.findById(movieId);
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
         Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCreditService.getCreditsByMovieGroupedByRole(movie);
@@ -96,11 +93,9 @@ public class CreditController {
     @DeleteMapping("/{creditId}/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView deleteCredit(@PathVariable UUID creditId) {
-
         MovieCredit movieCredit = movieCreditService.findCreditById(creditId);
         movieCreditService.deleteCredit(movieCredit);
 
         return new ModelAndView("redirect:/credit/" + movieCredit.getMovie().getId() + "/edit");
     }
-
 }

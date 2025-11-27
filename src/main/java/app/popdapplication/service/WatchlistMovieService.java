@@ -40,7 +40,6 @@ public class WatchlistMovieService {
 
     @Transactional
     public void saveToWatchlist(Watchlist watchlist, Movie movie) {
-
         if (findByWatchlistAndMovie(watchlist, movie).isPresent()) {
             throw new AlreadyExistsException("Movie already in watchlist");
         }
@@ -68,7 +67,6 @@ public class WatchlistMovieService {
 
     @Transactional
     public void removeFromWatchlist(Watchlist watchlist, Movie movie) {
-
         Optional<WatchlistMovie> watchlistMovie = watchlistMovieRepository.findByWatchlistAndMovie(watchlist, movie);
 
         if (watchlistMovie.isPresent()){

@@ -35,7 +35,6 @@ public class RatingService {
     }
 
     public void upsertRating(UUID userId, UUID movieId, int value) {
-
         try {
             RatingRequest ratingRequest = RatingRequest.builder()
                     .movieId(movieId)

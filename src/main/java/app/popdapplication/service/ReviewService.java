@@ -37,7 +37,6 @@ public class ReviewService {
     }
 
     public void upsertReview(UUID userId, UUID movieId, Integer rating, String title, String content) {
-
         try {
             ReviewRequest reviewRequest = ReviewRequest.builder()
                     .userId(userId)
@@ -68,7 +67,6 @@ public class ReviewService {
     }
 
     public ReviewResponse getReviewByUserAndMovie(UUID userId, UUID movieId) {
-
         try {
             return client.getReviewByUserAndMovie(userId, movieId).getBody();
         } catch (FeignException.NotFound e) {
@@ -77,7 +75,6 @@ public class ReviewService {
             log.error("Failed to fetch review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             return null;
         }
-
     }
 
     public void deleteReview(UUID userId, UUID movieId) {

@@ -52,13 +52,10 @@ public class ProfileController {
 
     @GetMapping
     public ModelAndView getProfilePage(@AuthenticationPrincipal UserData userData) {
-
         if (userData == null) {
             return new ModelAndView("redirect:/login");
         }
-
         ModelAndView modelAndView = new ModelAndView("profile");
-
         User user = userService.findById(userData.getUserId());
         int watchedMoviesCount = watchedMovieService.countWatchedMovies(user);
         int moviesInWatchlistCount = watchlistService.countMoviesInWatchlist(user);
@@ -81,7 +78,6 @@ public class ProfileController {
 
     @GetMapping("/{id}/edit")
     public ModelAndView getEditProfilePage(@PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
-
         if (userData == null) {
             return new ModelAndView("redirect:/login");
         }
@@ -102,7 +98,6 @@ public class ProfileController {
 
     @PutMapping("/{id}/edit")
     public ModelAndView updateProfilePage(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, @PathVariable UUID id, @AuthenticationPrincipal UserData userData) {
-
         if (!userData.getUserId().equals(id) && !userData.getRole().name().equals("ADMIN")) {
             return new ModelAndView("redirect:/profile");
         }
@@ -122,9 +117,7 @@ public class ProfileController {
 
     @GetMapping("/{userId}/watchlist")
     public ModelAndView getUserWatchlist(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-
         ModelAndView modelAndView = new ModelAndView("user-watchlist");
-
         User user = userService.findById(userId);
         Watchlist watchlist = watchlistService.findByUser(user);
         Page<app.popdapplication.model.entity.WatchlistMovie> watchlistMovies = watchlistMovieService.findAllByWatchlistOrderByAddedOnDesc(watchlist, page, size);
@@ -140,9 +133,7 @@ public class ProfileController {
 
     @GetMapping("/{userId}/watched")
     public ModelAndView getUserWatchedMovies(@PathVariable UUID userId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-
         ModelAndView modelAndView = new ModelAndView("user-watched");
-
         User user = userService.findById(userId);
         Page<app.popdapplication.model.entity.WatchedMovie> watchedMovies = watchedMovieService.findAllByUserOrderByCreatedOnDesc(user, page, size);
 
@@ -156,9 +147,7 @@ public class ProfileController {
 
     @GetMapping("/{userId}/latest-ratings")
     public ModelAndView getLatestRatings(@PathVariable UUID userId) {
-
         ModelAndView modelAndView = new ModelAndView("user-ratings");
-
         User user = userService.findById(userId);
         List<Rating> ratings = ratingService.getLatestRatingsByUserId(userId);
         Set<UUID> movieIds = ratingService.extractMovieIdsFromRatings(ratings);
@@ -173,9 +162,7 @@ public class ProfileController {
 
     @GetMapping("/{userId}/latest-reviews")
     public ModelAndView getLatestReviews(@PathVariable UUID userId) {
-
         ModelAndView modelAndView = new ModelAndView("user-reviews");
-
         User user = userService.findById(userId);
         List<ReviewResponse> reviews = reviewService.getLatestReviewsByUserId(userId);
         Set<UUID> movieIds = reviewService.extractMovieIdsFromReviews(reviews);

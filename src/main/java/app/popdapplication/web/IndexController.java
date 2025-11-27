@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.UUID;
 
-
 @Controller
 public class IndexController {
 
@@ -33,7 +32,6 @@ public class IndexController {
 
     @GetMapping("/")
     public ModelAndView index() {
-
         ModelAndView modelAndView = new ModelAndView("index");
 
         List<UUID> movieIds = activityService.getTopMovieIds();
@@ -45,18 +43,15 @@ public class IndexController {
     }
 
     @GetMapping("/register")
-    public ModelAndView getRegisterPage(){
-
+    public ModelAndView getRegisterPage() {
         ModelAndView modelAndView = new ModelAndView("register");
         modelAndView.addObject("registerRequest", new RegisterRequest());
-
         return modelAndView;
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult){
-
-        if (bindingResult.hasErrors()){
+    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
 
@@ -66,16 +61,14 @@ public class IndexController {
 
     @GetMapping("/login")
     public ModelAndView getLoginPage(@RequestParam(name = "loginAttemptMessage", required = false) String message, @RequestParam(name = "error", required = false) String error) {
-
         ModelAndView modelAndView = new ModelAndView("login");
 
         modelAndView.addObject("loginRequest", new LoginRequest());
         modelAndView.addObject("loginAttemptMessage", message);
-        if (error != null){
+        if (error != null) {
             modelAndView.addObject("error", "Invalid username or password");
         }
 
         return modelAndView;
     }
-
 }

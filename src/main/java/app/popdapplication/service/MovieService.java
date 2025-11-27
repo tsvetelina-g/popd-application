@@ -30,7 +30,6 @@ public class MovieService {
 
     @Transactional
     public Movie addMovie(AddMovieRequest addMovieRequest) {
-
         List<Genre> genres = genreService.findAllById(addMovieRequest.getGenresIds());
 
         Movie movie = Movie.builder()
@@ -53,7 +52,6 @@ public class MovieService {
 
     @Transactional
     public void updateMovieInfo(UUID movieId, EditMovieRequest editMovieRequest) {
-
         Movie movie = movieRepository.getReferenceById(movieId);
         List<Genre> genres = genreService.findAllById(editMovieRequest.getGenresIds());
 
@@ -109,7 +107,6 @@ public class MovieService {
     }
 
     public List<Movie> getTopMovies(List<UUID> movieIds) {
-
         if (movieIds == null || movieIds.isEmpty()) {
             return findTop10ByClosestReleaseDate();
         }

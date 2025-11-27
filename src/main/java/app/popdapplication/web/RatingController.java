@@ -21,8 +21,7 @@ public class RatingController {
     }
 
     @PostMapping("/{movieId}/add")
-    public ModelAndView addRating(@PathVariable UUID movieId, @RequestParam int value, @AuthenticationPrincipal UserData userData,  HttpServletRequest request) {
-
+    public ModelAndView addRating(@PathVariable UUID movieId, @RequestParam int value, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
         request.setAttribute("movieId", movieId);
 
         ratingService.upsertRating(userData.getUserId(), movieId, value);
@@ -30,14 +29,10 @@ public class RatingController {
         return new ModelAndView("redirect:/movie/" + movieId);
     }
 
-
     @DeleteMapping("/{movieId}/delete")
     public ModelAndView deleteRating(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
-
         ratingService.deleteRating(userData.getUserId(), movieId);
 
         return new ModelAndView("redirect:/movie/" + movieId);
     }
-
-
 }

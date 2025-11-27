@@ -27,7 +27,6 @@ public class ArtistService {
 
     @CacheEvict(value = "artists", allEntries = true)
     public Artist addArtist(AddArtistRequest addArtistRequest) {
-
         Artist artist = Artist.builder()
                 .name(addArtistRequest.getName())
                 .birthDate(addArtistRequest.getBirthDate())
@@ -47,7 +46,6 @@ public class ArtistService {
 
     @CacheEvict(value = "artists", key = "#artistId")
     public void updateArtistInfo(UUID artistId, EditArtistRequest editArtistRequest) {
-
         Artist artist = findById(artistId);
 
         artist.setName(editArtistRequest.getName());

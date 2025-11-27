@@ -25,7 +25,6 @@ public class DtoMapper {
     }
 
     public static EditMovieRequest fromMovie(Movie movie) {
-
         return EditMovieRequest.builder()
                 .title(movie.getTitle())
                 .description(movie.getDescription())
@@ -41,7 +40,6 @@ public class DtoMapper {
     }
 
     public static EditArtistRequest fromArtist(Artist artist) {
-
         return EditArtistRequest.builder()
                 .name(artist.getName())
                 .biography(artist.getBiography())
@@ -51,7 +49,6 @@ public class DtoMapper {
     }
 
     public static EditReviewRequest fromReviewResponse(ReviewResponse response) {
-
         return EditReviewRequest.builder()
                 .title(response.getTitle())
                 .content(response.getContent())
