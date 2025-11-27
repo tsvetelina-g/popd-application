@@ -99,13 +99,13 @@ public class UserService implements UserDetailsService {
         user.setLastName(editProfileRequest.getLastName());
         user.setEmail(editProfileRequest.getEmail());
         user.setProfilePicture(editProfileRequest.getProfilePictureUrl());
+        user.setUpdatedOn(LocalDateTime.now());
 
         userRepository.save(user);
         log.info("Profile updated for user with id: {}", id);
     }
 
     public Page<User> findAll(int page, int size) {
-        // Validate and normalize pagination parameters
         if (page < 0) {
             page = 0;
         }
@@ -117,7 +117,7 @@ public class UserService implements UserDetailsService {
         return findAll(pageable);
     }
 
-    public Page<User> findAll(PageRequest pageable) {
+    private Page<User> findAll(PageRequest pageable) {
         return this.userRepository.findAll(pageable);
     }
 
@@ -178,8 +178,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public List<User> searchUsers(String query) {
+    private List<User> searchUsers(String query) {
         return userRepository.findAllByUsernameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(query, query, query);
+    }
+
+    public List<User> searchUsersLimited(String query, int limit) {
+        return searchUsers(query).stream()
+                .limit(limit)
+                .toList();
     }
 
     public Map<UUID, String> getUsernamesByIds(Set<UUID> userIds) {

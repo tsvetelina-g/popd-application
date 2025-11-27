@@ -58,6 +58,7 @@ public class ProfileController {
         }
 
         ModelAndView modelAndView = new ModelAndView("profile");
+
         User user = userService.findById(userData.getUserId());
         int watchedMoviesCount = watchedMovieService.countWatchedMovies(user);
         int moviesInWatchlistCount = watchlistService.countMoviesInWatchlist(user);
@@ -126,7 +127,6 @@ public class ProfileController {
 
         User user = userService.findById(userId);
         Watchlist watchlist = watchlistService.findByUser(user);
-        // Service handles pagination validation
         Page<app.popdapplication.model.entity.WatchlistMovie> watchlistMovies = watchlistMovieService.findAllByWatchlistOrderByAddedOnDesc(watchlist, page, size);
 
         modelAndView.addObject("user", user);
@@ -144,7 +144,6 @@ public class ProfileController {
         ModelAndView modelAndView = new ModelAndView("user-watched");
 
         User user = userService.findById(userId);
-        // Service handles pagination validation
         Page<app.popdapplication.model.entity.WatchedMovie> watchedMovies = watchedMovieService.findAllByUserOrderByCreatedOnDesc(user, page, size);
 
         modelAndView.addObject("user", user);

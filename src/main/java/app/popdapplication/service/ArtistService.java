@@ -59,7 +59,7 @@ public class ArtistService {
         log.info("Artist info updated for artist with id: {}", artistId);
     }
 
-    public List<Artist> searchArtists(String searchTerm) {
+    private List<Artist> searchArtists(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             return artistRepository.findAllByOrderByName();
         }
@@ -71,7 +71,21 @@ public class ArtistService {
                 .orElseThrow(() -> new NotFoundException("Artist with name [%s] not found".formatted(name)));
     }
 
-    public List<Artist> searchByName(String query) {
+    private List<Artist> searchByName(String query) {
         return artistRepository.findByNameContainingIgnoreCase(query);
+    }
+
+    public List<Artist> searchByNameLimited(String query, int limit) {
+        return searchByName(query).stream()
+                .limit(limit)
+                .toList();
+    }
+
+    public List<String> searchArtistNames(String query, int limit) {
+        List<Artist> artists = searchArtists(query);
+        return artists.stream()
+                .map(Artist::getName)
+                .limit(limit)
+                .toList();
     }
 }

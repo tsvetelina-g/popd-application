@@ -14,6 +14,7 @@ import app.popdapplication.repository.MovieCreditRepository;
 import app.popdapplication.repository.MovieRepository;
 import app.popdapplication.service.GenreService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -40,7 +42,7 @@ public class DataInitializer implements CommandLineRunner {
 
         List<Genre> genres = genreService.findAll();
 
-        if (genres.size() == 0) {
+        if (genres.isEmpty()) {
             for (GenreType genreType : GenreType.values()) {
                 Genre genre = new Genre();
                 genre.setName(genreType.getDisplayName());
@@ -48,7 +50,6 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        // Load artists if database is empty
         if (artistRepository.count() == 0 && artistProperties.getArtists() != null) {
             for (ArtistProperties.ArtistDetails artistDetails : artistProperties.getArtists()) {
                 Artist artist = Artist.builder()
@@ -61,14 +62,11 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        // Load movies if database is empty
         if (movieRepository.count() == 0 && movieProperties.getMovies() != null) {
-            // Create a map of genre names to Genre entities for quick lookup
             Map<String, Genre> genreMap = genreService.findAll().stream()
                     .collect(Collectors.toMap(Genre::getName, genre -> genre));
 
             for (MovieProperties.MovieDetails movieDetails : movieProperties.getMovies()) {
-                // Map genre names to Genre entities
                 List<Genre> movieGenres = movieDetails.getGenres() != null ?
                         movieDetails.getGenres().stream()
                                 .map(genreMap::get)
@@ -87,9 +85,7 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        // Load credits if database is empty
         if (movieCreditRepository.count() == 0 && creditProperties.getCredits() != null) {
-            // Create maps for quick lookup
             Map<String, Movie> movieMap = movieRepository.findAll().stream()
                     .collect(Collectors.toMap(Movie::getTitle, movie -> movie));
             Map<String, Artist> artistMap = artistRepository.findAll().stream()
@@ -109,8 +105,10 @@ public class DataInitializer implements CommandLineRunner {
                                 .build();
                         movieCreditRepository.save(movieCredit);
                     } catch (IllegalArgumentException e) {
-                        // Skip if role doesn't match any enum value
-                        System.err.println("Invalid role: " + creditDetails.getRole() + " for " + creditDetails.getArtistName() + " in " + creditDetails.getMovieTitle());
+                        log.warn("Invalid role: {} for {} in {}", 
+                                creditDetails.getRole(), 
+                                creditDetails.getArtistName(), 
+                                creditDetails.getMovieTitle());
                     }
                 }
             }

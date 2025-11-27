@@ -95,7 +95,6 @@ public class WatchedMovieService {
     }
 
     public Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, int page, int size) {
-        // Validate and normalize pagination parameters
         if (page < 0) {
             page = 0;
         }
@@ -107,7 +106,7 @@ public class WatchedMovieService {
         return findAllByUserOrderByCreatedOnDesc(user, pageable);
     }
 
-    public Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, Pageable pageable) {
+    private Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, Pageable pageable) {
         return watchedMovieRepository.findAllByUserOrderByCreatedOnDesc(user, pageable);
     }
 }

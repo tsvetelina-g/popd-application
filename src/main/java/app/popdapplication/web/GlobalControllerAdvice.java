@@ -5,6 +5,7 @@ import app.popdapplication.exception.ReviewMicroserviceUnavailableException;
 import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.exception.AlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,13 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException(NotFoundException e) {
-
+        log.warn("Resource not found: {}", e.getMessage());
         return "not-found";
     }
 
@@ -32,6 +34,7 @@ public class GlobalControllerAdvice {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
 
+        log.warn("Resource already exists: {}", e.getMessage());
         redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 
         String referer = request.getHeader("Referer");
@@ -42,7 +45,6 @@ public class GlobalControllerAdvice {
         Object movieId = request.getAttribute("movieId");
         if (movieId != null) {
             if (referer != null && referer.contains("/credit/")) {
-                // Credit errors always come from add page, redirect back there
                 return "redirect:/credit/" + movieId + "/add";
             }
             return "redirect:/movie/" + movieId;
@@ -55,16 +57,18 @@ public class GlobalControllerAdvice {
         return "redirect:/";
     }
 
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({
             NoResourceFoundException.class,
             AccessDeniedException.class
     })
-    public ModelAndView handleNoResourceFoundException() {
-
-        ModelAndView modelAndView = new ModelAndView("not-found");
-
-        return modelAndView;
+    public ModelAndView handleNoResourceFoundException(Exception e) {
+        if (e instanceof NoResourceFoundException) {
+            log.warn("No resource found: {}", e.getMessage());
+        } else if (e instanceof AccessDeniedException) {
+            log.warn("Access denied: {}", e.getMessage());
+        }
+        return new ModelAndView("not-found");
     }
 
     @ExceptionHandler(RatingMicroserviceUnavailableException.class)
@@ -73,18 +77,16 @@ public class GlobalControllerAdvice {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
 
-        // Check if this is an AJAX request
+        log.error("Failed to communicate with Rating Microservice: {}", e.getMessage());
         String requestedWith = request.getHeader("X-Requested-With");
         boolean isAjaxRequest = "XMLHttpRequest".equals(requestedWith);
 
         if (isAjaxRequest) {
-            // For AJAX requests, return error response with message
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
 
-        // For normal requests, use redirect with flash attribute
         redirectAttributes.addFlashAttribute("ratingErrorMessage", e.getMessage());
 
         Object movieId = request.getAttribute("movieId");
@@ -102,18 +104,16 @@ public class GlobalControllerAdvice {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
 
-        // Check if this is an AJAX request
+        log.error("Failed to communicate with Review Microservice: {}", e.getMessage());
         String requestedWith = request.getHeader("X-Requested-With");
         boolean isAjaxRequest = "XMLHttpRequest".equals(requestedWith);
 
         if (isAjaxRequest) {
-            // For AJAX requests, return error response with message
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
 
-        // For normal requests, use redirect with flash attribute
         redirectAttributes.addFlashAttribute("reviewErrorMessage", e.getMessage());
 
         Object movieId = request.getAttribute("movieId");
@@ -127,9 +127,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleLeftoverExceptions(Exception e) {
-
-        ModelAndView modelAndView = new ModelAndView("internal-server-error");
-
-        return modelAndView;
+        log.error("Unhandled exception occurred", e);
+        return new ModelAndView("internal-server-error");
     }
 }

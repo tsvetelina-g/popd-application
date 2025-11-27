@@ -62,6 +62,12 @@ public class MovieCreditService {
         return movieCreditRepository.findByMovie(movie);
     }
 
+    public Map<ArtistRole, List<MovieCredit>> getCreditsByMovieGroupedByRole(Movie movie) {
+        List<MovieCredit> movieCredits = getCreditsByMovie(movie);
+        return movieCredits.stream()
+                .collect(Collectors.groupingBy(MovieCredit::getRoleType));
+    }
+
     public MovieCredit findCreditById(UUID creditId) {
         return movieCreditRepository.findById(creditId).orElseThrow(() -> new NotFoundException("Credit with id [%s] not found".formatted(creditId)));
     }

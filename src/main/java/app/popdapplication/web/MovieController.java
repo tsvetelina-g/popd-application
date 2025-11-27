@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/movie")
@@ -93,8 +92,7 @@ public class MovieController {
         List<ReviewResponse> latestFiveReviews = reviewService.getLatestFiveReviewsForAMovie(movieId);
         int usersWatchedCount = watchedMovieService.usersWatchedCount(movieId);
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
-        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
-                .collect(Collectors.groupingBy(MovieCredit::getRoleType));
+        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCreditService.getCreditsByMovieGroupedByRole(movie);
         Set<UUID> userIds = reviewService.extractUserIdsFromReviews(latestFiveReviews);
         Map<UUID, String> userIdToUsernameMap = userService.getUsernamesByIds(userIds);
 

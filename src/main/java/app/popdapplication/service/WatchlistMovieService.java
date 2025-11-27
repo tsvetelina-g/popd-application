@@ -95,7 +95,6 @@ public class WatchlistMovieService {
     }
 
     public Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, int page, int size) {
-        // Validate and normalize pagination parameters
         if (page < 0) {
             page = 0;
         }
@@ -107,7 +106,7 @@ public class WatchlistMovieService {
         return findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }
 
-    public Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, Pageable pageable) {
+    private Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, Pageable pageable) {
         return watchlistMovieRepository.findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }
 }

@@ -74,6 +74,7 @@ public class RatingService {
             Rating rating = client.getRatingByUserAndMovie(userId, movieId).getBody();
             return rating != null ? rating.getValue() : null;
         } catch (FeignException.NotFound e) {
+            log.info("Rating not found for user with id {} and movie with id {}", userId, movieId);
             return null;
         } catch (FeignException e) {
             log.error("Failed to fetch rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
@@ -91,7 +92,8 @@ public class RatingService {
                 reviewService.upsertReview(userId, movieId, null, reviewResponse.getTitle(), reviewResponse.getContent());
             }
         } catch (FeignException.NotFound e) {
-            log.warn("Rating not found for deletion: user with id {}, movie with id {}", userId, movieId);
+            log.info("Rating not found for deletion: user with id {}, movie with id {}", userId, movieId);
+            return;
         } catch (FeignException e) {
             log.error("Failed to delete rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             throw new RatingMicroserviceUnavailableException("Unable to delete rating. The rating service is currently unavailable. Please try again later.");
@@ -115,10 +117,10 @@ public class RatingService {
         try {
             MovieRatingStatsResponse movieRatingStats = client.getMovieRatingStats(movieId).getBody();
             return movieRatingStats != null ? movieRatingStats.getAverageRating() : null;
-        }  catch (FeignException.NotFound e) {
-            log.warn("Average rating not found for movie id: {}", movieId);
+        } catch (FeignException.NotFound e) {
+            log.info("Rating statistics not found for movie with id {}", movieId);
             return null;
-        }catch (FeignException e) {
+        } catch (FeignException e) {
             log.error("Failed to fetch average rating for movie with id {}: {}", movieId, e.getMessage());
             return null;
         }
@@ -128,6 +130,9 @@ public class RatingService {
         try {
             MovieRatingStatsResponse movieRatingStats = client.getMovieRatingStats(movieId).getBody();
             return movieRatingStats != null ? movieRatingStats.getTotalRatings() : null;
+        } catch (FeignException.NotFound e) {
+            log.info("Rating statistics not found for movie with id {}", movieId);
+            return null;
         } catch (FeignException e) {
             log.error("Failed to fetch total ratings for movie with id {}: {}", movieId, e.getMessage());
             return null;
@@ -138,6 +143,9 @@ public class RatingService {
         try {
             UserRatingStatsResponse ratingStats = client.getUserRatingStats(userId).getBody();
             return ratingStats != null ? ratingStats.getRatedMovies() : null;
+        } catch (FeignException.NotFound e) {
+            log.info("Rating statistics not found for user with id {}", userId);
+            return null;
         } catch (FeignException e) {
             log.error("Failed to fetch total ratings for user with id {}: {}", userId, e.getMessage());
             return null;
@@ -148,8 +156,9 @@ public class RatingService {
         try {
             return client.getLatestRatingsByUser(userId).getBody();
         } catch (FeignException.NotFound e) {
+            log.info("Latest ratings not found for user with id {}", userId);
             return null;
-        }catch (FeignException e) {
+        } catch (FeignException e) {
             log.error("Failed to fetch latest ratings for user with id {}: {}", userId, e.getMessage());
             return null;
         }

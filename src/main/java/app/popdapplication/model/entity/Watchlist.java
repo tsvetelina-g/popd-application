@@ -33,5 +33,5 @@ public class Watchlist {
     private LocalDateTime createdOn;
 
     @Column(name = "updated_on", nullable = false)
-    private LocalDateTime updated;
+    private LocalDateTime updatedOn;
 }

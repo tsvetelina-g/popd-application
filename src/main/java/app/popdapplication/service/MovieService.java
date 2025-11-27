@@ -68,8 +68,14 @@ public class MovieService {
         log.info("Movie info updated for movie with id: {}", movieId);
     }
 
-    public List<Movie> searchByTitle(String query) {
+    private List<Movie> searchByTitle(String query) {
         return movieRepository.findByTitleContainingIgnoreCase(query);
+    }
+
+    public List<Movie> searchByTitleLimited(String query, int limit) {
+        return searchByTitle(query).stream()
+                .limit(limit)
+                .toList();
     }
 
     public Map<UUID, String> getMovieNamesByIds(Set<UUID> movieIds) {
@@ -97,7 +103,7 @@ public class MovieService {
         return result;
     }
 
-    public List<Movie> findTop10ByClosestReleaseDate() {
+    private List<Movie> findTop10ByClosestReleaseDate() {
         LocalDate today = LocalDate.now();
         return movieRepository.findTop10ByClosestReleaseDate(today, PageRequest.of(0, 10));
     }

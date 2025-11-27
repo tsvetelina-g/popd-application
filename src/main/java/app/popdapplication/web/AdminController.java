@@ -29,11 +29,10 @@ public class AdminController {
     @GetMapping
     @RequestMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView list(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ModelAndView getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
         ModelAndView modelAndView = new ModelAndView("admin-users");
 
-        // Service handles pagination validation
         Page<User> users = userService.findAll(page, size);
         
         modelAndView.addObject("users", users);

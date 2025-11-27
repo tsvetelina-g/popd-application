@@ -34,7 +34,7 @@ public class WatchlistService {
                 .name("Default")
                 .watchlistType(WatchlistType.DEFAULT)
                 .createdOn(LocalDateTime.now())
-                .updated(LocalDateTime.now())
+                .updatedOn(LocalDateTime.now())
                 .build();
 
         watchlistRepository.save(watchlist);
@@ -55,7 +55,7 @@ public class WatchlistService {
 
         watchlistMovieService.saveToWatchlist(watchlist, movie);
 
-        watchlist.setUpdated(LocalDateTime.now());
+        watchlist.setUpdatedOn(LocalDateTime.now());
 
         watchlistRepository.save(watchlist);
     }
@@ -66,7 +66,7 @@ public class WatchlistService {
 
         watchlistMovieService.removeFromWatchlist(watchlist, movie);
 
-        watchlist.setUpdated(LocalDateTime.now());
+        watchlist.setUpdatedOn(LocalDateTime.now());
 
         watchlistRepository.save(watchlist);
     }

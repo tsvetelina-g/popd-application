@@ -110,7 +110,7 @@ public class ReviewService {
         } catch (FeignException.NotFound e) {
             return null;
         } catch (FeignException e) {
-            log.error("Failed to fetch reviews for movie with id {}: {}", movieId, e.getMessage());
+            log.error("Failed to fetch latest reviews for movie with id {}: {}", movieId, e.getMessage());
             return null;
         }
     }
@@ -127,16 +127,14 @@ public class ReviewService {
         return getReviewsForMovie(movieId, pageable);
     }
 
-    public Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
+    private Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
         try {
-            // Call microservice to get paginated reviews
             ResponseEntity<Page<ReviewResponse>> response = client.getReviewsForMovie(movieId, pageable.getPageNumber(), pageable.getPageSize());
 
             if (response.getBody() != null) {
                 return response.getBody();
             }
 
-            // Return empty page if no reviews
             return new PageImpl<>(List.of(), pageable, 0);
         } catch (FeignException.NotFound e) {
             return new PageImpl<>(List.of(), pageable, 0);

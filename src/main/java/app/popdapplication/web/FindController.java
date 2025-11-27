@@ -40,9 +40,9 @@ public class FindController {
             return modelAndView;
         }
 
-        List<Movie> movies = movieService.searchByTitle(query).stream().limit(20).toList();
-        List<Artist> artists = artistService.searchByName(query).stream().limit(20).toList();
-        List<User> users = userService.searchUsers(query).stream().limit(20).toList();
+        List<Movie> movies = movieService.searchByTitleLimited(query, 20);
+        List<Artist> artists = artistService.searchByNameLimited(query, 20);
+        List<User> users = userService.searchUsersLimited(query, 20);
 
         ModelAndView modelAndView = new ModelAndView("find");
         modelAndView.addObject("movies", movies);

@@ -1,6 +1,5 @@
 package app.popdapplication.web;
 
-import app.popdapplication.model.entity.Artist;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.MovieCredit;
 import app.popdapplication.model.enums.ArtistRole;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/credit")
@@ -52,13 +50,7 @@ public class CreditController {
     @GetMapping("/artists/search")
     @ResponseBody
     public ResponseEntity<List<String>> searchArtists(@RequestParam(required = false, defaultValue = "") String query) {
-        List<Artist> artists = artistService.searchArtists(query);
-        // Limit results to 50 for performance
-        List<String> artistNames = artists.stream()
-                .map(Artist::getName)
-                .limit(50)
-                .collect(Collectors.toList());
-
+        List<String> artistNames = artistService.searchArtistNames(query, 50);
         return ResponseEntity.ok(artistNames);
     }
 
@@ -91,10 +83,7 @@ public class CreditController {
 
         Movie movie = movieService.findById(movieId);
         List<MovieCredit> movieCredits = movieCreditService.getCreditsByMovie(movie);
-
-        // Group credits by role
-        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCredits.stream()
-                .collect(Collectors.groupingBy(MovieCredit::getRoleType));
+        Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCreditService.getCreditsByMovieGroupedByRole(movie);
 
         ModelAndView modelAndView = new ModelAndView("credit-edit");
         modelAndView.addObject("movie", movie);

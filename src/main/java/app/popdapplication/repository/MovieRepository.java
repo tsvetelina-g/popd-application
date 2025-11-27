@@ -14,10 +14,13 @@ import java.util.UUID;
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
     List<Movie> findByTitleContainingIgnoreCase(String query);
 
-    @Query("""
-    SELECT m FROM Movie m 
-    WHERE m.releaseDate IS NOT NULL 
-    ORDER BY ABS(DATEDIFF(:today, m.releaseDate)) ASC
-    """)
+    @Query(
+            value = """
+            SELECT * FROM movie m
+            WHERE m.release_date IS NOT NULL
+            ORDER BY ABS(DATEDIFF(:today, m.release_date)) ASC
+            """,
+            nativeQuery = true
+    )
     List<Movie> findTop10ByClosestReleaseDate(LocalDate today, Pageable pageable);
 }

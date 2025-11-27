@@ -61,7 +61,6 @@ public class ReviewController {
         return new ModelAndView("redirect:/movie/" + movieId);
     }
 
-    //th:action="@{'/review/' + ${movie.id} + '/edit'}"
     @GetMapping("/review/{movieId}/edit")
     public ModelAndView getEditReviewPage(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
 
@@ -101,7 +100,6 @@ public class ReviewController {
 
             Movie movie = movieService.findById(movieId);
 
-            // Service handles pagination validation
             Page<ReviewResponse> reviews = reviewService.getReviewsForMovie(movieId, page, size);
 
             Set<UUID> userIds = reviewService.extractUserIdsFromReviews(reviews.getContent());
