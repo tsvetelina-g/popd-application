@@ -34,11 +34,10 @@ public class RegisterUserITest {
         String email = "ts@gmail.com";
         String password = "123123123";
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .username(username)
-                .email(email)
-                .password(password)
-                .build();
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername(username);
+        registerRequest.setEmail(email);
+        registerRequest.setPassword(password);
 
         userService.register(registerRequest);
 

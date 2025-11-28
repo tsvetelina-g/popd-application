@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -93,7 +93,7 @@
                     <img src="https://dl.dropboxusercontent.com/scl/fi/wwhw715m7c048f2zv4bsb/popcorn.png?rlkey=54m7mxucv9d9wnyodx5j1xble&st=z6990uik"
                          alt="Popcorn" class="popcorn-icon">
                     <div class="movie-rating-details">
-                        <a th:href="@{'/movie/' + ${rating.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(rating.movieId)}">Movie Name</a>
+                        <a th:href="@{'/movies/' + ${rating.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(rating.movieId)}">Movie Name</a>
                         <span class="rating-value" th:text="${rating.value + ' popcorns'}">5 popcorns</span>
                     </div>
                 </div>

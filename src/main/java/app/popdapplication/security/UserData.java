@@ -25,7 +25,6 @@ public class UserData implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + this.role.name());
         return List.of(role);
     }

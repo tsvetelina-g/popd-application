@@ -39,16 +39,22 @@ public class ReviewController {
 
     @PostMapping("/review/{movieId}")
     public ModelAndView upsertReview(@PathVariable UUID movieId,
-                                     @RequestParam String title,
+                                     @RequestParam(required = false) String title,
                                      @RequestParam String content,
                                      @AuthenticationPrincipal UserData userData,
-                                     HttpServletRequest request) {
+                                     HttpServletRequest request,
+                                     RedirectAttributes redirectAttributes) {
         request.setAttribute("movieId", movieId);
+
+        if (content == null || content.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("reviewContentError", "Content cannot be empty or contain only whitespace");
+            return new ModelAndView("redirect:/movies/" + movieId);
+        }
 
         Integer rating = ratingService.getRatingByUserAndMovie(userData.getUserId(), movieId);
 
         reviewService.upsertReview(userData.getUserId(), movieId, rating, title, content);
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @DeleteMapping("/review/{movieId}")
@@ -56,7 +62,7 @@ public class ReviewController {
         request.setAttribute("movieId", movieId);
 
         reviewService.deleteReview(userData.getUserId(), movieId);
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @GetMapping("/review/{movieId}/edit")
@@ -66,6 +72,7 @@ public class ReviewController {
         EditReviewRequest editReviewRequest = DtoMapper.fromReviewResponse(reviewResponse);
 
         modelAndView.addObject("editReviewRequest", editReviewRequest);
+        modelAndView.addObject("movieId", movieId);
 
         return modelAndView;
     }
@@ -73,15 +80,21 @@ public class ReviewController {
     @PutMapping("/review/{movieId}/edit")
     public ModelAndView updateReview(@Valid EditReviewRequest editReviewRequest, BindingResult bindingResult, @PathVariable UUID movieId, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("review-edit");
+            ModelAndView modelAndView = new ModelAndView("review-edit");
+            modelAndView.addObject("editReviewRequest", editReviewRequest);
+            modelAndView.addObject("contentError", "Content cannot be empty or contain only whitespace");
+            modelAndView.addObject("movieId", movieId);
+            return modelAndView;
         }
 
         request.setAttribute("movieId", movieId);
 
         Integer rating = ratingService.getRatingByUserAndMovie(userData.getUserId(), movieId);
-        reviewService.upsertReview(userData.getUserId(), movieId, rating, editReviewRequest.getTitle(), editReviewRequest.getContent());
+        String trimmedContent = editReviewRequest.getContent().trim();
+        String trimmedTitle = editReviewRequest.getTitle() != null ? editReviewRequest.getTitle().trim() : null;
+        reviewService.upsertReview(userData.getUserId(), movieId, rating, trimmedTitle, trimmedContent);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @GetMapping("/reviews/{movieId}")
@@ -104,7 +117,7 @@ public class ReviewController {
             return modelAndView;
         } catch (ReviewMicroserviceUnavailableException e) {
             redirectAttributes.addFlashAttribute("reviewErrorMessage", e.getMessage());
-            return new ModelAndView("redirect:/movie/" + movieId);
+            return new ModelAndView("redirect:/movies/" + movieId);
         }
     }
 }

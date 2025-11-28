@@ -119,7 +119,7 @@ public class ReviewService {
         if (size < 1 || size > 50) {
             size = 5;
         }
-        
+
         Pageable pageable = PageRequest.of(page, size);
         return getReviewsForMovie(movieId, pageable);
     }
@@ -145,16 +145,20 @@ public class ReviewService {
         try {
             MovieReviewStatsResponse movieReviewStats = client.getMovieReviewsCount(movieId).getBody();
             return movieReviewStats != null ? movieReviewStats.getTotalReviews() : null;
+        } catch (FeignException.NotFound e) {
+            return null;
         } catch (FeignException e) {
             log.error("Failed to fetch total reviews for movie with id {}: {}", movieId, e.getMessage());
             return null;
         }
     }
 
-    public Integer getTotalMoviesReviewedByUser(UUID userId){
+    public Integer getTotalMoviesReviewedByUser(UUID userId) {
         try {
             UserReviewsStatsResponse reviewStats = client.getUserReviewsStats(userId).getBody();
             return reviewStats != null ? reviewStats.getReviewedMovies() : null;
+        } catch (FeignException.NotFound e) {
+            return null;
         } catch (FeignException e) {
             log.error("Failed to fetch total reviews for user with id {}: {}", userId, e.getMessage());
             return null;
@@ -166,7 +170,7 @@ public class ReviewService {
             return client.getLatestReviewsByUser(userId).getBody();
         } catch (FeignException.NotFound e) {
             return null;
-        }catch (FeignException e) {
+        } catch (FeignException e) {
             log.error("Failed to fetch latest reviews for user with id {}: {}", userId, e.getMessage());
             return null;
         }

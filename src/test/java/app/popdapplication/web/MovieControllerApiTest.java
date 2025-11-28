@@ -71,7 +71,7 @@ public class MovieControllerApiTest {
 
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = get("/movies/add")
                 .with(user(adminUser));
 
         mockMvc.perform(httpRequest)
@@ -87,7 +87,7 @@ public class MovieControllerApiTest {
     void getAddMoviePage_andUserIsNotAdmin_thenReturn404NotFound() throws Exception {
         UserDetails regularUser = regularUserAuthentication();
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = get("/movies/add")
                 .with(user(regularUser));
 
         mockMvc.perform(httpRequest)
@@ -99,7 +99,7 @@ public class MovieControllerApiTest {
 
     @Test
     void getAddMoviePage_andUserIsNotAuthenticated_thenReturn404NotFound() throws Exception {
-        MockHttpServletRequestBuilder httpRequest = get("/movie/add");
+        MockHttpServletRequestBuilder httpRequest = get("/movies/add");
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is4xxClientError())
@@ -116,7 +116,7 @@ public class MovieControllerApiTest {
 
         when(movieService.addMovie(any())).thenReturn(createdMovie);
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = post("/movies/add")
                 .param("title", "Title")
                 .param("description", "Description")
                 .param("posterUrl", "https://www.picture.com")
@@ -125,7 +125,7 @@ public class MovieControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(movieService).addMovie(any());
     }
@@ -137,7 +137,7 @@ public class MovieControllerApiTest {
 
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = post("/movies/add")
                 .param("title", "")
                 .with(user(adminUser))
                 .with(csrf());
@@ -158,7 +158,7 @@ public class MovieControllerApiTest {
 
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = post("/movies/add")
                 .param("title", "Title")
                 .param("posterUrl", "not-a-valid-url")
                 .with(user(adminUser))
@@ -175,7 +175,7 @@ public class MovieControllerApiTest {
     void postAddMovie_andUserIsNotAdmin_thenReturn404NotFound() throws Exception {
         UserDetails regularUser = regularUserAuthentication();
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = post("/movies/add")
                 .param("title", "Title")
                 .with(user(regularUser))
                 .with(csrf());
@@ -190,7 +190,7 @@ public class MovieControllerApiTest {
     void postAddMovie_andNoCsrfToken_thenRedirectToLogin() throws Exception {
         UserDetails adminUser = adminAuthentication();
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/add")
+        MockHttpServletRequestBuilder httpRequest = post("/movies/add")
                 .param("title", "Title")
                 .with(user(adminUser));
 
@@ -225,7 +225,7 @@ public class MovieControllerApiTest {
         when(ratingService.getAverageRatingForAMovie(movieId)).thenReturn(7.5);
         when(reviewService.getReviewByUserAndMovie(userId, movieId)).thenReturn(null);
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/{id}", movieId)
+        MockHttpServletRequestBuilder httpRequest = get("/movies/{id}", movieId)
                 .with(user(authenticatedUser));
 
         mockMvc.perform(httpRequest)
@@ -265,7 +265,7 @@ public class MovieControllerApiTest {
         when(reviewService.extractUserIdsFromReviews(any())).thenReturn(Set.of());
         when(userService.getUsernamesByIds(any())).thenReturn(Map.of());
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/{id}", movieId);
+        MockHttpServletRequestBuilder httpRequest = get("/movies/{id}", movieId);
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().isOk())
@@ -292,13 +292,13 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(userService.findById(userId)).thenReturn(user);
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/{movieId}/watched", movieId)
+        MockHttpServletRequestBuilder httpRequest = post("/movies/{movieId}/watched", movieId)
                 .with(user(authenticatedUser))
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(watchedMovieService).addToWatched(movie, user);
     }
@@ -307,7 +307,7 @@ public class MovieControllerApiTest {
     void postAddToWatched_andUserIsNotAuthenticated_thenRedirectToLogin() throws Exception {
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/{movieId}/watched", movieId)
+        MockHttpServletRequestBuilder httpRequest = post("/movies/{movieId}/watched", movieId)
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
@@ -321,7 +321,7 @@ public class MovieControllerApiTest {
         UserDetails authenticatedUser = regularUserAuthentication();
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/{movieId}/watched", movieId)
+        MockHttpServletRequestBuilder httpRequest = post("/movies/{movieId}/watched", movieId)
                 .with(user(authenticatedUser));
 
         mockMvc.perform(httpRequest)
@@ -342,13 +342,13 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(userService.findById(userId)).thenReturn(user);
 
-        MockHttpServletRequestBuilder httpRequest = delete("/movie/{movieId}/delete-watched", movieId)
+        MockHttpServletRequestBuilder httpRequest = delete("/movies/{movieId}/delete-watched", movieId)
                 .with(user(authenticatedUser))
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(watchedMovieService).removeFromWatched(movie, user);
     }
@@ -357,7 +357,7 @@ public class MovieControllerApiTest {
     void deleteFromWatched_andUserIsNotAuthenticated_thenRedirectToLogin() throws Exception {
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = delete("/movie/{movieId}/delete-watched", movieId)
+        MockHttpServletRequestBuilder httpRequest = delete("/movies/{movieId}/delete-watched", movieId)
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
@@ -378,13 +378,13 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(userService.findById(userId)).thenReturn(user);
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/{movieId}/watchlist", movieId)
+        MockHttpServletRequestBuilder httpRequest = post("/movies/{movieId}/watchlist", movieId)
                 .with(user(authenticatedUser))
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(watchlistService).addToWatchlist(movie, user);
     }
@@ -393,7 +393,7 @@ public class MovieControllerApiTest {
     void postAddToWatchlist_andUserIsNotAuthenticated_thenRedirectToLogin() throws Exception {
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = post("/movie/{movieId}/watchlist", movieId)
+        MockHttpServletRequestBuilder httpRequest = post("/movies/{movieId}/watchlist", movieId)
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
@@ -414,13 +414,13 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(userService.findById(userId)).thenReturn(user);
 
-        MockHttpServletRequestBuilder httpRequest = delete("/movie/{movieId}/delete-from-watchlist", movieId)
+        MockHttpServletRequestBuilder httpRequest = delete("/movies/{movieId}/delete-from-watchlist", movieId)
                 .with(user(authenticatedUser))
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(watchlistService).removeFromWatchlist(movie, user);
     }
@@ -429,7 +429,7 @@ public class MovieControllerApiTest {
     void deleteFromWatchlist_andUserIsNotAuthenticated_thenRedirectToLogin() throws Exception {
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = delete("/movie/{movieId}/delete-from-watchlist", movieId)
+        MockHttpServletRequestBuilder httpRequest = delete("/movies/{movieId}/delete-from-watchlist", movieId)
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
@@ -450,7 +450,7 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = get("/movies/{movieId}/edit", movieId)
                 .with(user(adminUser));
 
         mockMvc.perform(httpRequest)
@@ -469,7 +469,7 @@ public class MovieControllerApiTest {
         UserDetails regularUser = regularUserAuthentication();
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = get("/movies/{movieId}/edit", movieId)
                 .with(user(regularUser));
 
         mockMvc.perform(httpRequest)
@@ -483,7 +483,7 @@ public class MovieControllerApiTest {
     void getEditMoviePage_andUserIsNotAuthenticated_thenReturn404NotFound() throws Exception {
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = get("/movie/{movieId}/edit", movieId);
+        MockHttpServletRequestBuilder httpRequest = get("/movies/{movieId}/edit", movieId);
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is4xxClientError())
@@ -500,7 +500,7 @@ public class MovieControllerApiTest {
 
         when(movieService.findById(movieId)).thenReturn(movie);
 
-        MockHttpServletRequestBuilder httpRequest = put("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = put("/movies/{movieId}/edit", movieId)
                 .param("title", "Title")
                 .param("description", "Description")
                 .param("posterUrl", "https://www.new-picture.com")
@@ -509,7 +509,7 @@ public class MovieControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(movieService).updateMovieInfo(eq(movieId), any(EditMovieRequest.class));
     }
@@ -524,7 +524,7 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = put("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = put("/movies/{movieId}/edit", movieId)
                 .param("title", "")
                 .with(user(adminUser))
                 .with(csrf());
@@ -548,7 +548,7 @@ public class MovieControllerApiTest {
         when(movieService.findById(movieId)).thenReturn(movie);
         when(genreService.findAll()).thenReturn(genres);
 
-        MockHttpServletRequestBuilder httpRequest = put("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = put("/movies/{movieId}/edit", movieId)
                 .param("title", "Title")
                 .param("posterUrl", "invalid-url")
                 .with(user(adminUser))
@@ -566,7 +566,7 @@ public class MovieControllerApiTest {
         UserDetails regularUser = regularUserAuthentication();
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = put("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = put("/movies/{movieId}/edit", movieId)
                 .param("title", "Title")
                 .with(user(regularUser))
                 .with(csrf());
@@ -582,7 +582,7 @@ public class MovieControllerApiTest {
         UserDetails adminUser = adminAuthentication();
         UUID movieId = UUID.randomUUID();
 
-        MockHttpServletRequestBuilder httpRequest = put("/movie/{movieId}/edit", movieId)
+        MockHttpServletRequestBuilder httpRequest = put("/movies/{movieId}/edit", movieId)
                 .param("title", "Title")
                 .with(user(adminUser));
 

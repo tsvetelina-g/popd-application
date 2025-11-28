@@ -12,9 +12,10 @@ import java.util.UUID;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, UUID> {
+
     List<Activity> findAllByUserIdOrderByCreatedOnDesc(UUID userId);
 
-    long deleteAllByCreatedOnBefore(LocalDateTime oneYearAgo);
+    long deleteAllByCreatedOnBefore(LocalDateTime sixMonthsAgo);
 
     @Query("""
     SELECT a.movieId

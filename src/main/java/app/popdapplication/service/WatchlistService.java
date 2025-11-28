@@ -69,7 +69,6 @@ public class WatchlistService {
 
     public int countMoviesInWatchlist(User user) {
         Watchlist watchlist = watchlistRepository.findByUser(user);
-
         return watchlistMovieService.findAllByWatchlist(watchlist).size();
     }
 

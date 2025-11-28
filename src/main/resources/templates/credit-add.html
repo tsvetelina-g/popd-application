@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -148,7 +148,6 @@
         let highlightedIndex = -1;
         let searchTimeout = null;
 
-        // Debug: Check if elements are found
         if (!artistInput) {
             console.error('Artist input not found');
             return;
@@ -161,11 +160,9 @@
         function populateDropdown(artistNames) {
             if (!dropdown) return;
 
-            // Clear existing options
             dropdown.innerHTML = '';
             allOptions = [];
 
-            // Create option elements
             artistNames.forEach(name => {
                 const option = document.createElement('div');
                 option.className = 'dropdown-option';
@@ -177,12 +174,10 @@
         }
 
         function searchArtists(query) {
-            // Cancel previous timeout
             if (searchTimeout) {
                 clearTimeout(searchTimeout);
             }
 
-            // Debounce the search - wait 300ms after user stops typing
             searchTimeout = setTimeout(function() {
                 const trimmedQuery = query ? query.trim() : '';
                 if (trimmedQuery.length === 0) {
@@ -248,10 +243,8 @@
             const visibleOptions = allOptions.filter(opt => !opt.classList.contains('hidden'));
             if (visibleOptions.length === 0) return;
 
-            // Remove previous highlight
             allOptions.forEach(opt => opt.classList.remove('highlighted'));
 
-            // Ensure index is within bounds
             if (index < 0) index = visibleOptions.length - 1;
             if (index >= visibleOptions.length) index = 0;
 
@@ -260,31 +253,25 @@
             visibleOptions[index].scrollIntoView({ block: 'nearest' });
         }
 
-        // Input event - search artists as user types
         if (artistInput) {
             artistInput.addEventListener('input', function(e) {
                 const searchTerm = e.target.value;
                 
                 if (searchTerm.trim().length === 0) {
-                    // If empty, show all artists
                     searchArtists('');
                 } else if (searchTerm.trim().length >= 2) {
-                    // Only search if at least 2 characters
                     searchArtists(searchTerm);
                 } else {
-                    // Hide dropdown if less than 2 characters
                     hideDropdown();
                 }
             });
 
-            // Focus event - show dropdown with all artists
             artistInput.addEventListener('focus', function() {
                 if (artistInput.value.trim().length >= 2) {
                     searchArtists(artistInput.value);
                 }
             });
 
-            // Click on icon - toggle dropdown
             if (icon) {
                 icon.style.pointerEvents = 'auto';
                 icon.style.cursor = 'pointer';
@@ -304,7 +291,6 @@
                 console.warn('Datalist icon not found');
             }
 
-            // Keyboard navigation
             artistInput.addEventListener('keydown', function(e) {
                 const visibleOptions = allOptions.filter(opt => !opt.classList.contains('hidden'));
 
@@ -315,7 +301,6 @@
                             searchArtists(artistInput.value);
                         }
                     }
-                    // Wait a bit for dropdown to populate, then highlight
                     setTimeout(() => {
                         highlightOption(highlightedIndex + 1);
                     }, 50);
@@ -333,7 +318,6 @@
             });
         }
 
-        // Click on dropdown option
         if (dropdown) {
             dropdown.addEventListener('click', function(e) {
                 const option = e.target.closest('.dropdown-option');
@@ -343,7 +327,6 @@
             });
         }
 
-        // Hide dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (artistInput && dropdown) {
                 const wrapper = artistInput.closest('.datalist-wrapper');

@@ -128,4 +128,18 @@ public class MovieService {
         }
         return movies;
     }
+
+    public List<Movie> getTop5MoviesByGenreClosestReleaseDate(UUID genreId) {
+        LocalDate today = LocalDate.now();
+        return movieRepository.findTop5ByGenreIdClosestReleaseDate(
+                genreId,
+                today,
+                PageRequest.of(0, 5)
+        );
+    }
+
+    public List<Movie> getTop5MostRecentReleases() {
+        LocalDate today = LocalDate.now();
+        return movieRepository.findTop10ByClosestReleaseDate(today, PageRequest.of(0, 5));
+    }
 }

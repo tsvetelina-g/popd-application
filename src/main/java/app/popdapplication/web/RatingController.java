@@ -26,13 +26,13 @@ public class RatingController {
 
         ratingService.upsertRating(userData.getUserId(), movieId, value);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @DeleteMapping("/{movieId}/delete")
     public ModelAndView deleteRating(@PathVariable UUID movieId, @AuthenticationPrincipal UserData userData) {
         ratingService.deleteRating(userData.getUserId(), movieId);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 }

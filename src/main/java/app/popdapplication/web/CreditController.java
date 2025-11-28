@@ -83,6 +83,7 @@ public class CreditController {
         Map<ArtistRole, List<MovieCredit>> creditsByRole = movieCreditService.getCreditsByMovieGroupedByRole(movie);
 
         ModelAndView modelAndView = new ModelAndView("credit-edit");
+        
         modelAndView.addObject("movie", movie);
         modelAndView.addObject("movieCredits", movieCredits);
         modelAndView.addObject("creditsByRole", creditsByRole);
@@ -94,6 +95,7 @@ public class CreditController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView deleteCredit(@PathVariable UUID creditId) {
         MovieCredit movieCredit = movieCreditService.findCreditById(creditId);
+
         movieCreditService.deleteCredit(movieCredit);
 
         return new ModelAndView("redirect:/credit/" + movieCredit.getMovie().getId() + "/edit");

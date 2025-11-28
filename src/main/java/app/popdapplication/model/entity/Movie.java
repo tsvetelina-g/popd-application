@@ -30,6 +30,11 @@ public class Movie {
     private LocalDate releaseDate;
 
     @ManyToMany
+    @JoinTable(
+            name = "movie_genres",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genres_id")
+    )
     private List<Genre> genres = new ArrayList<>();
 
     @Column

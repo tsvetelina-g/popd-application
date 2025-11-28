@@ -59,7 +59,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -76,7 +76,7 @@
     <section class="reviews-page-section">
         <div class="reviews-page-header">
             <h1 class="reviews-page-title">Reviews for <span th:text="${movie.title}">Movie Title</span></h1>
-            <a th:href="@{'/movie/' + ${movie.id}}" class="action-button back-to-movie-button">
+            <a th:href="@{'/movies/' + ${movie.id}}" class="action-button back-to-movie-button">
                 <i class="fas fa-arrow-left"></i>
                 Back to Movie
             </a>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div class="review-content">
-                    <h4 class="review-title" th:text="${review.title}">Review Title</h4>
+                    <h4 class="review-title" th:if="${review.title != null and !#strings.isEmpty(review.title)}" th:text="${review.title}">Review Title</h4>
                     <p th:text="${review.content}">Review content goes here.</p>
                 </div>
                 <!-- Mini Rating Display -->

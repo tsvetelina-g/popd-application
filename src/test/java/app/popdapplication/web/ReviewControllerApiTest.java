@@ -68,7 +68,7 @@ public class ReviewControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(ratingService).getRatingByUserAndMovie(userId, movieId);
         verify(reviewService).upsertReview(eq(userId), eq(movieId), eq(8), eq("Title"), eq("Description"));
@@ -90,7 +90,7 @@ public class ReviewControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(reviewService).upsertReview(eq(userId), eq(movieId), eq(null), eq("Title 1"), eq("Description 1"));
     }
@@ -138,7 +138,7 @@ public class ReviewControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(reviewService).deleteReview(userId, movieId);
     }
@@ -219,7 +219,7 @@ public class ReviewControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId));
+                .andExpect(redirectedUrl("/movies/" + movieId));
 
         verify(ratingService).getRatingByUserAndMovie(userId, movieId);
         verify(reviewService).upsertReview(eq(userId), eq(movieId), eq(9), eq("Title"), eq("Description"));
@@ -353,7 +353,7 @@ public class ReviewControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/movie/" + movieId))
+                .andExpect(redirectedUrl("/movies/" + movieId))
                 .andExpect(flash().attributeExists("reviewErrorMessage"));
 
         verify(reviewService).getReviewsForMovie(movieId, 0, 5);

@@ -59,7 +59,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -89,7 +89,7 @@
 
     <div class="movies-grid" th:if="${!watchlistMovies.content.isEmpty()}">
         <div class="movie-card" th:each="watchlistMovie : ${watchlistMovies.content}">
-            <a th:href="@{'/movie/' + ${watchlistMovie.movie.id}}">
+            <a th:href="@{'/movies/' + ${watchlistMovie.movie.id}}">
                 <img class="poster-image" th:src="${watchlistMovie.movie.posterUrl}" th:alt="${watchlistMovie.movie.title}">
                 <div class="movie-info">
                     <div class="movie-title" th:text="${watchlistMovie.movie.title}"></div>

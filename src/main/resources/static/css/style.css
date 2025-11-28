@@ -46,7 +46,6 @@ html, body {
   justify-content: flex-end;
   flex-grow: 1;
   gap: 24px;
-  /*margin-bottom: 20px;*/
 }
 
 .logo-section {
@@ -192,7 +191,6 @@ html, body {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  /*margin-top: 20px;*/
 }
 
 .search-bar {
@@ -349,12 +347,7 @@ html, body {
   font-size: 14px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
-  /*.header-top {*/
-  /*  flex-direction: column;*/
-  /*  gap: 20px;*/
-  /*}*/
 
   .search-section {
     flex-direction: column;

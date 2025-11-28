@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Movie - popd</title>
+    <title>Movies - POPd</title>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/movies-add.css">
+    <link rel="stylesheet" href="/css/movies.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="/favicon.ico">
 </head>
@@ -72,75 +72,48 @@
 </header>
 
 <main class="container">
-    <section class="register-section">
-        <div class="register-container">
-            <h2 class="register-title">Add Movie</h2>
-            <p class="register-subtitle">Create a new movie entry</p>
-
-            <form class="register-form" th:action="@{/movies/add}" th:object="${addMovieRequest}" method="post">
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="title" class="form-label">Title</label>
-                        <span class="warning-text" id="titleWarning" th:if="${#fields.hasErrors('title')}">Title cannot be empty</span>
-                    </div>
-                    <input type="text" id="title" th:field="*{title}" class="form-input" placeholder="Enter movie title"
-                           required>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="description" class="form-label">Description</label>
-                    </div>
-                    <textarea id="description" th:field="*{description}" class="form-input"
-                              placeholder="Enter description" rows="5" style="resize: vertical;"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="releaseDate" class="form-label">Release Date</label>
-                    </div>
-                    <input type="date" id="releaseDate" th:field="*{releaseDate}" class="form-input">
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label class="form-label">Genres</label>
-                    </div>
-                    <div class="genres-box">
-                        <details>
-                            <summary>Select genres</summary>
-                            <div class="genres-panel">
-                                <label th:each="genre : ${genres}">
-                                    <input type="checkbox" th:field="*{genresIds}" name="genres" th:value="${genre.id}"
-                                           th:text="${genre.name}">
-                                </label>
-                            </div>
-                        </details>
-                    </div>
-                    <small class="genres-hint">You can select multiple genres.</small>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="posterUrl" class="form-label">Poster URL</label>
-                    </div>
-                    <input type="url" id="posterUrl" th:field="*{posterUrl}" class="form-input"
-                           placeholder="https://...">
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="backgroundImage" class="form-label">Background Image URL</label>
-                    </div>
-                    <input type="url" id="backgroundImage" th:field="*{backgroundImage}" class="form-input"
-                           placeholder="https://...">
-                </div>
-
-                <button type="submit" class="register-button">
-                    <i class="fas fa-plus"></i>
-                    Save Movie
-                </button>
+    <section class="movies-section">
+        <div class="movies-header">
+            <h2 class="section-title" th:text="${selectedGenre != null ? 'Newest ' + selectedGenre.name + ' Releases' : 'Newest Releases'}">
+                Newest Releases
+            </h2>
+            
+            <form method="get" action="/movies" class="genre-filter-form">
+                <label for="genreId" class="genre-label">Filter by Genre:</label>
+                <select name="genreId" id="genreId" class="genre-select" onchange="this.form.submit()">
+                    <option value="">All Genres</option>
+                    <option th:each="genre : ${genres}" 
+                            th:value="${genre.id}" 
+                            th:text="${genre.name}"
+                            th:selected="${selectedGenreId != null && selectedGenreId == genre.id}">
+                        Genre Name
+                    </option>
+                </select>
             </form>
+        </div>
+
+        <div class="movies-grid">
+            <div class="movie-card" th:each="movie : ${movies}">
+                <a th:href="@{'/movies/' + ${movie.id}}">
+                    <img th:src="${movie.posterUrl != null ? movie.posterUrl : '/images/default-poster.jpg'}" 
+                         th:alt="${movie.title}">
+                    <div class="movie-info">
+                        <div class="movie-title" th:text="${movie.title}">Movie Title</div>
+                        <div class="movie-release-date" th:if="${movie.releaseDate != null}" 
+                             th:text="${#temporals.format(movie.releaseDate, 'MMMM d, yyyy', T(java.util.Locale).ENGLISH)}">January 1, 2024</div>
+                        <div class="movie-description" th:if="${movie.description != null and #strings.length(movie.description) > 100}" 
+                             th:text="${#strings.substring(movie.description, 0, 100) + '...'}">Movie description...</div>
+                        <div class="movie-description" th:if="${movie.description != null and #strings.length(movie.description) <= 100}" 
+                             th:text="${movie.description}">Movie description...</div>
+                        <div class="movie-description" th:if="${movie.description == null}">No description available</div>
+                    </div>
+                </a>
+            </div>
+            <div class="no-results-card" th:if="${movies == null || movies.isEmpty()}">
+                <p th:text="${selectedGenre != null ? 'No movies found for ' + selectedGenre.name + ' genre.' : 'No movies available at the moment.'}">
+                    No movies found.
+                </p>
+            </div>
         </div>
     </section>
 </main>
@@ -152,5 +125,4 @@
 </footer>
 </body>
 </html>
-
 

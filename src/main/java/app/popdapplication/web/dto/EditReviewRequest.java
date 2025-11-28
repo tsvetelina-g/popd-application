@@ -1,6 +1,6 @@
 package app.popdapplication.web.dto;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EditReviewRequest {
 
-    @Column(nullable = true)
     private String title;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Content cannot be empty or contain only whitespace")
     private String content;
 }

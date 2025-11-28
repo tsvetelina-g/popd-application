@@ -16,7 +16,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, SessionRegistry sessionRegistry) throws Exception {
-
         httpSecurity.authorizeHttpRequests(matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/register", "/movie", "/artist", "/error").permitAll()
@@ -29,7 +28,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                                 "/artist/**")
                         .permitAll()
                         .anyRequest().authenticated()
-
                 )
                 .formLogin(formLogin -> formLogin
                                 .loginPage("/login")

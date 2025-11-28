@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Repository
 public interface WatchedMovieRepository extends JpaRepository<WatchedMovie, UUID> {
+
     Collection<WatchedMovie> findAllByUser(User user);
 
     Optional<WatchedMovie> findByUserAndMovie(User user, Movie movie);

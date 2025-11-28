@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,17 +46,21 @@ public class IndexController {
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
         ModelAndView modelAndView = new ModelAndView("register");
+
         modelAndView.addObject("registerRequest", new RegisterRequest());
+        
         return modelAndView;
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
 
         userService.register(registerRequest);
+        redirectAttributes.addFlashAttribute("registrationSuccess", "User registered successfully!");
+
         return new ModelAndView("redirect:/login");
     }
 

@@ -60,7 +60,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -129,11 +129,11 @@
                              th:class="${activity.removed ? 'activity-icon popcorn-icon icon-removed' : 'activity-icon popcorn-icon icon-normal'}">
                         <div class="activity-content">
                             <span class="activity-text" th:if="${!activity.removed}">
-                                Rated <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                Rated <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
                                 <span th:if="${activity.rating != null}" th:text="${' ' + activity.rating + ' popcorns'}"> 5 popcorns</span>
                             </span>
                             <span class="activity-text" th:if="${activity.removed}">
-                                Removed rating for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                Removed rating for <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
                             </span>
                             <span class="activity-date" th:if="${activity.createdOn != null}"
                                   th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
@@ -147,10 +147,10 @@
                         <i th:class="${activity.removed ? 'fas fa-comment activity-icon icon-removed' : 'fas fa-comment activity-icon icon-normal'}"></i>
                         <div class="activity-content">
                             <span class="activity-text" th:if="${!activity.removed}">
-                                Wrote a review for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                Wrote a review for <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
                             </span>
                             <span class="activity-text" th:if="${activity.removed}">
-                                Removed review for <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                Removed review for <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
                             </span>
                             <span class="activity-date" th:if="${activity.createdOn != null}"
                                   th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
@@ -164,10 +164,10 @@
                         <i th:class="${activity.removed ? 'fas fa-film activity-icon icon-removed' : 'fas fa-film activity-icon icon-normal'}"></i>
                         <div class="activity-content">
                             <span class="activity-text" th:if="${!activity.removed}">
-                                Added <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> to watchlist
+                                Added <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> to watchlist
                             </span>
                             <span class="activity-text" th:if="${activity.removed}">
-                                Removed <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watchlist
+                                Removed <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watchlist
                             </span>
                             <span class="activity-date" th:if="${activity.createdOn != null}"
                                   th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">
@@ -181,10 +181,10 @@
                         <i th:class="${activity.removed ? 'fas fa-eye activity-icon icon-removed' : 'fas fa-eye activity-icon icon-normal'}"></i>
                         <div class="activity-content">
                             <span class="activity-text" th:if="${!activity.removed}">
-                                Watched <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
+                                Watched <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a>
                             </span>
                             <span class="activity-text" th:if="${activity.removed}">
-                                Removed <a th:href="@{'/movie/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watched
+                                Removed <a th:href="@{'/movies/' + ${activity.movieId}}" th:text="${movieIdToMovieNameMap.get(activity.movieId)}" class="activity-movie-link">Movie Name</a> from watched
                             </span>
                             <span class="activity-date" th:if="${activity.createdOn != null}"
                                   th:text="${#temporals.format(activity.createdOn, 'MMMM dd, yyyy', T(java.util.Locale).ENGLISH) + ' at ' + #temporals.format(activity.createdOn, 'HH:mm', T(java.util.Locale).ENGLISH)}">

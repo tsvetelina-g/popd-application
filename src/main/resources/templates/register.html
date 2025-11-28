@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -85,7 +85,7 @@
                         <span class="warning-text" id="usernameWarning" th:if="${#fields.hasErrors('username')}">Invalid username</span>
                     </div>
                     <input th:field="*{username}" type="text" id="username" name="username" class="form-input"
-                           placeholder="Enter your username" required>
+                           placeholder="Enter your username (3-30 characters)" required>
                 </div>
 
                 <div class="form-group">
@@ -106,7 +106,7 @@
                               style="display: none;">Invalid password</span>
                     </div>
                     <input type="password" id="password" name="password" class="form-input"
-                           placeholder="Enter your password" required>
+                           placeholder="Enter your password (8-64 characters)" required>
                 </div>
 
                 <div class="form-group">

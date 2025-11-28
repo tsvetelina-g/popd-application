@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -78,7 +78,7 @@
         <h3 class="results-title">Movies</h3>
         <div class="movies-grid">
             <div class="movie-card" th:each="movie : ${movies}">
-                <a th:href="@{'/movie/' + ${movie.id}}">
+                <a th:href="@{'/movies/' + ${movie.id}}">
                     <img class="poster-image" th:src="${movie.posterUrl}" th:alt="${movie.title}">
                     <div class="movie-info">
                         <div class="movie-title" th:text="${movie.title}"></div>

@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.*;
 
 @Controller
-@RequestMapping("/movie")
+@RequestMapping("/movies")
 public class MovieController {
 
     private final MovieService movieService;
@@ -43,6 +43,33 @@ public class MovieController {
         this.movieCreditService = movieCreditService;
         this.ratingService = ratingService;
         this.reviewService = reviewService;
+    }
+
+    @GetMapping
+    public ModelAndView getAllMovies(@RequestParam(required = false) UUID genreId) {
+        ModelAndView modelAndView = new ModelAndView("movies");
+
+        List<Genre> genres = genreService.findAll();
+        List<Movie> movies;
+        Genre selectedGenre = null;
+
+        if (genreId != null) {
+            selectedGenre = genreService.findById(genreId).orElse(null);
+            if (selectedGenre != null) {
+                movies = movieService.getTop5MoviesByGenreClosestReleaseDate(genreId);
+            } else {
+                movies = new ArrayList<>();
+            }
+        } else {
+            movies = movieService.getTop5MostRecentReleases();
+        }
+
+        modelAndView.addObject("genres", genres);
+        modelAndView.addObject("movies", movies != null ? movies : new ArrayList<>());
+        modelAndView.addObject("selectedGenreId", genreId);
+        modelAndView.addObject("selectedGenre", selectedGenre);
+
+        return modelAndView;
     }
 
     @GetMapping("/add")
@@ -68,7 +95,7 @@ public class MovieController {
         }
 
         Movie movie = movieService.addMovie(addMovieRequest);
-        return new ModelAndView("redirect:/movie/" + movie.getId());
+        return new ModelAndView("redirect:/movies/" + movie.getId());
     }
 
     @GetMapping("/{id}")
@@ -126,7 +153,7 @@ public class MovieController {
 
         watchedMovieService.addToWatched(movie, user);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @DeleteMapping("/{movieId}/delete-watched")
@@ -136,7 +163,7 @@ public class MovieController {
 
         watchedMovieService.removeFromWatched(movie, user);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @PostMapping("/{movieId}/watchlist")
@@ -148,7 +175,7 @@ public class MovieController {
 
         watchlistService.addToWatchlist(movie, user);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @DeleteMapping("/{movieId}/delete-from-watchlist")
@@ -158,7 +185,7 @@ public class MovieController {
 
         watchlistService.removeFromWatchlist(movie, user);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 
     @GetMapping("/{movieId}/edit")
@@ -181,6 +208,7 @@ public class MovieController {
     public ModelAndView editMovieInfo(@Valid EditMovieRequest editMovieRequest, BindingResult bindingResult, @PathVariable UUID movieId) {
         Movie movie = movieService.findById(movieId);
         List<Genre> genres = genreService.findAll();
+        
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("movies-edit");
             modelAndView.addObject("genres", genres);
@@ -190,6 +218,6 @@ public class MovieController {
 
         movieService.updateMovieInfo(movieId, editMovieRequest);
 
-        return new ModelAndView("redirect:/movie/" + movieId);
+        return new ModelAndView("redirect:/movies/" + movieId);
     }
 }

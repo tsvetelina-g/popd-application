@@ -1,6 +1,5 @@
 package app.popdapplication.model.entity;
 
-import app.popdapplication.model.enums.GenreType;
 import jakarta.persistence.*;
 import lombok.*;
 

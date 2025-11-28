@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Repository
 public interface WatchlistMovieRepository extends JpaRepository<WatchlistMovie, UUID> {
+
     Optional<WatchlistMovie> findByWatchlistAndMovie(Watchlist watchlist, Movie movie);
 
     List<WatchlistMovie> findAllByWatchlist(Watchlist watchlist);

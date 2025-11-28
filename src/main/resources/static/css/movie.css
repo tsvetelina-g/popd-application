@@ -2,7 +2,6 @@
 
 /* Movie Details Section */
 .movie-details-section {
-    /*padding: 40px 0;*/
     min-height: 80vh;
 }
 
@@ -13,7 +12,6 @@
     border-radius: 12px;
     max-width: 100%;
     width: 100%;
-    /*margin: 0 auto;*/
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
@@ -72,7 +70,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85); /* overlay color */
+    background: rgba(0, 0, 0, 0.85);
     opacity: var(--show-overlay);
     transition: opacity 0.3s ease;
     z-index: 1;
@@ -89,8 +87,6 @@
     flex-shrink: 0;
     width: 300px;
     height: 400px;
-    /*border: 3px solid var(--border);*/
-    /*background-color: var(--accent);*/
     align-items: center;
     justify-content: center;
     border-radius: 8px;
@@ -193,10 +189,10 @@
 .movie-actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-between; /* space buttons evenly */
+    justify-content: space-between;
     align-items: stretch;
     width: 100%;
-    gap: 10px; /* consistent spacing between buttons */
+    gap: 10px;
     margin-top: 15px;
     padding: 20px;
 }
@@ -341,7 +337,6 @@
     flex-direction: column;
     gap: 10px;
     justify-content: space-between;
-    /*padding: 20px;*/
 }
 
 .stat-item {
@@ -487,9 +482,6 @@
     transform: translateY(-2px);
 }
 
-.rating-button.active,
-.rating-radio:checked + .rating-button {
-}
 
 .popcorn-rating-icon {
     width: 30px;
@@ -687,14 +679,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /*align-content: space-between;*/
     align-content: stretch;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     overflow: hidden;
-    /*flex: 0 0 auto;*/
     width: 150px;
     padding: 0;
 }
@@ -801,7 +791,6 @@
 .reviews-section {
     margin-top: 40px;
     background: var(--bg);
-    /*border: 1px solid var(--border);*/
     border-radius: 8px;
     padding: 20px;
 }

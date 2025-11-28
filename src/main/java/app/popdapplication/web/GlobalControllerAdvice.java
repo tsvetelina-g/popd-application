@@ -47,7 +47,7 @@ public class GlobalControllerAdvice {
             if (referer != null && referer.contains("/credit/")) {
                 return "redirect:/credit/" + movieId + "/add";
             }
-            return "redirect:/movie/" + movieId;
+            return "redirect:/movies/" + movieId;
         }
 
         if (referer != null) {
@@ -92,7 +92,7 @@ public class GlobalControllerAdvice {
         Object movieId = request.getAttribute("movieId");
 
         if (movieId != null) {
-            return "redirect:/movie/" + movieId;
+            return "redirect:/movies/" + movieId;
         }
 
         return "redirect:/";
@@ -119,7 +119,7 @@ public class GlobalControllerAdvice {
         Object movieId = request.getAttribute("movieId");
 
         if (movieId != null) {
-            return "redirect:/movie/" + movieId;
+            return "redirect:/movies/" + movieId;
         }
 
         return "redirect:/";

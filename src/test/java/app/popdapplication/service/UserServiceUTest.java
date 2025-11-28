@@ -156,11 +156,10 @@ public class UserServiceUTest {
 
     @Test
     void whenRegister_andValidData_thenSaveUserAndCreateWatchlist() {
-        RegisterRequest request = RegisterRequest.builder()
-                .username("tsvetelina")
-                .email("ts@gmail.com")
-                .password("123123123")
-                .build();
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("tsvetelina");
+        request.setEmail("ts@gmail.com");
+        request.setPassword("123123123");
         when(userRepository.findByUsername("tsvetelina")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("ts@gmail.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("123123123")).thenReturn("encodedPassword");
@@ -174,11 +173,10 @@ public class UserServiceUTest {
 
     @Test
     void whenRegister_andUsernameAlreadyExists_thenThrowsException() {
-        RegisterRequest request = RegisterRequest.builder()
-                .username("tsvetelina")
-                .email("ts@gmail.com")
-                .password("123123123")
-                .build();
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("tsvetelina");
+        request.setEmail("ts@gmail.com");
+        request.setPassword("123123123");
         when(userRepository.findByUsername("tsvetelina")).thenReturn(Optional.of(new User()));
 
         assertThrows(AlreadyExistsException.class, () -> userService.register(request));
@@ -188,11 +186,10 @@ public class UserServiceUTest {
 
     @Test
     void whenRegister_andEmailAlreadyExists_thenThrowsException() {
-        RegisterRequest request = RegisterRequest.builder()
-                .username("newuser")
-                .email("existing@example.com")
-                .password("password123")
-                .build();
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("newuser");
+        request.setEmail("existing@example.com");
+        request.setPassword("password123");
         when(userRepository.findByUsername("newuser")).thenReturn(Optional.empty());
         when(userRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(new User()));
 

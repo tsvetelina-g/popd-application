@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -91,8 +91,8 @@
             <div class="review-content">
                 <div class="review-movie-info">
                     <div class="review-details">
-                        <a th:href="@{'/movie/' + ${review.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(review.movieId)}">Movie Name</a>
-                        <h3 class="review-title" th:text="${review.title}">Review Title</h3>
+                        <a th:href="@{'/movies/' + ${review.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(review.movieId)}">Movie Name</a>
+                        <h3 class="review-title" th:if="${review.title != null and !#strings.isEmpty(review.title)}" th:text="${review.title}">Review Title</h3>
                     </div>
                 </div>
                 <div class="review-text-container">
@@ -126,7 +126,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const reviewItems = document.querySelectorAll('.review-item');
-        const COLLAPSED_HEIGHT = 120; // Max height when collapsed in pixels
+        const COLLAPSED_HEIGHT = 120;
         
         reviewItems.forEach(function(item) {
             const reviewTextContainer = item.querySelector('.review-text');
@@ -138,12 +138,10 @@
             if (reviewTextContent && readMoreBtn) {
                 const fullText = reviewTextContent.textContent;
                 
-                // Check if content exceeds collapsed height
                 reviewTextContainer.style.maxHeight = 'none';
                 const contentHeight = reviewTextContainer.scrollHeight;
                 
                 if (contentHeight > COLLAPSED_HEIGHT) {
-                    // Content is too long, enable expand/collapse
                     reviewTextContainer.style.maxHeight = COLLAPSED_HEIGHT + 'px';
                     readMoreBtn.style.display = 'block';
                     
@@ -151,13 +149,11 @@
                         const isExpanded = item.classList.contains('expanded');
                         
                         if (isExpanded) {
-                            // Collapse
                             reviewTextContainer.style.maxHeight = COLLAPSED_HEIGHT + 'px';
                             item.classList.remove('expanded');
                             readMoreText.style.display = 'inline';
                             readLessText.style.display = 'none';
                         } else {
-                            // Expand
                             reviewTextContainer.style.maxHeight = 'none';
                             item.classList.add('expanded');
                             readMoreText.style.display = 'none';
@@ -165,7 +161,6 @@
                         }
                     });
                 } else {
-                    // Content fits, hide button
                     readMoreBtn.style.display = 'none';
                 }
             }

@@ -9,5 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface WatchlistRepository extends JpaRepository<Watchlist, UUID> {
+
     Watchlist findByUser(User user);
 }

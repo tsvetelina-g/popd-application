@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -133,7 +133,7 @@
                         <div th:each="credit : ${roleEntry.value}"
                              class="credit-item"
                              th:attr="data-role=${roleEntry.key.name()}">
-                            <a th:href="@{'/movie/' + ${credit.movie.id}}" class="credit-link">
+                            <a th:href="@{'/movies/' + ${credit.movie.id}}" class="credit-link">
                                 <span class="credit-movie-title" th:text="${credit.movie.title}">Movie Title</span>
                                 <span class="credit-year"
                                       th:text="${credit.movie.releaseDate != null ? '(' + #temporals.format(credit.movie.releaseDate, 'yyyy') + ')' : ''}">
@@ -167,17 +167,14 @@
         }
         
         function filterCredits(selectedRole) {
-            // Hide all credit items
             creditItems.forEach(item => {
                 item.style.display = 'none';
             });
             
-            // Hide the "no credits" message
             if (noCreditsMessage) {
                 noCreditsMessage.style.display = 'none';
             }
             
-            // Show credit items for the selected role
             let foundCredits = false;
             creditItems.forEach(item => {
                 if (item.getAttribute('data-role') === selectedRole) {
@@ -191,12 +188,10 @@
             }
         }
         
-        // Set up change event listener
         roleSelect.addEventListener('change', function() {
             filterCredits(this.value);
         });
         
-        // Initialize with default selected role (actor)
         filterCredits(roleSelect.value);
     });
 </script>

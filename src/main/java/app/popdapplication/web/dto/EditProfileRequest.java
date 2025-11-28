@@ -30,5 +30,4 @@ public class EditProfileRequest {
     @URL
     @Nullable
     private String profilePictureUrl;
-
 }

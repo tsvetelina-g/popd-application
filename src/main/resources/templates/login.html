@@ -60,7 +60,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -78,6 +78,10 @@
         <div class="login-container">
             <h2 class="login-title">Welcome Back</h2>
             <p class="login-subtitle">Sign in to your popd account</p>
+
+            <div class="success-message" th:if="${registrationSuccess}" th:text="${registrationSuccess}">
+                User registered successfully!
+            </div>
 
             <form class="login-form" th:action="@{/login}" th:method="post">
                 <div class="form-group">
@@ -110,7 +114,6 @@
         </div>
     </section>
 </main>
-
 
 <footer class="site-footer">
     <div class="container">

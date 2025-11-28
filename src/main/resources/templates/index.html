@@ -57,7 +57,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -75,7 +75,7 @@
         <h2 class="section-title">Hot Movies</h2>
         <div class="movies-grid">
             <div class="movie-card" th:each="movie : ${movies}">
-                <a th:href="@{'/movie/' + ${movie.id}}">
+                <a th:href="@{'/movies/' + ${movie.id}}">
                     <img th:src="${movie.posterUrl != null ? movie.posterUrl : '/images/default-poster.jpg'}" 
                          th:alt="${movie.title}">
                     <div class="movie-info">
@@ -95,13 +95,13 @@
     </section>
 
     <section class="site-description">
+        <h2 class="section-title">POPd lets you...</h2>
         <div class="description-grid">
-            <div class="description-item">Eejed Chertyu</div>
-            <div class="description-item">MnD</div>
-            <div class="description-item">Dre Sd Ueek S</div>
-            <div class="description-item">Hadoo</div>
-            <div class="description-item">Bieow & Supoorny Gam Ue</div>
-            <div class="description-item">Coyce Sit</div>
+            <div class="description-item">Discover & Search Movies</div>
+            <div class="description-item">Rate & Review Films</div>
+            <div class="description-item">Build Your Watchlist</div>
+            <div class="description-item">Track Watched Movies</div>
+            <div class="description-item">Explore Artist Profiles</div>
         </div>
     </section>
 </main>

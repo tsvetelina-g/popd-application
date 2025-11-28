@@ -1,6 +1,5 @@
 package app.popdapplication.client;
 
-import app.popdapplication.client.RatingDto.Rating;
 import app.popdapplication.client.ReviewDto.MovieReviewStatsResponse;
 import app.popdapplication.client.ReviewDto.ReviewRequest;
 import app.popdapplication.client.ReviewDto.ReviewResponse;

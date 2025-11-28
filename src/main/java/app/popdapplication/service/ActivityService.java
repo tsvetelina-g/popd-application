@@ -38,6 +38,9 @@ public class ActivityService {
                 .build();
 
         activityRepository.save(activity);
+        log.info("Activity saved: type={}, userId={}, movieId={}, removed={}", 
+                activityDtoEvent.getType(), activityDtoEvent.getUserId(), 
+                activityDtoEvent.getMovieId(), activityDtoEvent.isRemoved());
     }
 
     public List<Activity> returnLatestFiveActivities(UUID userId) {
@@ -50,8 +53,8 @@ public class ActivityService {
         return activities;
     }
 
-    public long deleteByCreatedOnBefore(LocalDateTime oneYearAgo) {
-        return activityRepository.deleteAllByCreatedOnBefore(oneYearAgo);
+    public long deleteByCreatedOnBefore(LocalDateTime sixMonthsAgo) {
+        return activityRepository.deleteAllByCreatedOnBefore(sixMonthsAgo);
     }
 
     @Cacheable(value = "topMovies", key = "'top10'")

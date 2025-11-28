@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -85,7 +85,7 @@
                         <span class="warning-text" id="titleWarning"></span>
                     </div>
                     <input th:field="*{title}" type="text" id="title" name="title" class="form-input"
-                           placeholder="Enter review title" required>
+                           placeholder="Enter review title (optional)">
                 </div>
 
                 <div class="form-group">
@@ -96,6 +96,7 @@
                     <textarea th:field="*{content}" id="content" name="content" class="form-input"
                               placeholder="Enter your review content" rows="8" style="resize: vertical;" required></textarea>
                     <p class="alert-warning" th:if="${#fields.hasErrors('content')}">Invalid content</p>
+                    <p class="alert-warning" th:if="${contentError}" th:text="${contentError}">Content cannot be null</p>
 
                 </div>
 

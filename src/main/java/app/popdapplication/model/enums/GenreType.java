@@ -1,7 +1,6 @@
 package app.popdapplication.model.enums;
 
 public enum GenreType {
-
     ACTION("Action"),
     ADVENTURE("Adventure"),
     ANIMATION("Animation"),

@@ -59,7 +59,7 @@
                             <i class="fa-solid fa-chevron-down"></i>
                         </a>
                         <div class="dropdown-menu">
-                            <a href="/movie/add">Add Movie</a>
+                            <a href="/movies/add">Add Movie</a>
                             <a href="/artist/add">Add Artist</a>
                             <a href="/admin/users">Manage Users</a>
                             <a href="/admin">Admin Panel</a>
@@ -141,7 +141,7 @@
             </div>
 
             <div class="credit-edit-footer">
-                <a th:href="'/movie/' + ${movie.id}" class="back-button">
+                <a th:href="'/movies/' + ${movie.id}" class="back-button">
                     <i class="fas fa-arrow-left"></i>
                     Back to Movie
                 </a>
@@ -171,17 +171,14 @@
                     return;
                 }
 
-                // Hide all credit items
                 creditItems.forEach(item => {
                     item.style.display = 'none';
                 });
 
-                // Hide the "no credits" message initially
                 if (noCreditsMessage) {
                     noCreditsMessage.style.display = 'none';
                 }
 
-                // Show credit items for the selected role
                 let foundCredits = false;
                 creditItems.forEach(item => {
                     if (item.getAttribute('data-role') === selectedRole) {
@@ -190,18 +187,15 @@
                     }
                 });
 
-                // Show message if no credits found for selected role
                 if (!foundCredits && noCreditsMessage) {
                     noCreditsMessage.style.display = 'block';
                 }
             }
 
-            // Set up change event listener
             roleSelect.addEventListener('change', function () {
                 filterCredits(this.value);
             });
 
-            // Initialize with "Actor" selected (default)
             filterCredits(roleSelect.value);
         }
     });
