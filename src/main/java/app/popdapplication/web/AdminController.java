@@ -28,8 +28,7 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping
-    @RequestMapping("/users")
+    @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         ModelAndView modelAndView = new ModelAndView("admin-users");
@@ -43,8 +42,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PatchMapping
-    @RequestMapping("users/{userId}/status")
+    @PatchMapping("users/{userId}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public String changeUserStatus(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size, @AuthenticationPrincipal UserData userData) {
         UUID adminId = userData.getUserId();
@@ -58,8 +56,7 @@ public class AdminController {
         return "redirect:/admin/users?page=" + page + "&size=" + size;
     }
 
-    @PatchMapping
-    @RequestMapping("users/{userId}/role")
+    @PatchMapping("users/{userId}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public String changeUserRole(@PathVariable UUID userId, @RequestParam int page, @RequestParam int size, @AuthenticationPrincipal UserData userData) {
         UUID adminId = userData.getUserId();

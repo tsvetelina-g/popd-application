@@ -98,3 +98,128 @@
     }
 }
 
+/* AI Recommendations Section */
+.ai-recommendations-section {
+    margin: 40px 0;
+    padding: 30px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.ai-recommendations-section .section-title {
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.ai-description {
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.ai-recommendation-form {
+    margin-bottom: 20px;
+}
+
+.ai-input-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ai-query-input {
+    flex: 1;
+    min-width: 300px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    font-family: inherit;
+}
+
+.ai-query-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(133, 3, 9, 0.2);
+}
+
+.ai-query-input::placeholder {
+    color: var(--muted);
+}
+
+.ai-submit-button {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-submit-button:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+}
+
+.ai-submit-button:active {
+    transform: translateY(0);
+}
+
+.ai-response-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.ai-response-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.ai-response-title {
+    color: var(--text);
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.ai-response-content {
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .ai-input-group {
+        flex-direction: column;
+    }
+    
+    .ai-query-input {
+        min-width: 100%;
+    }
+    
+    .ai-submit-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

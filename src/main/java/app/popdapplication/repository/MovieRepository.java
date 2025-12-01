@@ -24,7 +24,6 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
             """,
             nativeQuery = true
     )
-
     List<Movie> findTop10ByClosestReleaseDate(LocalDate today, Pageable pageable);
 
     @Query(
@@ -37,6 +36,5 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
     """,
             nativeQuery = true
     )
-
     List<Movie> findTop5ByGenreIdClosestReleaseDate(@Param("genreId") UUID genreId, @Param("today") LocalDate today, Pageable pageable);
 }

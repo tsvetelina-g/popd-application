@@ -9,6 +9,7 @@ import app.popdapplication.security.UserData;
 import app.popdapplication.service.ArtistService;
 import app.popdapplication.service.MovieCreditService;
 import app.popdapplication.service.MovieService;
+import app.popdapplication.web.dto.ArtistSearchResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -97,11 +98,15 @@ public class CreditControllerApiTest {
     }
 
     @Test
-    void searchArtists_andUserIsAuthenticated_thenReturnArtistNames() throws Exception {
+    void searchArtists_andUserIsAuthenticated_thenReturnArtistSearchResults() throws Exception {
         UserDetails authenticatedUser = regularUserAuthentication();
-        List<String> artistNames = List.of("Artist 1", "Artist 2", "Artist 3");
+        List<ArtistSearchResult> artists = List.of(
+                new ArtistSearchResult("Artist 1", 1980),
+                new ArtistSearchResult("Artist 2", null),
+                new ArtistSearchResult("Artist 3", 1990)
+        );
 
-        when(artistService.searchArtistNames("Artist", 50)).thenReturn(artistNames);
+        when(artistService.searchArtistsWithBirthYear("Artist", 50)).thenReturn(artists);
 
         MockHttpServletRequestBuilder httpRequest = get("/credit/artists/search")
                 .param("query", "Artist")
@@ -109,17 +114,20 @@ public class CreditControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(status().isOk())
-                .andExpect(content().json("[\"Artist 1\",\"Artist 2\",\"Artist 3\"]"));
+                .andExpect(content().json("[{\"name\":\"Artist 1\",\"birthYear\":1980},{\"name\":\"Artist 2\",\"birthYear\":null},{\"name\":\"Artist 3\",\"birthYear\":1990}]"));
 
-        verify(artistService).searchArtistNames("Artist", 50);
+        verify(artistService).searchArtistsWithBirthYear("Artist", 50);
     }
 
     @Test
     void searchArtists_andEmptyQuery_thenReturnResultsWithEmptyQuery() throws Exception {
         UserDetails authenticatedUser = regularUserAuthentication();
-        List<String> artistNames = List.of("Artist 1", "Artist 2");
+        List<ArtistSearchResult> artists = List.of(
+                new ArtistSearchResult("Artist 1", 1980),
+                new ArtistSearchResult("Artist 2", null)
+        );
 
-        when(artistService.searchArtistNames("", 50)).thenReturn(artistNames);
+        when(artistService.searchArtistsWithBirthYear("", 50)).thenReturn(artists);
 
         MockHttpServletRequestBuilder httpRequest = get("/credit/artists/search")
                 .with(user(authenticatedUser));
@@ -127,7 +135,7 @@ public class CreditControllerApiTest {
         mockMvc.perform(httpRequest)
                 .andExpect(status().isOk());
 
-        verify(artistService).searchArtistNames("", 50);
+        verify(artistService).searchArtistsWithBirthYear("", 50);
     }
 
     @Test
@@ -138,7 +146,7 @@ public class CreditControllerApiTest {
         mockMvc.perform(httpRequest)
                 .andExpect(status().is3xxRedirection());
 
-        verify(artistService, never()).searchArtistNames(any(), anyInt());
+        verify(artistService, never()).searchArtistsWithBirthYear(any(), anyInt());
     }
 
     @Test

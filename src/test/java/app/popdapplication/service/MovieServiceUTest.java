@@ -286,4 +286,85 @@ public class MovieServiceUTest {
         assertEquals(4, result.size());
         verify(movieRepository).findTop10ByClosestReleaseDate(any(LocalDate.class), any(PageRequest.class));
     }
+
+    @Test
+    void whenGetTop5MoviesByGenreClosestReleaseDate_thenReturnTop5Movies() {
+        UUID genreId = UUID.randomUUID();
+        List<Movie> movies = List.of(
+                Movie.builder().title("Movie 1").build(),
+                Movie.builder().title("Movie 2").build()
+        );
+        when(movieRepository.findTop5ByGenreIdClosestReleaseDate(
+                eq(genreId), any(LocalDate.class), any(PageRequest.class)))
+                .thenReturn(movies);
+
+        List<Movie> result = movieService.getTop5MoviesByGenreClosestReleaseDate(genreId);
+
+        assertEquals(2, result.size());
+        verify(movieRepository).findTop5ByGenreIdClosestReleaseDate(
+                eq(genreId), any(LocalDate.class), any(PageRequest.class));
+    }
+
+    @Test
+    void whenGetTop5MostRecentReleases_thenReturnTop5Movies() {
+        List<Movie> movies = List.of(
+                Movie.builder().title("Movie 1").build(),
+                Movie.builder().title("Movie 2").build()
+        );
+        when(movieRepository.findTop10ByClosestReleaseDate(any(LocalDate.class), any(PageRequest.class)))
+                .thenReturn(movies);
+
+        List<Movie> result = movieService.getTop5MostRecentReleases();
+
+        assertEquals(2, result.size());
+        verify(movieRepository).findTop10ByClosestReleaseDate(any(LocalDate.class), any(PageRequest.class));
+    }
+
+    @Test
+    void whenGetMovieNamesByIds_withNullId_thenSkipNullId() {
+        UUID validId = UUID.randomUUID();
+        Movie movie = Movie.builder().id(validId).title("Valid Movie").build();
+        Set<UUID> movieIds = new HashSet<>();
+        movieIds.add(validId);
+        movieIds.add(null);
+
+        when(movieRepository.findById(validId)).thenReturn(Optional.of(movie));
+
+        Map<UUID, String> result = movieService.getMovieNamesByIds(movieIds);
+
+        assertEquals(1, result.size());
+        assertEquals("Valid Movie", result.get(validId));
+    }
+
+    @Test
+    void whenGetMovieNamesByIds_withDuplicateIds_thenSkipDuplicates() {
+        UUID movieId = UUID.randomUUID();
+        Movie movie = Movie.builder().id(movieId).title("Movie").build();
+        Set<UUID> movieIds = new HashSet<>();
+        movieIds.add(movieId);
+
+        when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
+
+        Map<UUID, String> result = movieService.getMovieNamesByIds(movieIds);
+
+        assertEquals(1, result.size());
+        assertEquals("Movie", result.get(movieId));
+        verify(movieRepository, times(1)).findById(movieId);
+    }
+
+    @Test
+    void whenGetMovieNamesByIds_andExceptionThrown_thenSkipAndContinue() {
+        UUID validId = UUID.randomUUID();
+        UUID invalidId = UUID.randomUUID();
+        Movie movie = Movie.builder().id(validId).title("Valid Movie").build();
+
+        when(movieRepository.findById(validId)).thenReturn(Optional.of(movie));
+        when(movieRepository.findById(invalidId)).thenThrow(new RuntimeException("Database error"));
+
+        Set<UUID> movieIds = Set.of(validId, invalidId);
+        Map<UUID, String> result = movieService.getMovieNamesByIds(movieIds);
+
+        assertEquals(1, result.size());
+        assertEquals("Valid Movie", result.get(validId));
+    }
 }
