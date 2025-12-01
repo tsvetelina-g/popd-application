@@ -56,6 +56,9 @@ public class MovieControllerApiTest {
     private ReviewService reviewService;
 
     @MockitoBean
+    private AiRecommendationService aiRecommendationService;
+
+    @MockitoBean
     private SessionRegistry sessionRegistry;
 
     @Autowired

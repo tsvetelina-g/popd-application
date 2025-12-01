@@ -4,6 +4,7 @@ import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Artist;
 import app.popdapplication.repository.ArtistRepository;
 import app.popdapplication.web.dto.AddArtistRequest;
+import app.popdapplication.web.dto.ArtistSearchResult;
 import app.popdapplication.web.dto.EditArtistRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -46,7 +51,8 @@ public class ArtistService {
 
     @CacheEvict(value = "artists", key = "#artistId")
     public void updateArtistInfo(UUID artistId, EditArtistRequest editArtistRequest) {
-        Artist artist = findById(artistId);
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new NotFoundException("Artist with id [%s] not found".formatted(artistId)));
 
         artist.setName(editArtistRequest.getName());
         artist.setBiography(editArtistRequest.getBiography());
@@ -61,7 +67,44 @@ public class ArtistService {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
             return artistRepository.findAllByOrderByName();
         }
-        return artistRepository.findByNameContainingIgnoreCase(searchTerm.trim());
+        
+        String trimmedTerm = searchTerm.trim();
+        String[] words = trimmedTerm.split("\\s+");
+        
+        if (words.length > 1) {
+            List<Artist> exactMatch = artistRepository.findByNameContainingIgnoreCase(trimmedTerm);
+            
+            List<Artist> multiWordResults = artistRepository.findByNameContainingBothWords(words[0], words[1]);
+            
+            if (words.length > 2) {
+                multiWordResults = multiWordResults.stream()
+                        .filter(artist -> {
+                            String lowerName = artist.getName().toLowerCase();
+                            return Arrays.stream(words)
+                                    .allMatch(word -> lowerName.contains(word.toLowerCase()));
+                        })
+                        .toList();
+            }
+            
+            Set<UUID> seenIds = new HashSet<>();
+            List<Artist> combined = new ArrayList<>();
+            
+            for (Artist artist : exactMatch) {
+                if (seenIds.add(artist.getId())) {
+                    combined.add(artist);
+                }
+            }
+            
+            for (Artist artist : multiWordResults) {
+                if (seenIds.add(artist.getId())) {
+                    combined.add(artist);
+                }
+            }
+            
+            return combined;
+        }
+        
+        return artistRepository.findByNameContainingIgnoreCase(trimmedTerm);
     }
     
     public Artist findByName(String name) {
@@ -79,10 +122,15 @@ public class ArtistService {
                 .toList();
     }
 
-    public List<String> searchArtistNames(String query, int limit) {
+    public List<ArtistSearchResult> searchArtistsWithBirthYear(String query, int limit) {
         List<Artist> artists = searchArtists(query);
         return artists.stream()
-                .map(Artist::getName)
+                .map(artist -> {
+                    Integer birthYear = artist.getBirthDate() != null 
+                            ? artist.getBirthDate().getYear() 
+                            : null;
+                    return new ArtistSearchResult(artist.getName(), birthYear);
+                })
                 .limit(limit)
                 .toList();
     }

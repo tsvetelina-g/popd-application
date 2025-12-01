@@ -286,7 +286,6 @@ public class MovieCreditServiceUTest {
         assertTrue(result.containsKey(ArtistRole.ACTOR));
         assertTrue(result.containsKey(ArtistRole.DIRECTOR));
 
-        // Verify sorted by release date descending (newest first)
         List<MovieCredit> actorCredits = result.get(ArtistRole.ACTOR);
         assertEquals(2, actorCredits.size());
         assertEquals("New Movie", actorCredits.get(0).getMovie().getTitle());

@@ -157,17 +157,42 @@
             return;
         }
 
-        function populateDropdown(artistNames) {
+        function populateDropdown(artists) {
             if (!dropdown) return;
 
             dropdown.innerHTML = '';
             allOptions = [];
 
-            artistNames.forEach(name => {
+            // Validate that artists is an array
+            if (!Array.isArray(artists)) {
+                console.error('populateDropdown: artists is not an array', artists);
+                return;
+            }
+
+            // Filter out invalid entries and process valid artists
+            artists.forEach(artist => {
+                // Validate artist object structure
+                if (!artist || typeof artist !== 'object') {
+                    console.warn('Invalid artist entry:', artist);
+                    return;
+                }
+
+                // Ensure name exists and is a string
+                if (!artist.name || typeof artist.name !== 'string') {
+                    console.warn('Artist missing valid name:', artist);
+                    return;
+                }
+
                 const option = document.createElement('div');
                 option.className = 'dropdown-option';
-                option.setAttribute('data-value', name);
-                option.textContent = name;
+                option.setAttribute('data-value', artist.name);
+                
+                // Display format: "Name (Year)" or just "Name" if no birth year
+                const displayText = artist.birthYear != null 
+                    ? `${artist.name} (${artist.birthYear})` 
+                    : artist.name;
+                option.textContent = displayText;
+                
                 dropdown.appendChild(option);
                 allOptions.push(option);
             });
@@ -195,19 +220,30 @@
                         }
                         return response.json();
                     })
-                    .then(artistNames => {
-                        if (Array.isArray(artistNames)) {
-                            populateDropdown(artistNames);
-                            if (artistNames.length > 0) {
-                                showDropdown();
-                            } else {
-                                hideDropdown();
-                            }
-                            highlightedIndex = -1;
-                        } else {
-                            console.error('Invalid response format:', artistNames);
+                    .then(artists => {
+                        if (!Array.isArray(artists)) {
+                            console.error('Invalid response format: expected array, got:', typeof artists, artists);
                             hideDropdown();
+                            return;
                         }
+
+                        // Filter out any invalid entries before populating
+                        const validArtists = artists.filter(artist => 
+                            artist && 
+                            typeof artist === 'object' && 
+                            artist.name && 
+                            typeof artist.name === 'string'
+                        );
+
+                        if (validArtists.length === 0) {
+                            hideDropdown();
+                            highlightedIndex = -1;
+                            return;
+                        }
+
+                        populateDropdown(validArtists);
+                        showDropdown();
+                        highlightedIndex = -1;
                     })
                     .catch(error => {
                         console.error('Error searching artists:', error);

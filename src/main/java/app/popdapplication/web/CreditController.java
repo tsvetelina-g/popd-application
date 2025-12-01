@@ -7,6 +7,7 @@ import app.popdapplication.service.ArtistService;
 import app.popdapplication.service.MovieCreditService;
 import app.popdapplication.service.MovieService;
 import app.popdapplication.web.dto.AddCreditRequest;
+import app.popdapplication.web.dto.ArtistSearchResult;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,9 +49,9 @@ public class CreditController {
 
     @GetMapping("/artists/search")
     @ResponseBody
-    public ResponseEntity<List<String>> searchArtists(@RequestParam(required = false, defaultValue = "") String query) {
-        List<String> artistNames = artistService.searchArtistNames(query, 50);
-        return ResponseEntity.ok(artistNames);
+    public ResponseEntity<List<ArtistSearchResult>> searchArtists(@RequestParam(required = false, defaultValue = "") String query) {
+        List<ArtistSearchResult> artists = artistService.searchArtistsWithBirthYear(query, 50);
+        return ResponseEntity.ok(artists);
     }
 
     @PostMapping("/{movieId}/add")

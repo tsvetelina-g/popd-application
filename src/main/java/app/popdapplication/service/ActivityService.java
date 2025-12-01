@@ -4,6 +4,7 @@ import app.popdapplication.event.ActivityDtoEvent;
 import app.popdapplication.model.entity.Activity;
 import app.popdapplication.repository.ActivityRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.event.EventListener;
@@ -22,6 +23,7 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
 
+    @Autowired
     public ActivityService(ActivityRepository activityRepository) {
         this.activityRepository = activityRepository;
     }

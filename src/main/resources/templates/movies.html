@@ -73,6 +73,37 @@
 
 <main class="container">
     <section class="movies-section">
+        <!-- AI Recommendations Section -->
+        <div class="ai-recommendations-section">
+            <h3 class="section-title">AI Movie Recommendations</h3>
+            <p class="ai-description">Ask for movie recommendations based on your preferences!</p>
+            
+            <form action="/movies" method="get" class="ai-recommendation-form">
+                <input type="hidden" name="genreId" th:value="${selectedGenreId}">
+                <div class="ai-input-group">
+                    <input type="text" 
+                           name="aiQuery" 
+                           th:value="${aiQuery}"
+                           placeholder="e.g., 'I like action movies with good plot twists' or 'Recommend sci-fi movies similar to The Matrix'"
+                           class="ai-query-input"
+                           required>
+                    <button type="submit" class="action-button ai-submit-button">
+                        <i class="fas fa-robot"></i>
+                        Get Recommendations
+                    </button>
+                </div>
+            </form>
+            
+            <div th:if="${aiRecommendations != null}" class="ai-response-container">
+                <div class="ai-response-header">
+                    <h4 class="ai-response-title">AI Recommendations:</h4>
+                </div>
+                <div class="ai-response-content" th:text="${aiRecommendations}">
+                    <!-- AI response will appear here -->
+                </div>
+            </div>
+        </div>
+
         <div class="movies-header">
             <h2 class="section-title" th:text="${selectedGenre != null ? 'Newest ' + selectedGenre.name + ' Releases' : 'Newest Releases'}">
                 Newest Releases

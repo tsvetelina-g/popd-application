@@ -4,6 +4,7 @@ import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Artist;
 import app.popdapplication.repository.ArtistRepository;
 import app.popdapplication.web.dto.AddArtistRequest;
+import app.popdapplication.web.dto.ArtistSearchResult;
 import app.popdapplication.web.dto.EditArtistRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -225,68 +226,57 @@ public class ArtistServiceUTest {
     }
 
     @Test
-    void whenSearchArtistNames_andQueryIsProvided_thenReturnLimitedListOfArtistNames() {
-        List<Artist> artists = List.of(
-                Artist.builder().name("Actor 1").build(),
-                Artist.builder().name("Actor 2").build(),
-                Artist.builder().name("Actor 3").build()
-        );
-        when(artistRepository.findByNameContainingIgnoreCase("Actor")).thenReturn(artists);
+    void whenSearchArtistsWithBirthYear_withEmptyQuery_thenReturnAllArtists() {
+        Artist artist1 = Artist.builder().id(UUID.randomUUID()).name("Artist A").birthDate(LocalDate.of(1980, 1, 1)).build();
+        Artist artist2 = Artist.builder().id(UUID.randomUUID()).name("Artist B").build();
+        when(artistRepository.findAllByOrderByName()).thenReturn(List.of(artist1, artist2));
 
-        List<String> result = artistService.searchArtistNames("Actor", 2);
+        List<ArtistSearchResult> result = artistService.searchArtistsWithBirthYear("", 10);
 
         assertEquals(2, result.size());
-        assertEquals("Actor 1", result.get(0));
-        assertEquals("Actor 2", result.get(1));
+        assertEquals("Artist A", result.get(0).getName());
+        assertEquals(1980, result.get(0).getBirthYear());
+        assertEquals("Artist B", result.get(1).getName());
+        assertNull(result.get(1).getBirthYear());
     }
 
     @Test
-    void whenSearchArtistNames_andQueryIsNull_thenReturnAllArtistNamesUpToLimit() {
-        List<Artist> allArtists = List.of(
-                Artist.builder().name("Actor 1").build(),
-                Artist.builder().name("Actor 2").build(),
-                Artist.builder().name("Actor 3").build()
-        );
-        when(artistRepository.findAllByOrderByName()).thenReturn(allArtists);
+    void whenSearchArtistsWithBirthYear_withMultiWordQuery_thenReturnCombinedResults() {
+        Artist artist1 = Artist.builder().id(UUID.randomUUID()).name("John Smith").birthDate(LocalDate.of(1980, 1, 1)).build();
+        Artist artist2 = Artist.builder().id(UUID.randomUUID()).name("Smith John").birthDate(LocalDate.of(1990, 5, 10)).build();
+        when(artistRepository.findByNameContainingIgnoreCase("John Smith")).thenReturn(List.of(artist1));
+        when(artistRepository.findByNameContainingBothWords("John", "Smith")).thenReturn(List.of(artist1, artist2));
 
-        List<String> result = artistService.searchArtistNames(null, 2);
+        List<ArtistSearchResult> result = artistService.searchArtistsWithBirthYear("John Smith", 10);
 
         assertEquals(2, result.size());
+        verify(artistRepository).findByNameContainingIgnoreCase("John Smith");
+        verify(artistRepository).findByNameContainingBothWords("John", "Smith");
     }
 
     @Test
-    void whenSearchArtistNames_andQueryIsEmptyString_thenReturnAllArtistNamesUpToLimit() {
-        List<Artist> allArtists = List.of(
-                Artist.builder().name("Actor 1").build(),
-                Artist.builder().name("Actor 2").build()
-        );
-        when(artistRepository.findAllByOrderByName()).thenReturn(allArtists);
+    void whenSearchArtistsWithBirthYear_withThreeWordQuery_thenFilterResults() {
+        Artist artist1 = Artist.builder().id(UUID.randomUUID()).name("John Michael Smith").birthDate(LocalDate.of(1980, 1, 1)).build();
+        Artist artist2 = Artist.builder().id(UUID.randomUUID()).name("John Smith").birthDate(LocalDate.of(1990, 5, 10)).build();
+        when(artistRepository.findByNameContainingIgnoreCase("John Michael Smith")).thenReturn(List.of(artist1));
+        when(artistRepository.findByNameContainingBothWords("John", "Michael")).thenReturn(List.of(artist1, artist2));
 
-        List<String> result = artistService.searchArtistNames("", 5);
-
-        assertEquals(2, result.size());
-    }
-
-    @Test
-    void whenSearchArtistNames_andQueryIsWhitespaceOnly_thenTreatAsEmptyAndReturnAllArtistNames() {
-        List<Artist> allArtists = List.of(
-                Artist.builder().name("Actor 1").build()
-        );
-        when(artistRepository.findAllByOrderByName()).thenReturn(allArtists);
-
-        List<String> result = artistService.searchArtistNames("   ", 10);
+        List<ArtistSearchResult> result = artistService.searchArtistsWithBirthYear("John Michael Smith", 10);
 
         assertEquals(1, result.size());
-        assertEquals("Actor 1", result.get(0));
+        assertEquals("John Michael Smith", result.get(0).getName());
     }
 
     @Test
-    void whenSearchArtistNames_andNoArtistsMatchQuery_thenReturnEmptyList() {
-        when(artistRepository.findByNameContainingIgnoreCase("NoMatch")).thenReturn(Collections.emptyList());
+    void whenSearchArtistsWithBirthYear_withLimit_thenReturnLimitedResults() {
+        Artist artist1 = Artist.builder().id(UUID.randomUUID()).name("Artist 1").birthDate(LocalDate.of(1980, 1, 1)).build();
+        Artist artist2 = Artist.builder().id(UUID.randomUUID()).name("Artist 2").birthDate(LocalDate.of(1990, 5, 10)).build();
+        Artist artist3 = Artist.builder().id(UUID.randomUUID()).name("Artist 3").build();
+        when(artistRepository.findByNameContainingIgnoreCase("Artist")).thenReturn(List.of(artist1, artist2, artist3));
 
-        List<String> result = artistService.searchArtistNames("NoMatch", 10);
+        List<ArtistSearchResult> result = artistService.searchArtistsWithBirthYear("Artist", 2);
 
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertEquals(2, result.size());
     }
+
 }

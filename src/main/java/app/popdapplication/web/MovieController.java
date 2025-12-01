@@ -33,8 +33,9 @@ public class MovieController {
     private final MovieCreditService movieCreditService;
     private final RatingService ratingService;
     private final ReviewService reviewService;
+    private final AiRecommendationService aiRecommendationService;
 
-    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService, RatingService ratingService, ReviewService reviewService) {
+    public MovieController(MovieService movieService, UserService userService, WatchedMovieService watchedMovieService, WatchlistService watchlistService, GenreService genreService, MovieCreditService movieCreditService, RatingService ratingService, ReviewService reviewService, AiRecommendationService aiRecommendationService) {
         this.movieService = movieService;
         this.userService = userService;
         this.watchedMovieService = watchedMovieService;
@@ -43,15 +44,18 @@ public class MovieController {
         this.movieCreditService = movieCreditService;
         this.ratingService = ratingService;
         this.reviewService = reviewService;
+        this.aiRecommendationService = aiRecommendationService;
     }
 
     @GetMapping
-    public ModelAndView getAllMovies(@RequestParam(required = false) UUID genreId) {
+    public ModelAndView getAllMovies(@RequestParam(required = false) UUID genreId,
+                                     @RequestParam(required = false) String aiQuery) {
         ModelAndView modelAndView = new ModelAndView("movies");
 
         List<Genre> genres = genreService.findAll();
         List<Movie> movies;
         Genre selectedGenre = null;
+        String aiRecommendations = null;
 
         if (genreId != null) {
             selectedGenre = genreService.findById(genreId).orElse(null);
@@ -64,10 +68,16 @@ public class MovieController {
             movies = movieService.getTop5MostRecentReleases();
         }
 
+        if (aiQuery != null && !aiQuery.trim().isEmpty()) {
+            aiRecommendations = aiRecommendationService.getMovieRecommendations(aiQuery.trim());
+        }
+
         modelAndView.addObject("genres", genres);
         modelAndView.addObject("movies", movies != null ? movies : new ArrayList<>());
         modelAndView.addObject("selectedGenreId", genreId);
         modelAndView.addObject("selectedGenre", selectedGenre);
+        modelAndView.addObject("aiRecommendations", aiRecommendations);
+        modelAndView.addObject("aiQuery", aiQuery);
 
         return modelAndView;
     }
@@ -99,7 +109,8 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getMoviePage(@PathVariable("id") UUID movieId, @AuthenticationPrincipal UserData userData) {
+    public ModelAndView getMoviePage(@PathVariable("id") UUID movieId, 
+                                     @AuthenticationPrincipal UserData userData) {
         Movie movie = movieService.findById(movieId);
 
         boolean movieIsWatched = false;
