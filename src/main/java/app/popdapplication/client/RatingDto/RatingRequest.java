@@ -13,5 +13,5 @@ public class RatingRequest {
 
     private UUID movieId;
 
-    private int value;
+    private int rating;
 }

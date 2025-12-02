@@ -46,11 +46,11 @@ public class RatingServiceUTest {
     void whenUpsertRating_andRatingClientSucceeds_thenSaveRatingAndPublishActivityEvent() {
         UUID userId = UUID.randomUUID();
         UUID movieId = UUID.randomUUID();
-        int value = 8;
+        int rating = 8;
 
         when(reviewService.getReviewByUserAndMovie(userId, movieId)).thenReturn(null);
 
-        ratingService.upsertRating(userId, movieId, value);
+        ratingService.upsertRating(userId, movieId, rating);
 
         ArgumentCaptor<RatingRequest> requestCaptor = ArgumentCaptor.forClass(RatingRequest.class);
         verify(client).upsertRating(requestCaptor.capture());
@@ -58,7 +58,7 @@ public class RatingServiceUTest {
         RatingRequest capturedRequest = requestCaptor.getValue();
         assertEquals(userId, capturedRequest.getUserId());
         assertEquals(movieId, capturedRequest.getMovieId());
-        assertEquals(value, capturedRequest.getValue());
+        assertEquals(rating, capturedRequest.getRating());
 
         ArgumentCaptor<ActivityDtoEvent> eventCaptor = ArgumentCaptor.forClass(ActivityDtoEvent.class);
         verify(eventPublisher).publishEvent(eventCaptor.capture());
@@ -68,14 +68,14 @@ public class RatingServiceUTest {
         assertEquals(movieId, capturedEvent.getMovieId());
         assertEquals(ActivityType.RATED, capturedEvent.getType());
         assertFalse(capturedEvent.isRemoved());
-        assertEquals(value, capturedEvent.getRating());
+        assertEquals(rating, capturedEvent.getRating());
     }
 
     @Test
     void whenUpsertRating_andUserHasExistingReview_thenUpdateReviewWithNewRatingValue() {
         UUID userId = UUID.randomUUID();
         UUID movieId = UUID.randomUUID();
-        int value = 9;
+        int rating = 9;
         ReviewResponse existingReview = ReviewResponse.builder()
                 .title("Title")
                 .content("Content")
@@ -83,9 +83,9 @@ public class RatingServiceUTest {
 
         when(reviewService.getReviewByUserAndMovie(userId, movieId)).thenReturn(existingReview);
 
-        ratingService.upsertRating(userId, movieId, value);
+        ratingService.upsertRating(userId, movieId, rating);
 
-        verify(reviewService).upsertReview(userId, movieId, value, "Title", "Content");
+        verify(reviewService).upsertReview(userId, movieId, rating, "Title", "Content");
         verify(eventPublisher).publishEvent(any(ActivityDtoEvent.class));
     }
 
@@ -116,7 +116,7 @@ public class RatingServiceUTest {
     void whenGetRatingByUserAndMovie_andRatingExists_thenReturnRatingValue() {
         UUID userId = UUID.randomUUID();
         UUID movieId = UUID.randomUUID();
-        Rating rating = Rating.builder().value(8).build();
+        Rating rating = Rating.builder().rating(8).build();
 
         when(client.getRatingByUserAndMovie(userId, movieId)).thenReturn(ResponseEntity.ok(rating));
 
@@ -362,8 +362,8 @@ public class RatingServiceUTest {
     void whenGetLatestRatingsByUserId_andRatingsExist_thenReturnListOfRatings() {
         UUID userId = UUID.randomUUID();
         List<Rating> ratings = List.of(
-                Rating.builder().movieId(UUID.randomUUID()).value(8).build(),
-                Rating.builder().movieId(UUID.randomUUID()).value(9).build()
+                Rating.builder().movieId(UUID.randomUUID()).rating(8).build(),
+                Rating.builder().movieId(UUID.randomUUID()).rating(9).build()
         );
 
         when(client.getLatestRatingsByUser(userId)).thenReturn(ResponseEntity.ok(ratings));
@@ -402,9 +402,9 @@ public class RatingServiceUTest {
         UUID movieId2 = UUID.randomUUID();
         UUID movieId3 = UUID.randomUUID();
         List<Rating> ratings = List.of(
-                Rating.builder().movieId(movieId1).value(7).build(),
-                Rating.builder().movieId(movieId2).value(8).build(),
-                Rating.builder().movieId(movieId3).value(9).build()
+                Rating.builder().movieId(movieId1).rating(7).build(),
+                Rating.builder().movieId(movieId2).rating(8).build(),
+                Rating.builder().movieId(movieId3).rating(9).build()
         );
 
         Set<UUID> result = ratingService.extractMovieIdsFromRatings(ratings);
@@ -420,9 +420,9 @@ public class RatingServiceUTest {
         UUID movieId1 = UUID.randomUUID();
         UUID movieId2 = UUID.randomUUID();
         List<Rating> ratings = List.of(
-                Rating.builder().movieId(movieId1).value(7).build(),
-                Rating.builder().movieId(movieId1).value(8).build(),
-                Rating.builder().movieId(movieId2).value(9).build()
+                Rating.builder().movieId(movieId1).rating(7).build(),
+                Rating.builder().movieId(movieId1).rating(8).build(),
+                Rating.builder().movieId(movieId2).rating(9).build()
         );
 
         Set<UUID> result = ratingService.extractMovieIdsFromRatings(ratings);
@@ -450,8 +450,8 @@ public class RatingServiceUTest {
     void whenExtractMovieIdsFromRatings_andSomeRatingsHaveNullMovieIds_thenFilterOutNullsAndReturnValidIds() {
         UUID movieId1 = UUID.randomUUID();
         List<Rating> ratings = List.of(
-                Rating.builder().movieId(movieId1).value(7).build(),
-                Rating.builder().movieId(null).value(8).build()
+                Rating.builder().movieId(movieId1).rating(7).build(),
+                Rating.builder().movieId(null).rating(8).build()
         );
 
         Set<UUID> result = ratingService.extractMovieIdsFromRatings(ratings);

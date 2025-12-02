@@ -94,7 +94,7 @@
                          alt="Popcorn" class="popcorn-icon">
                     <div class="movie-rating-details">
                         <a th:href="@{'/movies/' + ${rating.movieId}}" class="movie-name" th:text="${movieIdToMovieNameMap.get(rating.movieId)}">Movie Name</a>
-                        <span class="rating-value" th:text="${rating.value + ' popcorns'}">5 popcorns</span>
+                        <span class="rating-value" th:text="${rating.rating + ' popcorns'}">5 popcorns</span>
                     </div>
                 </div>
                 <div class="rating-date" th:if="${rating.createdOn != null}"

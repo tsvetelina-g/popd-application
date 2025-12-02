@@ -8,5 +8,6 @@ import lombok.Data;
 public class MovieRatingStatsResponse {
 
     private Double averageRating;
+
     private Integer totalRatings;
 }

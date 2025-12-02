@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 public class Rating {
 
-    private int value;
+    private int rating;
 
     private UUID userId;
 

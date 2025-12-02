@@ -34,19 +34,19 @@ public class RatingService {
         this.eventPublisher = eventPublisher;
     }
 
-    public void upsertRating(UUID userId, UUID movieId, int value) {
+    public void upsertRating(UUID userId, UUID movieId, int rating) {
         try {
             RatingRequest ratingRequest = RatingRequest.builder()
                     .movieId(movieId)
                     .userId(userId)
-                    .value(value)
+                    .rating(rating)
                     .build();
             client.upsertRating(ratingRequest);
 
             ReviewResponse reviewResponse = reviewService.getReviewByUserAndMovie(userId, movieId);
 
             if (reviewResponse != null) {
-                reviewService.upsertReview(userId, movieId, value, reviewResponse.getTitle(), reviewResponse.getContent());
+                reviewService.upsertReview(userId, movieId, rating, reviewResponse.getTitle(), reviewResponse.getContent());
             }
 
         } catch (FeignException e) {
@@ -54,7 +54,7 @@ public class RatingService {
             throw new RatingMicroserviceUnavailableException("Unable to save rating. The rating service is currently unavailable. Please try again later.");
         }
 
-        log.info("Rating upserted successfully: user id {}, movie id {}, value {}", userId, movieId, value);
+        log.info("Rating upserted successfully: user id {}, movie id {}, rating {}", userId, movieId, rating);
 
         ActivityDtoEvent event = ActivityDtoEvent.builder()
                 .userId(userId)
@@ -62,7 +62,7 @@ public class RatingService {
                 .type(ActivityType.RATED)
                 .removed(false)
                 .createdOn(LocalDateTime.now())
-                .rating(value)
+                .rating(rating)
                 .build();
 
         eventPublisher.publishEvent(event);
@@ -71,7 +71,7 @@ public class RatingService {
     public Integer getRatingByUserAndMovie(UUID userId, UUID movieId) {
         try {
             Rating rating = client.getRatingByUserAndMovie(userId, movieId).getBody();
-            return rating != null ? rating.getValue() : null;
+            return rating != null ? rating.getRating() : null;
         } catch (FeignException.NotFound e) {
             log.info("Rating not found for user with id {} and movie with id {}", userId, movieId);
             return null;

@@ -39,10 +39,10 @@ public class RatingControllerApiTest {
         UserDetails authenticatedUser = regularUserAuthentication();
         UUID movieId = UUID.randomUUID();
         UUID userId = ((UserData) authenticatedUser).getUserId();
-        int ratingValue = 8;
+        int rating = 8;
 
         MockHttpServletRequestBuilder httpRequest = post("/rating/{movieId}/add", movieId)
-                .param("value", String.valueOf(ratingValue))
+                .param("rating", String.valueOf(rating))
                 .with(user(authenticatedUser))
                 .with(csrf());
 
@@ -50,7 +50,7 @@ public class RatingControllerApiTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/movies/" + movieId));
 
-        verify(ratingService).upsertRating(eq(userId), eq(movieId), eq(ratingValue));
+        verify(ratingService).upsertRating(eq(userId), eq(movieId), eq(rating));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class RatingControllerApiTest {
         UUID movieId = UUID.randomUUID();
 
         MockHttpServletRequestBuilder httpRequest = post("/rating/{movieId}/add", movieId)
-                .param("value", "8")
+                .param("rating", "8")
                 .with(csrf());
 
         mockMvc.perform(httpRequest)
@@ -73,7 +73,7 @@ public class RatingControllerApiTest {
         UUID movieId = UUID.randomUUID();
 
         MockHttpServletRequestBuilder httpRequest = post("/rating/{movieId}/add", movieId)
-                .param("value", "8")
+                .param("rating", "8")
                 .with(user(authenticatedUser));
 
         mockMvc.perform(httpRequest)

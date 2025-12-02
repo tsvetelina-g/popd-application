@@ -21,10 +21,10 @@ public class RatingController {
     }
 
     @PostMapping("/{movieId}/add")
-    public ModelAndView addRating(@PathVariable UUID movieId, @RequestParam int value, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
+    public ModelAndView addRating(@PathVariable UUID movieId, @RequestParam int rating, @AuthenticationPrincipal UserData userData, HttpServletRequest request) {
         request.setAttribute("movieId", movieId);
 
-        ratingService.upsertRating(userData.getUserId(), movieId, value);
+        ratingService.upsertRating(userData.getUserId(), movieId, rating);
 
         return new ModelAndView("redirect:/movies/" + movieId);
     }

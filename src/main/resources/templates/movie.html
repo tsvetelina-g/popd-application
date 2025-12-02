@@ -216,7 +216,7 @@
 
                         <label th:each="i : ${#numbers.sequence(10, 1, -1)}" class="rating-label">
                             <input type="radio"
-                                   name="value"
+                                   name="rating"
                                    th:value="${i}"
                                    th:checked="${rating != null and rating == i}"
                                    class="rating-radio">

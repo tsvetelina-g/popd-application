@@ -1,184 +1,159 @@
-# POPd Application
+# POPd – Movie Review Platform (Spring Boot MVC + Microservices)
 
-A Spring Boot-based movie review and rating platform that allows users to discover, rate, review, and track movies.
+POPd is a Spring Boot MVC-based movie platform that allows users to browse movies, submit ratings and reviews, manage watchlists, and receive AI-powered recommendations.
+The application integrates with two microservices: one for ratings (MySQL) and one for reviews (MongoDB).
 
-## Features
+## Core Features
 
-POPd lets you:
-- **Discover & Search Movies** - Browse and search through a comprehensive movie database
-- **Rate & Review Films** - Share your opinions by rating movies (1-10) and writing detailed reviews
-- **Build Your Watchlist** - Create and manage personalized watchlists to track movies you want to watch
-- **Track Watched Movies** - Keep a record of movies you've already watched
-- **Explore Artist Profiles** - View detailed information about actors, directors, and other artists
-
-### Additional Features
-- User authentication and authorization (USER/ADMIN roles)
-- Movie browsing by genre with newest releases
-- Artist and movie credit management
-- User profiles with activity tracking
-- Admin panel for managing users, movies, and artists
-- Activity feed tracking user interactions
-- Caching for improved performance
+- Movie browsing & search
+- Ratings (1–10 scale)
+- Reviews with optional rating and title
+- Watchlist & watched movies
+- User profiles and activity feed
+- Admin panel for content and user management
+- AI-powered movie recommendations (Groq / LLaMA)
+- Caching and scheduled background jobs
 
 ## Tech Stack
 
-- **Framework**: Spring Boot 3.4.0
-- **Java Version**: 17
-- **Database**: MySQL 8 (production), H2 (testing)
-- **Template Engine**: Thymeleaf
-- **Security**: Spring Security
-- **ORM**: Spring Data JPA / Hibernate
-- **Build Tool**: Maven
-- **Microservices**: Spring Cloud OpenFeign (for Rating and Review microservices)
-- **Caching**: Spring Cache
-- **Validation**: Jakarta Validation
+- Java 17
+- Spring Boot 3.4.0
+- Spring MVC (Thymeleaf)
+- Spring Security
+- Spring Data JPA / Hibernate
+- Spring Cloud OpenFeign
+- MySQL (main database)
+- MongoDB (reviews)
+- H2 (tests)
+- Spring AI (Groq API)
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              POPd MVC Application (Port 8080)          │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐            │
+│  │  Movies  │  │  Users    │  │ Artists  │            │
+│  │  MySQL   │  │  MySQL    │  │  MySQL   │            │
+│  └──────────┘  └──────────┘  └──────────┘            │
+│       │              │              │                  │
+│       └──────────────┼──────────────┘                  │
+│                      │                                  │
+│         ┌───────────┴───────────┐                     │
+│         │   Feign Clients        │                     │
+│         └───────────┬───────────┘                     │
+└─────────┼───────────┼───────────┼─────────────────────┘
+          │           │           │
+          ▼           ▼           ▼
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│   Rating    │ │   Review    │ │   Groq AI    │
+│  Service    │ │  Service    │ │    API      │
+│  (8084)     │ │  (8085)     │ │             │
+│   MySQL     │ │  MongoDB    │ │             │
+└─────────────┘ └─────────────┘ └─────────────┘
+```
 
 ## Prerequisites
 
-- Java 17 or higher
-- Maven 3.6+
-- MySQL 8.0+ (for production)
-- MySQL server running on `localhost:3306`
+- Java 17+
+- MySQL running on `localhost:3306`
+- MongoDB installed
+- Maven or Maven Wrapper
+- Rating Service running on port 8084 (recommended)
+- Review Service running on port 8085 (recommended)
+- Groq API Key (optional)
 
-## Installation & Setup
+## Setup Instructions
 
-1. **Open the project in IntelliJ IDEA**
-   - Open IntelliJ IDEA
-   - Select `File` → `Open`
-   - Navigate to the project directory and select it
-   - IntelliJ will automatically detect it as a Maven project and import dependencies
+### 1. Configure MySQL
 
-2. **Configure the database**
-   
-   Update `src/main/resources/application.properties` with your MySQL credentials:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/popd?createDatabaseIfNotExist=true
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
+In `src/main/resources/application.properties`:
 
-3. **Wait for Maven to sync**
-   - IntelliJ will automatically download dependencies
-   - Wait for the Maven sync to complete (check the bottom-right status bar)
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/popd?createDatabaseIfNotExist=true
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+```
 
-## Running the Application
+### 2. Configure Microservices (Optional)
 
-### Using IntelliJ IDEA
+**Rating Service:**
+- Ensure Rating Service is running on `http://localhost:8084/api/v1`
+- Feign client configured in `RatingClient.java`
 
-1. **Locate the main class**
-   - Navigate to `src/main/java/app/popdapplication/PopdApplication.java`
+**Review Service:**
+- Ensure Review Service is running on `http://localhost:8085/api/v1`
+- Feign client configured in `ReviewClient.java`
 
-2. **Run the application**
-   - Right-click on `PopdApplication.java`
-   - Select `Run 'PopdApplication'`
-   - Or use the green play button next to the main method
-   - Or press `Shift + F10`
+### 3. Configure AI Recommendations (Optional)
 
-3. **Access the application**
-   - The application will be available at `http://localhost:8080`
-   - Check the IntelliJ console for startup logs and any errors
+In `src/main/resources/application.properties`:
 
-## Configuration
+```properties
+spring.ai.openai.api-key=YOUR_GROQ_API_KEY
+spring.ai.openai.base-url=https://api.groq.com/openai
+spring.ai.openai.chat.options.model=llama-3.1-8b-instant
+```
 
-### Application Properties
+### 4. Start Required Services
 
-Key configuration options in `application.properties`:
+Start services in this order:
 
-- **Database**: MySQL connection settings
-- **JPA**: Hibernate DDL auto-update enabled
-- **Server**: Runs on all interfaces (0.0.0.0)
-- **Caching**: Enabled for top movies
-- **Scheduling**: Enabled for background jobs
+1. MySQL
+2. MongoDB
+3. Rating Service (8084)
+4. Review Service (8085)
+5. POPd MVC application
 
-### External Microservices
+### 5. Run the Application
 
-The application integrates with external microservices for:
-- **Rating Service**: Handles movie ratings
-- **Review Service**: Manages movie reviews
+Open and run:
 
-Ensure these services are running and accessible if using the full microservices architecture.
+```
+src/main/java/app/popdapplication/PopdApplication.java
+```
+
+or using Maven:
+
+```bash
+mvn spring-boot:run
+```
+
+### 6. Open the Application
+
+**http://localhost:8080**
 
 ## Testing
 
-### Running Tests in IntelliJ IDEA
+The project uses H2 in-memory database for tests.
+No external database setup is required.
 
-1. **Run all tests**
-   - Right-click on the `src/test/java` folder
-   - Select `Run 'All Tests'`
-   - Or use `Ctrl + Shift + F10` (Windows/Linux) or `Cmd + Shift + R` (Mac)
-
-2. **Run a specific test class**
-   - Open the test file (e.g., `UserServiceUTest.java`)
-   - Right-click on the class name or the file
-   - Select `Run 'UserServiceUTest'`
-   - Or click the green play button next to the class declaration
-
-3. **Run a specific test method**
-   - Click the green play button next to the test method
-   - Or right-click on the method and select `Run 'methodName()'`
-
-4. **View test results**
-   - Test results appear in the `Run` tool window at the bottom
-   - Green checkmarks indicate passed tests
-   - Red X marks indicate failed tests with error details
-
-The test suite includes:
-- Unit tests for services
-- Integration tests for controllers
-- End-to-end tests for user flows
-
-Test database uses H2 in-memory database (configured in `src/test/resources/application.properties`).
-
-## Project Structure
-
-```
-src/
-├── main/
-│   ├── java/app/popdapplication/
-│   │   ├── client/          # Feign clients for microservices
-│   │   ├── config/          # Configuration classes
-│   │   ├── event/           # Event handling
-│   │   ├── exception/       # Custom exceptions
-│   │   ├── initialization/  # Data initialization
-│   │   ├── job/             # Scheduled jobs
-│   │   ├── model/           # Entity models and enums
-│   │   ├── repository/      # JPA repositories
-│   │   ├── security/        # Security configuration
-│   │   ├── service/         # Business logic services
-│   │   └── web/             # Controllers and DTOs
-│   └── resources/
-│       ├── templates/       # Thymeleaf templates
-│       ├── static/css/      # CSS stylesheets
-│       └── application.properties
-└── test/
-    └── java/                # Test classes
-```
-
-## API Endpoints
-
-### Public Endpoints
-- `GET /` - Home page
-- `GET /movies` - Browse movies by genre
-- `GET /movies/{id}` - Movie details
-- `GET /find` - Search movies and artists
-- `GET /login` - Login page
-- `GET /register` - Registration page
-
-### Authenticated Endpoints
-- `GET /profile` - User profile
-- `POST /rating/{movieId}/add` - Add rating
-- `POST /review/{movieId}` - Submit review
-- `GET /user/watchlist` - User watchlist
-- `GET /user/watched` - Watched movies
-
-### Admin Endpoints
-- `GET /admin` - Admin panel
-- `GET /admin/users` - User management
-- `POST /movies/add` - Add movie
-- `POST /artist/add` - Add artist
+Test types:
+- **Unit tests** - Service layer (`RatingServiceUTest.java`, `ReviewServiceUTest.java`, etc.)
+- **API tests** - Controller layer (`RatingControllerApiTest.java`, `ReviewControllerApiTest.java`, etc.)
+- **Integration tests** - End-to-end (`RegisterUserITest.java`, `GetMoviePageITest.java`, etc.)
 
 ## Default Admin Account
 
-On first startup, the application initializes with default data including an admin user. Check `DataInitializer` for default credentials.
+Check `DataInitializer.java` for default admin credentials.
 
+## Notes
 
+- Ratings are integers from 1 to 10
+- Each user can submit only one rating and one review per movie
+- Microservices are optional but required for full functionality
+- AI module is optional and fails gracefully if disabled
+- Database schema is auto-generated by Hibernate
+- Activity feed reflects user actions (reviews, ratings, watchlist, watched)
+
+## Summary
+
+This project demonstrates:
+
+- Microservices integration using Feign
+- MVC architecture with Thymeleaf
+- SQL + NoSQL integration
+- Authentication and authorization
+- AI-based recommendation integration
+- Caching and scheduled jobs
+- Clean architecture separation
