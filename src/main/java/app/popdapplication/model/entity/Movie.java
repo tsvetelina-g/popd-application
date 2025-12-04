@@ -23,7 +23,8 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
-    @Column
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @Column

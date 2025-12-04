@@ -27,6 +27,7 @@ public class Artist {
     @Column
     private String imageUrl;
 
-    @Column
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String biography;
 }
