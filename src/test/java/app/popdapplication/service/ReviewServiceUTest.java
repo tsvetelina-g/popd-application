@@ -172,7 +172,7 @@ public class ReviewServiceUTest {
     }
 
     @Test
-    void whenDeleteReview_andReviewNotFoundInMicroservice_thenLogWarningButStillPublishEvent() {
+    void whenDeleteReview_andReviewNotFoundInMicroservice_thenLogWarningAndDoNotPublishEvent() {
         UUID userId = UUID.randomUUID();
         UUID movieId = UUID.randomUUID();
 
@@ -180,7 +180,7 @@ public class ReviewServiceUTest {
 
         reviewService.deleteReview(userId, movieId);
 
-        verify(eventPublisher).publishEvent(any(ActivityDtoEvent.class));
+        verify(eventPublisher, never()).publishEvent(any(ActivityDtoEvent.class));
     }
 
     @Test
