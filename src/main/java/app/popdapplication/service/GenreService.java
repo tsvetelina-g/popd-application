@@ -2,6 +2,7 @@ package app.popdapplication.service;
 
 import app.popdapplication.model.entity.Genre;
 import app.popdapplication.repository.GenreRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
+    @Transactional
     public void saveGenre(Genre genre) {
         genreRepository.save(genre);
     }

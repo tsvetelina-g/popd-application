@@ -16,25 +16,19 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
 
     List<Movie> findByTitleContainingIgnoreCase(String query);
 
-    @Query(
-            value = """
+    @Query(value = """
             SELECT * FROM movie m
             WHERE m.release_date IS NOT NULL
             ORDER BY ABS(DATEDIFF(:today, m.release_date)) ASC
-            """,
-            nativeQuery = true
-    )
+            """, nativeQuery = true)
     List<Movie> findTop10ByClosestReleaseDate(LocalDate today, Pageable pageable);
 
-    @Query(
-            value = """
-    SELECT DISTINCT m.* FROM movie m
-    INNER JOIN movie_genres mg ON m.id = mg.movie_id
-    WHERE mg.genres_id = :genreId
-    AND m.release_date IS NOT NULL
-    ORDER BY ABS(DATEDIFF(:today, m.release_date)) ASC
-    """,
-            nativeQuery = true
-    )
+    @Query(value = """
+            SELECT DISTINCT m.* FROM movie m
+            INNER JOIN movie_genres mg ON m.id = mg.movie_id
+            WHERE mg.genres_id = :genreId
+            AND m.release_date IS NOT NULL
+            ORDER BY ABS(DATEDIFF(:today, m.release_date)) ASC
+            """, nativeQuery = true)
     List<Movie> findTop5ByGenreIdClosestReleaseDate(@Param("genreId") UUID genreId, @Param("today") LocalDate today, Pageable pageable);
 }

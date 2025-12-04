@@ -47,23 +47,23 @@ public class ReviewService {
                     .build();
 
             client.upsertReview(reviewRequest);
+
+            log.info("Review upserted successfully: user id {}, movie id {}", userId, movieId);
+
+            ActivityDtoEvent event = ActivityDtoEvent.builder()
+                    .userId(userId)
+                    .movieId(movieId)
+                    .type(ActivityType.REVIEWED)
+                    .removed(false)
+                    .createdOn(LocalDateTime.now())
+                    .rating(null)
+                    .build();
+
+            eventPublisher.publishEvent(event);
         } catch (FeignException e) {
             log.error("Failed to upsert review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             throw new ReviewMicroserviceUnavailableException("Unable to save review. The review service is currently unavailable. Please try again later.");
         }
-
-        log.info("Review upserted successfully: user id {}, movie id {}", userId, movieId);
-
-        ActivityDtoEvent event = ActivityDtoEvent.builder()
-                .userId(userId)
-                .movieId(movieId)
-                .type(ActivityType.REVIEWED)
-                .removed(false)
-                .createdOn(LocalDateTime.now())
-                .rating(null)
-                .build();
-
-        eventPublisher.publishEvent(event);
     }
 
     public ReviewResponse getReviewByUserAndMovie(UUID userId, UUID movieId) {
@@ -80,25 +80,25 @@ public class ReviewService {
     public void deleteReview(UUID userId, UUID movieId) {
         try {
             client.deleteReview(userId, movieId);
+
+            log.info("Review deleted successfully: user id {}, movie id {}", userId, movieId);
+
+            ActivityDtoEvent event = ActivityDtoEvent.builder()
+                    .userId(userId)
+                    .movieId(movieId)
+                    .type(ActivityType.REVIEWED)
+                    .removed(true)
+                    .createdOn(LocalDateTime.now())
+                    .rating(null)
+                    .build();
+
+            eventPublisher.publishEvent(event);
         } catch (FeignException.NotFound e) {
             log.warn("Review not found for deletion: user with id {}, movie with id {}", userId, movieId);
         } catch (FeignException e) {
             log.error("Failed to delete review for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             throw new ReviewMicroserviceUnavailableException("Unable to delete review. The review service is currently unavailable. Please try again later.");
         }
-
-        log.info("Review deleted successfully: user id {}, movie id {}", userId, movieId);
-
-        ActivityDtoEvent event = ActivityDtoEvent.builder()
-                .userId(userId)
-                .movieId(movieId)
-                .type(ActivityType.REVIEWED)
-                .removed(true)
-                .createdOn(LocalDateTime.now())
-                .rating(null)
-                .build();
-
-        eventPublisher.publishEvent(event);
     }
 
     public List<ReviewResponse> getLatestFiveReviewsForAMovie(UUID movieId) {
@@ -121,10 +121,7 @@ public class ReviewService {
         }
 
         Pageable pageable = PageRequest.of(page, size);
-        return getReviewsForMovie(movieId, pageable);
-    }
 
-    private Page<ReviewResponse> getReviewsForMovie(UUID movieId, Pageable pageable) {
         try {
             ResponseEntity<Page<ReviewResponse>> response = client.getReviewsForMovie(movieId, pageable.getPageNumber(), pageable.getPageSize());
 

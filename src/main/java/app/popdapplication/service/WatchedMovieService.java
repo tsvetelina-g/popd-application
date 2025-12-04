@@ -101,10 +101,6 @@ public class WatchedMovieService {
         }
         
         Pageable pageable = PageRequest.of(page, size);
-        return findAllByUserOrderByCreatedOnDesc(user, pageable);
-    }
-
-    private Page<WatchedMovie> findAllByUserOrderByCreatedOnDesc(User user, Pageable pageable) {
         return watchedMovieRepository.findAllByUserOrderByCreatedOnDesc(user, pageable);
     }
 }

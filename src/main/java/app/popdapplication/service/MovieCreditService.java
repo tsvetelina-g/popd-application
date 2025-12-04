@@ -71,6 +71,7 @@ public class MovieCreditService {
         return movieCreditRepository.findById(creditId).orElseThrow(() -> new NotFoundException("Credit with id [%s] not found".formatted(creditId)));
     }
 
+    @Transactional
     public void deleteCredit(MovieCredit movieCredit) {
         movieCreditRepository.delete(movieCredit);
         log.info("Credit deleted successfully: {} as {} for movie '{}' (id: {})", 

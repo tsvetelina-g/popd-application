@@ -52,7 +52,7 @@ public class MovieService {
 
     @Transactional
     public void updateMovieInfo(UUID movieId, EditMovieRequest editMovieRequest) {
-        Movie movie = movieRepository.getReferenceById(movieId);
+        Movie movie = findById(movieId);
         List<Genre> genres = genreService.findAllById(editMovieRequest.getGenresIds());
 
         movie.setTitle(editMovieRequest.getTitle());
@@ -66,12 +66,8 @@ public class MovieService {
         log.info("Movie info updated for movie with id: {}", movieId);
     }
 
-    private List<Movie> searchByTitle(String query) {
-        return movieRepository.findByTitleContainingIgnoreCase(query);
-    }
-
     public List<Movie> searchByTitleLimited(String query, int limit) {
-        return searchByTitle(query).stream()
+        return movieRepository.findByTitleContainingIgnoreCase(query).stream()
                 .limit(limit)
                 .toList();
     }
@@ -84,15 +80,13 @@ public class MovieService {
         }
 
         for (UUID movieId : movieIds) {
-            if (movieId == null || result.containsKey(movieId)) {
+            if (movieId == null) {
                 continue;
             }
 
             try {
                 Movie movie = findById(movieId);
-                if (movie != null) {
-                    result.put(movieId, movie.getTitle());
-                }
+                result.put(movieId, movie.getTitle());
             } catch (Exception e) {
                 log.warn("Could not fetch movie with id {}: {}", movieId, e.getMessage());
             }

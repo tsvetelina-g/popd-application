@@ -69,23 +69,24 @@ public class WatchlistMovieService {
     public void removeFromWatchlist(Watchlist watchlist, Movie movie) {
         Optional<WatchlistMovie> watchlistMovie = watchlistMovieRepository.findByWatchlistAndMovie(watchlist, movie);
 
-        if (watchlistMovie.isPresent()){
+        if (watchlistMovie.isPresent()) {
             watchlistMovieRepository.delete(watchlistMovie.get());
             log.info("Movie removed from watchlist: movie id {}, user id {}", movie.getId(), watchlist.getUser().getId());
+
+            ActivityDtoEvent event = ActivityDtoEvent.builder()
+                    .userId(watchlist.getUser().getId())
+                    .movieId(movie.getId())
+                    .type(ActivityType.ADDED_TO_WATCHLIST)
+                    .removed(true)
+                    .createdOn(LocalDateTime.now())
+                    .rating(null)
+                    .build();
+
+            eventPublisher.publishEvent(event);
         } else {
+            log.warn("Movie not found in watchlist: movie id {}, user id {}", movie.getId(), watchlist.getUser().getId());
             throw new NotFoundException("Movie not found in watchlist");
         }
-
-        ActivityDtoEvent event = ActivityDtoEvent.builder()
-                .userId(watchlist.getUser().getId())
-                .movieId(movie.getId())
-                .type(ActivityType.ADDED_TO_WATCHLIST)
-                .removed(true)
-                .createdOn(LocalDateTime.now())
-                .rating(null)
-                .build();
-
-        eventPublisher.publishEvent(event);
     }
 
     public List<WatchlistMovie> findAllByWatchlist(Watchlist watchlist) {
@@ -101,10 +102,6 @@ public class WatchlistMovieService {
         }
         
         Pageable pageable = PageRequest.of(page, size);
-        return findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
-    }
-
-    private Page<WatchlistMovie> findAllByWatchlistOrderByAddedOnDesc(Watchlist watchlist, Pageable pageable) {
         return watchlistMovieRepository.findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }
 }

@@ -1,5 +1,6 @@
 package app.popdapplication.service;
 
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
@@ -73,7 +74,7 @@ public class WatchlistServiceUTest {
         Watchlist watchlist = Watchlist.builder().id(UUID.randomUUID()).user(user).build();
         WatchlistMovie watchlistMovie = WatchlistMovie.builder().watchlist(watchlist).movie(movie).build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
         when(watchlistMovieService.findByWatchlistAndMovie(watchlist, movie))
                 .thenReturn(Optional.of(watchlistMovie));
 
@@ -88,7 +89,7 @@ public class WatchlistServiceUTest {
         Movie movie = Movie.builder().id(UUID.randomUUID()).title("Title").build();
         Watchlist watchlist = Watchlist.builder().id(UUID.randomUUID()).user(user).build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
         when(watchlistMovieService.findByWatchlistAndMovie(watchlist, movie))
                 .thenReturn(Optional.empty());
 
@@ -107,7 +108,7 @@ public class WatchlistServiceUTest {
                 .updatedOn(LocalDateTime.now().minusDays(1))
                 .build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
 
         watchlistService.addToWatchlist(movie, user);
 
@@ -127,7 +128,7 @@ public class WatchlistServiceUTest {
                 .build();
         LocalDateTime beforeCall = LocalDateTime.now().minusSeconds(1);
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
 
         watchlistService.addToWatchlist(movie, user);
 
@@ -146,7 +147,7 @@ public class WatchlistServiceUTest {
                 .updatedOn(LocalDateTime.now().minusDays(1))
                 .build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
 
         watchlistService.removeFromWatchlist(movie, user);
 
@@ -166,7 +167,7 @@ public class WatchlistServiceUTest {
                 .build();
         LocalDateTime beforeCall = LocalDateTime.now().minusSeconds(1);
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
 
         watchlistService.removeFromWatchlist(movie, user);
 
@@ -186,7 +187,7 @@ public class WatchlistServiceUTest {
                 WatchlistMovie.builder().watchlist(watchlist).build()
         );
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
         when(watchlistMovieService.findAllByWatchlist(watchlist)).thenReturn(watchlistMovies);
 
         int result = watchlistService.countMoviesInWatchlist(user);
@@ -199,7 +200,7 @@ public class WatchlistServiceUTest {
         User user = User.builder().id(UUID.randomUUID()).build();
         Watchlist watchlist = Watchlist.builder().id(UUID.randomUUID()).user(user).build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
         when(watchlistMovieService.findAllByWatchlist(watchlist)).thenReturn(Collections.emptyList());
 
         int result = watchlistService.countMoviesInWatchlist(user);
@@ -217,7 +218,7 @@ public class WatchlistServiceUTest {
                 .watchlistType(WatchlistType.DEFAULT)
                 .build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(watchlist);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.of(watchlist));
 
         Watchlist result = watchlistService.findByUser(user);
 
@@ -227,13 +228,16 @@ public class WatchlistServiceUTest {
     }
 
     @Test
-    void whenFindByUser_andUserHasNoWatchlist_thenReturnNull() {
+    void whenFindByUser_andUserHasNoWatchlist_thenThrowNotFoundException() {
         User user = User.builder().id(UUID.randomUUID()).build();
 
-        when(watchlistRepository.findByUser(user)).thenReturn(null);
+        when(watchlistRepository.findByUser(user)).thenReturn(Optional.empty());
 
-        Watchlist result = watchlistService.findByUser(user);
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            watchlistService.findByUser(user);
+        });
 
-        assertNull(result);
+        assertTrue(exception.getMessage().contains("Watchlist for user with id"));
+        assertTrue(exception.getMessage().contains(user.getId().toString()));
     }
 }

@@ -48,7 +48,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public ModelAndView getAllMovies(@RequestParam(required = false) UUID genreId,
+    public ModelAndView getMoviesPage(@RequestParam(required = false) UUID genreId,
                                      @RequestParam(required = false) String aiQuery) {
         ModelAndView modelAndView = new ModelAndView("movies");
 

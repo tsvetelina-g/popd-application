@@ -191,7 +191,7 @@ public class UserService implements UserDetailsService {
         }
 
         for (UUID userId : userIds) {
-            if (userId == null || result.containsKey(userId)) {
+            if (userId == null) {
                 continue;
             }
 

@@ -30,27 +30,61 @@ The application integrates with two microservices: one for ratings (MySQL) and o
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│              POPd MVC Application (Port 8080)          │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐            │
-│  │  Movies  │  │  Users    │  │ Artists  │            │
-│  │  MySQL   │  │  MySQL    │  │  MySQL   │            │
-│  └──────────┘  └──────────┘  └──────────┘            │
-│       │              │              │                  │
-│       └──────────────┼──────────────┘                  │
-│                      │                                  │
-│         ┌───────────┴───────────┐                     │
-│         │   Feign Clients        │                     │
-│         └───────────┬───────────┘                     │
-└─────────┼───────────┼───────────┼─────────────────────┘
-          │           │           │
-          ▼           ▼           ▼
-┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│   Rating    │ │   Review    │ │   Groq AI    │
-│  Service    │ │  Service    │ │    API      │
-│  (8084)     │ │  (8085)     │ │             │
-│   MySQL     │ │  MongoDB    │ │             │
-└─────────────┘ └─────────────┘ └─────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                    Client (Browser)                       │
+│              (Thymeleaf Templates - HTML/CSS/JS)          │
+└───────────────────────────┬───────────────────────────────┘
+                            │ HTTP/HTTPS
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│         Spring Boot MVC Application (Port 8080)          │
+│                                                          │
+│  ┌─────────────────────────────────────────────────────┐ │
+│  │         Controllers (MVC)                           │ │
+│  │  • MovieController  • ArtistController              │ │
+│  │  • RatingController • ReviewController              │ │
+│  └───────────────────────┬─────────────────────────────┘ │
+│                          │                               │
+│  ┌───────────────────────┴─────────────────────────────┐ │
+│  │         Services (Business)                         │ │
+│  │  • MovieService  • ArtistService                    │ │
+│  │  • RatingService • ReviewService                    │ │
+│  │  • AiRecommendationService                          │ │
+│  └───────────────────────┬─────────────────────────────┘ │
+│                          │                               │
+│  ┌───────────────────────┴─────────────────────────────┐ │
+│  │         Repositories (Data)                         │ │
+│  │  • MovieRepository  • ArtistRepository              │ │
+│  │  • UserRepository   • ActivityRepository            │ │
+│  └───────┬──────────────────────┬──────┬───────────────┘ │
+│          │                      │      │                 │
+│          │                      │      │                 │
+│          ▼                      │      │                 │
+│  ┌──────────────┐               │      │                 │
+│  │   MySQL      │               │      │                 │
+│  │  Database    │               │      │                 │
+│  │  (MVC App)   │               │      │                 │
+│  │  • Movies    │               │      │                 │
+│  │  • Users     │               │      │                 │
+│  │  • Artists   │               │      │                 │
+│  └──────────────┘               │      │                 │
+│                                 │      │                 │
+│  ┌──────────────────────────────┴┐  ┌──┴────────────┐    │
+│  │    Feign Clients              │  │  Spring AI    │    │
+│  │  • RatingClient               │  │  • ChatModel  │    │
+│  │  • ReviewClient               │  │               │    │
+│  └───────┬───────────────┬───────┘  └───────┬───────┘    │
+└──────────┼───────────────┼──────────────────┼────────────┘
+           │               │                  │
+           │               │                  │
+           ▼               ▼                  ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│  Rating Service  │  │  Review Service  │  │   Groq AI API    │
+│   Port: 8084     │  │   Port: 8085     │  │   (External)     │
+│                  │  │                  │  │                  │
+│  Database: MySQL │  │ Database: MongoDB│  │                  │
+└──────────────────┘  └──────────────────┘  └──────────────────┘
+
 ```
 
 ## Prerequisites
@@ -75,7 +109,7 @@ spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_PASSWORD
 ```
 
-### 2. Configure Microservices (Optional)
+### 2. Configure Microservices 
 
 **Rating Service:**
 - Ensure Rating Service is running on `http://localhost:8084/api/v1`
@@ -85,9 +119,30 @@ spring.datasource.password=YOUR_PASSWORD
 - Ensure Review Service is running on `http://localhost:8085/api/v1`
 - Feign client configured in `ReviewClient.java`
 
-### 3. Configure AI Recommendations (Optional)
+### 3. Configure AI Recommendations 
 
-In `src/main/resources/application.properties`:
+A Groq API key is included in `src/main/resources/application.properties` for testing purposes.
+
+If you want to use your own API key:
+
+1. **Sign up for a free account:**
+   - Visit [Groq Cloud Console](https://console.groq.com/)
+   - Click "Sign Up" and complete the registration process
+   - If you already have an account, click "Log In"
+
+2. **Create an API key:**
+   - Once logged in, navigate to the [API Keys](https://console.groq.com/keys) section
+   - Click "Create API Key"
+   - Provide a descriptive name for your key (e.g., "POPd Application")
+   - Click "Submit" or "Create" to generate the key
+
+3. **Copy your API key:**
+   - Copy the generated key immediately (you won't be able to view it again after leaving the page)
+   - Store it securely
+
+4. **Update the configuration:**
+   - Open `src/main/resources/application.properties`
+   - Replace `YOUR_GROQ_API_KEY` with your actual API key:
 
 ```properties
 spring.ai.openai.api-key=YOUR_GROQ_API_KEY

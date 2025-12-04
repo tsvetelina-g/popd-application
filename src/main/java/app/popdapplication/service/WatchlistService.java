@@ -1,5 +1,6 @@
 package app.popdapplication.service;
 
+import app.popdapplication.exception.NotFoundException;
 import app.popdapplication.model.entity.Movie;
 import app.popdapplication.model.entity.User;
 import app.popdapplication.model.entity.Watchlist;
@@ -39,15 +40,20 @@ public class WatchlistService {
         watchlistRepository.save(watchlist);
     }
 
+    public Watchlist findByUser(User user) {
+        return watchlistRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("Watchlist for user with id [%s] not found".formatted(user.getId())));
+    }
+
     public boolean movieIsInWatchlist(Movie movie, User user) {
-        Watchlist watchlist = watchlistRepository.findByUser(user);
+        Watchlist watchlist = findByUser(user);
         Optional<WatchlistMovie> watchlistMovieOpt = watchlistMovieService.findByWatchlistAndMovie(watchlist, movie);
         return watchlistMovieOpt.isPresent();
     }
 
     @Transactional
     public void addToWatchlist(Movie movie, User user) {
-        Watchlist watchlist = watchlistRepository.findByUser(user);
+        Watchlist watchlist = findByUser(user);
 
         watchlistMovieService.saveToWatchlist(watchlist, movie);
 
@@ -58,7 +64,7 @@ public class WatchlistService {
 
     @Transactional
     public void removeFromWatchlist(Movie movie, User user) {
-        Watchlist watchlist = watchlistRepository.findByUser(user);
+        Watchlist watchlist = findByUser(user);
 
         watchlistMovieService.removeFromWatchlist(watchlist, movie);
 
@@ -68,11 +74,7 @@ public class WatchlistService {
     }
 
     public int countMoviesInWatchlist(User user) {
-        Watchlist watchlist = watchlistRepository.findByUser(user);
+        Watchlist watchlist = findByUser(user);
         return watchlistMovieService.findAllByWatchlist(watchlist).size();
-    }
-
-    public Watchlist findByUser(User user) {
-        return watchlistRepository.findByUser(user);
     }
 }

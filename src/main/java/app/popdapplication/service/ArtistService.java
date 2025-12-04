@@ -6,6 +6,7 @@ import app.popdapplication.repository.ArtistRepository;
 import app.popdapplication.web.dto.AddArtistRequest;
 import app.popdapplication.web.dto.ArtistSearchResult;
 import app.popdapplication.web.dto.EditArtistRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,6 +31,7 @@ public class ArtistService {
         this.artistRepository = artistRepository;
     }
 
+    @Transactional
     @CacheEvict(value = "artists", allEntries = true)
     public Artist addArtist(AddArtistRequest addArtistRequest) {
         Artist artist = Artist.builder()
@@ -49,6 +51,7 @@ public class ArtistService {
         return artistRepository.findById(artistId).orElseThrow(() -> new NotFoundException("Artist with id [%s] not found".formatted(artistId)));
     }
 
+    @Transactional
     @CacheEvict(value = "artists", key = "#artistId")
     public void updateArtistInfo(UUID artistId, EditArtistRequest editArtistRequest) {
         Artist artist = artistRepository.findById(artistId)

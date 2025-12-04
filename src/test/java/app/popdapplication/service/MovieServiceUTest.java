@@ -120,7 +120,7 @@ public class MovieServiceUTest {
                 .backgroundImage("www.poster.com")
                 .build();
 
-        when(movieRepository.getReferenceById(movieId)).thenReturn(existingMovie);
+        when(movieRepository.findById(movieId)).thenReturn(Optional.of(existingMovie));
         when(genreService.findAllById(List.of(genreId))).thenReturn(newGenres);
 
         movieService.updateMovieInfo(movieId, request);

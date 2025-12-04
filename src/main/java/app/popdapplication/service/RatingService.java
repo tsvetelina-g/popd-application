@@ -49,23 +49,22 @@ public class RatingService {
                 reviewService.upsertReview(userId, movieId, rating, reviewResponse.getTitle(), reviewResponse.getContent());
             }
 
+            log.info("Rating upserted successfully: user id {}, movie id {}, rating {}", userId, movieId, rating);
+
+            ActivityDtoEvent event = ActivityDtoEvent.builder()
+                    .userId(userId)
+                    .movieId(movieId)
+                    .type(ActivityType.RATED)
+                    .removed(false)
+                    .createdOn(LocalDateTime.now())
+                    .rating(rating)
+                    .build();
+
+            eventPublisher.publishEvent(event);
         } catch (FeignException e) {
             log.error("Failed to upsert rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             throw new RatingMicroserviceUnavailableException("Unable to save rating. The rating service is currently unavailable. Please try again later.");
         }
-
-        log.info("Rating upserted successfully: user id {}, movie id {}, rating {}", userId, movieId, rating);
-
-        ActivityDtoEvent event = ActivityDtoEvent.builder()
-                .userId(userId)
-                .movieId(movieId)
-                .type(ActivityType.RATED)
-                .removed(false)
-                .createdOn(LocalDateTime.now())
-                .rating(rating)
-                .build();
-
-        eventPublisher.publishEvent(event);
     }
 
     public Integer getRatingByUserAndMovie(UUID userId, UUID movieId) {
@@ -90,6 +89,19 @@ public class RatingService {
             if (reviewResponse != null) {
                 reviewService.upsertReview(userId, movieId, null, reviewResponse.getTitle(), reviewResponse.getContent());
             }
+
+            log.info("Rating deleted successfully: user id {}, movie id {}", userId, movieId);
+
+            ActivityDtoEvent event = ActivityDtoEvent.builder()
+                    .userId(userId)
+                    .movieId(movieId)
+                    .type(ActivityType.RATED)
+                    .removed(true)
+                    .createdOn(LocalDateTime.now())
+                    .rating(null)
+                    .build();
+
+            eventPublisher.publishEvent(event);
         } catch (FeignException.NotFound e) {
             log.info("Rating not found for deletion: user with id {}, movie with id {}", userId, movieId);
             return;
@@ -97,19 +109,6 @@ public class RatingService {
             log.error("Failed to delete rating for user with id {} and movie with id {}: {}", userId, movieId, e.getMessage());
             throw new RatingMicroserviceUnavailableException("Unable to delete rating. The rating service is currently unavailable. Please try again later.");
         }
-
-        log.info("Rating deleted successfully: user id {}, movie id {}", userId, movieId);
-
-        ActivityDtoEvent event = ActivityDtoEvent.builder()
-                .userId(userId)
-                .movieId(movieId)
-                .type(ActivityType.RATED)
-                .removed(true)
-                .createdOn(LocalDateTime.now())
-                .rating(null)
-                .build();
-
-        eventPublisher.publishEvent(event);
     }
 
     public Double getAverageRatingForAMovie(UUID movieId) {
