@@ -108,20 +108,16 @@ public class UserService implements UserDetailsService {
         if (size < 1 || size > 50) {
             size = 10;
         }
-        
-        PageRequest pageable = PageRequest.of(page, size);
-        return findAll(pageable);
-    }
 
-    private Page<User> findAll(PageRequest pageable) {
-        return this.userRepository.findAll(pageable);
+        PageRequest pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable);
     }
 
     @Transactional
     public void switchStatus(UUID userId) {
         Optional<User> userOpt = userRepository.findById(userId);
 
-        if (userOpt.isEmpty()){
+        if (userOpt.isEmpty()) {
             throw new NotFoundException("User with id [%s] not found".formatted(userId));
         }
 
@@ -155,7 +151,7 @@ public class UserService implements UserDetailsService {
     public void switchRole(UUID userId) {
         Optional<User> userOpt = userRepository.findById(userId);
 
-        if (userOpt.isEmpty()){
+        if (userOpt.isEmpty()) {
             throw new NotFoundException("User with id [%s] not found".formatted(userId));
         }
 

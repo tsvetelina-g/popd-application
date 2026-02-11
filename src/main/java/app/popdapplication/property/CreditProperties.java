@@ -22,6 +22,5 @@ public class CreditProperties {
         private String artistName;
         private String role;
     }
-
 }
 

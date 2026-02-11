@@ -231,5 +231,4 @@ public class ActivityServiceUTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
-
 }

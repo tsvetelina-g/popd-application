@@ -26,5 +26,4 @@ public class MovieProperties {
         private String posterUrl;
         private String backgroundImage;
     }
-
 }

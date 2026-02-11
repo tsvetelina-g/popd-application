@@ -41,8 +41,7 @@ public class AdminControllerApiTest {
     private MockMvc mockMvc;
 
     @Test
-    void patchRequestChangeUserStatus_fromAdminUser_shouldReturnRedirectAndInvokeServiceMethod () throws Exception {
-
+    void patchRequestChangeUserStatus_fromAdminUser_shouldReturnRedirectAndInvokeServiceMethod() throws Exception {
         UserDetails mockUserData = adminAuthentication();
 
         int page = 0;
@@ -61,8 +60,7 @@ public class AdminControllerApiTest {
     }
 
     @Test
-    void patchRequestChangeUserStatus_fromNormalUser_shouldReturn404StatusCodeAndViewNotFound () throws Exception {
-
+    void patchRequestChangeUserStatus_fromNormalUser_shouldReturn404StatusCodeAndViewNotFound() throws Exception {
         UserDetails mockUserData = nonAdminAuthentication();
 
         int page = 0;

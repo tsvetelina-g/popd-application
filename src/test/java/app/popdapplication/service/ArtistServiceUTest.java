@@ -278,5 +278,4 @@ public class ArtistServiceUTest {
 
         assertEquals(2, result.size());
     }
-
 }

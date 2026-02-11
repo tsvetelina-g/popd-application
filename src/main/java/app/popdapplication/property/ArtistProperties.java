@@ -24,5 +24,4 @@ public class ArtistProperties {
         private String imageUrl;
         private String biography;
     }
-
 }

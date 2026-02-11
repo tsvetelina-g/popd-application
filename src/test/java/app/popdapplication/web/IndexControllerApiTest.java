@@ -39,7 +39,6 @@ public class IndexControllerApiTest {
 
     @Test
     void getIndexEndpoint_shouldReturn200OkAndIndexView() throws Exception {
-
         MockHttpServletRequestBuilder httpRequest = get("/");
 
         mockMvc.perform(httpRequest)
@@ -49,7 +48,6 @@ public class IndexControllerApiTest {
 
     @Test
     void postRegister_shouldReturn302RedirectAndRedirectToLoginAndInvokeRegisterServiceMethod() throws Exception {
-
         MockHttpServletRequestBuilder httpRequest = post("/register")
                 .formField("username", "tsvetelina")
                 .formField("email", "ts@gmail.com")
@@ -64,7 +62,6 @@ public class IndexControllerApiTest {
 
     @Test
     void postRegisterWithInvalidFormData_shouldReturn200OkAndShowRegisterViewAndRegisterServiceMethodIsNeverInvoked() throws Exception {
-
         MockHttpServletRequestBuilder httpRequest = post("/register")
                 .formField("username", "t")
                 .formField("email", "t")

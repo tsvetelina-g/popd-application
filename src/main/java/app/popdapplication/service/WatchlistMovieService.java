@@ -100,7 +100,7 @@ public class WatchlistMovieService {
         if (size < 1 || size > 50) {
             size = 10;
         }
-        
+
         Pageable pageable = PageRequest.of(page, size);
         return watchlistMovieRepository.findAllByWatchlistOrderByAddedOnDesc(watchlist, pageable);
     }

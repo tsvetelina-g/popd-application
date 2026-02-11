@@ -95,7 +95,7 @@ public class ProfileControllerApiTest {
         mockMvc.perform(httpRequest)
                 .andExpect(view().name("profile"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("user","moviesWatched", "ratedMoviesCount", "moviesInWatchlistCount", "reviewedMoviesCount", "activities", "movieIdToMovieNameMap"));
+                .andExpect(model().attributeExists("user", "moviesWatched", "ratedMoviesCount", "moviesInWatchlistCount", "reviewedMoviesCount", "activities", "movieIdToMovieNameMap"));
     }
 
     @Test
@@ -284,7 +284,6 @@ public class ProfileControllerApiTest {
     }
 
     public static User randomUser() {
-
         return User.builder()
                 .username("tsvetelina")
                 .email("ts@gmail.com")
@@ -295,5 +294,4 @@ public class ProfileControllerApiTest {
                 .updatedOn(LocalDateTime.now())
                 .build();
     }
-
 }
